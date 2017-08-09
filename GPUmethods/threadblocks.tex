@@ -1,0 +1,154 @@
+\documentclass{article}
+
+\usepackage{tikz}
+\usetikzlibrary{calc,3d,arrows,shapes}
+\usepackage{tikz-3dplot}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usetikzlibrary{external}
+\tikzexternalize % activate!
+\begin{document}
+
+\begin{figure}[H]
+
+\tdplotsetmaincoords{70}{125} % rotate 60 degrees around x axis, then 105 degrees about z
+\begin{tikzpicture}[>=stealth',           % arrow tip
+                    tdplot_main_coords,   % Set view as defined by \tdplotsetmaincoords
+                    scale=0.4               % scale
+                    ]  
+                    
+   %%%%%%%Some inside figure preable, for variables that are going to be repated
+   %Trasnlation of CUBE
+   \newcommand{\Tx}{0} 
+   \newcommand{\Ty}{0} 
+   \newcommand{\Tz}{0}
+   \coordinate (T) at (\Tx,\Ty,\Tz);
+   % Cube coords
+   \newcommand{\CubeSz}{3}
+   \coordinate (P1) at (-\CubeSz,-\CubeSz,-\CubeSz);
+   \coordinate (P2) at (-\CubeSz,-\CubeSz,\CubeSz);
+   \coordinate (P3) at (-\CubeSz,\CubeSz,\CubeSz);
+   \coordinate (P4) at (-\CubeSz,\CubeSz,-\CubeSz);
+   \coordinate (P5) at (\CubeSz,-\CubeSz,-\CubeSz);
+   \coordinate (P6) at (\CubeSz,-\CubeSz,\CubeSz);
+   \coordinate (P7) at (\CubeSz,\CubeSz,\CubeSz);
+   \coordinate (P8) at (\CubeSz,\CubeSz,-\CubeSz);
+   
+  
+   
+   
+   
+   \newcommand{\DetSzOne}{5}
+   \newcommand{\DetSzTwo}{0.2}
+
+   \coordinate (D1) at (-\DetSzTwo,-\DetSzOne,-\DetSzOne);
+   \coordinate (D2) at (-\DetSzTwo,-\DetSzOne,\DetSzOne);
+   \coordinate (D3) at (-\DetSzTwo,\DetSzOne,\DetSzOne);
+   \coordinate (D4) at (-\DetSzTwo,\DetSzOne,-\DetSzOne);
+   \coordinate (D5) at (\DetSzTwo,-\DetSzOne,-\DetSzOne);
+   \coordinate (D6) at (\DetSzTwo,-\DetSzOne,\DetSzOne);
+   \coordinate (D7) at (\DetSzTwo,\DetSzOne,\DetSzOne);
+   \coordinate (D8) at (\DetSzTwo,\DetSzOne,-\DetSzOne);
+    \coordinate (T2) at (-12,-0.,-0.);
+   % offset vector
+
+   %Draw CUBE
+    \draw[black,fill=blue,opacity=0.05] ($(P1)+(T)$) -- ($(P2)+(T)$) -- ($(P3)+(T)$) -- ($(P4)+(T)$) -- cycle;% -X face
+	\draw[black,fill=blue!20,opacity=0.05] ($(P2)+(T)$) -- ($(P3)+(T)$) -- ($(P7)+(T)$) -- ($(P6)+(T)$) -- cycle;% +Z face
+	\draw[black,fill=blue,opacity=0.05] ($(P1)+(T)$) -- ($(P2)+(T)$) -- ($(P6)+(T)$) -- ($(P5)+(T)$) -- cycle;% -Y face
+	\draw[black,fill=blue,opacity=0.05] ($(P3)+(T)$) -- ($(P4)+(T)$) -- ($(P8)+(T)$) -- ($(P7)+(T)$) -- cycle;% Right Face
+	\draw[black,fill=blue,opacity=0.1] ($(P1)+(T)$) -- ($(P4)+(T)$) -- ($(P8)+(T)$) -- ($(P5)+(T)$) -- cycle;% Front Face
+	\draw[black,fill=blue,opacity=0.05] ($(P5)+(T)$) -- ($(P6)+(T)$) -- ($(P7)+(T)$) -- ($(P8)+(T)$) -- cycle;% Top Face
+	
+	%image
+	\node at ($(P2)+(T)+(0,0,0.5)$){\Large $\mathbb{I}$};
+	\node at ($(D2)+(T2)+(0,0,0.5)$){\Large $\mathbb{D}$};
+	
+
+	
+	
+	
+
+  
+
+    \draw[black,fill=black,opacity=0.05] ($(D1)+(T2)$) -- ($(D2)+(T2)$) -- ($(D3)+(T2)$) -- ($(D4)+(T2)$) -- cycle;% -X face
+	\draw[black,fill=black!20,opacity=0.05] ($(D2)+(T2)$) -- ($(D3)+(T2)$) -- ($(D7)+(T2)$) -- ($(D6)+(T2)$) -- cycle;% +Z face
+	\draw[black,fill=black,opacity=0.1] ($(D1)+(T2)$) -- ($(D2)+(T2)$) -- ($(D6)+(T2)$) -- ($(D5)+(T2)$) -- cycle;% -Y face
+	\draw[black,fill=black!20,opacity=0.05] ($(D3)+(T2)$) -- ($(D4)+(T2)$) -- ($(D8)+(T2)$) -- ($(D7)+(T2)$) -- cycle;% Right Face
+	\draw[black,fill=black,opacity=0.1] ($(D1)+(T2)$) -- ($(D4)+(T2)$) -- ($(D8)+(T2)$) -- ($(D5)+(T2)$) -- cycle;% Front Face
+	\draw[black,fill=black,opacity=0.05] ($(D5)+(T2)$) -- ($(D6)+(T2)$) -- ($(D7)+(T2)$) -- ($(D8)+(T2)$) -- cycle;% Top Face
+
+
+\draw[black,fill=red,opacity=0.5] ($(0,1,3)+(T2)$) -- ($(0,1,1)+(T2)$) -- ($(0,3,1)+(T2)$) -- ($(0,3,3)+(T2)$) -- cycle;% Top Face
+
+
+\foreach \x in {1,1.25,1.5,1.75,2,2.25,2.5,2.75,3}
+	\draw[black,thin] (-12,1,\x)--(-12,3,\x);
+	\foreach \x in {1,1.25,1.5,1.75,2,2.25,2.5,2.75,3}
+	\draw[black,thin] (-12,\x,1)--(-12,\x,3);
+	% draw kernel
+	
+    \draw[gray,dashed] (10,0,0)--($(0,1,3)+(T2)$);
+    \draw[gray,dashed] (10,0,0)--($(0,1,1)+(T2)$);
+    \draw[gray,dashed] (10,0,0)--($(0,3,1)+(T2)$);
+    \draw[gray,dashed] (10,0,0)--($(0,3,3)+(T2)$);
+
+% block path
+\draw[black,fill=gray,opacity=0.3] (3,0.3182,0.3182)--(3,0.3182,0.3182*3)--(3,0.3182*3,0.3182*3)--(3,0.3182*3,0.3182) -- cycle;
+\draw[black,fill=gray,opacity=0.3] (-3,0.5909,0.5909)--(-3,0.5909,0.5909*3)--(-3,0.5909*3,0.5909*3)--(-3,0.5909*3,0.5909) -- cycle;
+ \draw[black,fill=gray,opacity=0.3] (3,0.3182,0.3182)--(3,0.3182,0.3182*3)--(-3,0.5909,0.5909*3)--(-3,0.5909,0.5909) -- cycle;
+ \draw[black,fill=gray,opacity=0.3] (3,0.3182*3,0.3182)--(3,0.3182*3,0.3182*3)--(-3,0.5909*3,0.5909*3)--(-3,0.5909*3,0.5909) -- cycle; 
+ \draw[black,fill=gray,opacity=0.3] (3,0.3182,0.3182)--(3,0.3182*3,0.3182)--(-3,0.5909*3,0.5909)--(-3,0.5909,0.5909) -- cycle; 
+ \draw[black,fill=gray,opacity=0.3] (3,0.3182*3,0.3182*3)--(3,0.3182,0.3182*3)--(-3,0.5909,0.5909*3)--(-3,0.5909*3,0.5909*3) -- cycle; 
+ 
+ \draw[black,fill=red,opacity=0.3] (0,0.4546,0.4546)--(0,0.4546,0.4546*3)--(0,0.4546*3,0.4546*3)--(0,0.4546*3,0.4546) -- cycle;
+ 
+ 
+ 
+   \draw[thick,->] (0,-4,4)node[anchor=south east, align=left]{Concurrent \\ memory read} -- (0,0.4546,0.4546*3) ;
+   
+ \draw[thick,->] (0,4,-4)node[anchor=north west, align=left]{Memory used \\by a single\\ thread block} -- (-1.51,0.5*3,0.5) ;
+ 
+ 
+ \draw[<->](-12,3.2,1)--(-12,3.2,3);
+ \node at (-12,4.5,2.2){${\scriptsize divV}$};
+ 
+  \draw[<->](-12,1,3.2)--(-12,3,3.2);
+ \node at (-12,2.2,3.9){${\scriptsize divU}$};
+	 %% Source
+    \newcommand{\rotatedtangentangle}[1]{%
+    % find directions of projection
+    \path[tdplot_rotated_coords] (1,0,0);
+    \pgfgetlastxy{\axisxx}{\axisxy}
+    \path[tdplot_rotated_coords] (0,1,0);
+    \pgfgetlastxy{\axisyx}{\axisyy}
+    \path[tdplot_rotated_coords] (0,0,1);
+    \pgfgetlastxy{\axiszx}{\axiszy}
+    % angle of tangent
+    \pgfmathsetmacro{\rtang}{atan(-\axiszy/\axiszx)+180}
+    \pgfmathsetmacro{\angkorr}{atan(\axisyy/\axisyx)/2}
+
+    \pgfmathsetmacro{#1}{\rtang+\angkorr}
+}%      
+    \tdplotsetthetaplanecoords{90} % create rotated frame
+    \rotatedtangentangle{\tangent} % compute tanget angle
+    % shift rotated frame to center of cylinder
+    \coordinate (shift) at (10,0,0);
+    \tdplotsetrotatedcoordsorigin{(shift)}
+    % draw cylinder
+    \begin{scope}[tdplot_rotated_coords]
+        \draw[fill=red!30]
+            (0,0,-1.5) ++(\tangent:0.5) -- ++(0,0,1.5) arc (\tangent:\tangent-180:0.5) -- ++(0,0,-1.5);
+        \draw[fill=red!30] (0,0,-1.5) circle [radius=0.5];
+        
+    \end{scope}
+    \node at (10.4,0,0) {S};
+	
+    
+\end{tikzpicture}
+\centering
+
+\caption{Geometry of CBCT}
+\end{figure}
+
+\end{document}

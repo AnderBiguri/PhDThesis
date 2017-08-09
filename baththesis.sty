@@ -1,0 +1,122 @@
+% This style option is designed to work with the report document
+% style of LaTeX version 2.09.  Use
+% \documentstyle[mitthesis]{report}
+% Adapted by Philip Milne from Stephen Gildea's mitthesis style file. 
+%
+% Later hacked by FEB to reflect updated University regulations and
+% to ensure compatibility with LaTeX2e
+% 
+% Updated on 19/01/05 by PJH to reflect updated university regulations.
+
+%% Announce ourselves
+\ProvidesPackage{baththesis}
+%% Page layout: the regs ask for a margin of at least 40mm on the
+%% binding edge (left hand margin) and at least 15mm on all other
+%% margins.  The following does the job
+\oddsidemargin 15mm
+\evensidemargin 0pt
+\textwidth 5.7in
+\textheight 234mm
+\topmargin 0in
+\headheight 0in                 % no header
+\textheight 8.5in                       
+\headsep \headheight
+
+\footskip .4in
+
+%% The regs say we must have a minimum of one and a half line
+%% spacing.  For this we use the setspace style which is supposed to
+%% work with any dialect of LaTeX.
+\RequirePackage{setspace}
+\onehalfspacing
+
+% If you are getting two degrees, use \and between the names.
+\def\degree#1{\setbox0\hbox{#1}  %for side effect of setting \@degreeword
+  \gdef\@degree{#1}}
+
+% \and is used inside the \degree argument to separate two degrees
+\def\and{\gdef\@degreeword{degrees} \par and \par}
+\def\degreemonthyear#1{\gdef\@degreemonthyear{#1}}
+
+% input department name
+\def\department#1{\gdef\@department{#1}}
+
+\def\@standardcopyright{Attention is drawn to the fact that copyright of this
+thesis rests with its author. This copy of the thesis has been supplied on
+the condition that anyone who consults it is understood to recognise
+that its copyright rests with its author and that no quotation from the thesis 
+and no information derived from it may be published without the 
+prior written consent of the author.}
+
+\def\norestrictions{\gdef\@restriction{This thesis may be made available 
+for consultation within the University Library and may be photocopied 
+or lent to other libraries for the purposes of consultation.}}
+
+\def\restrictions#1{\gdef\@restriction{This thesis may not be consulted,
+photocopied or lent to other libraries without the permission of the
+author for #1 years from the date of acceptance of the thesis.}}
+
+
+\def\signature#1#2{\par\noindent#1\dotfill\null
+
+  {\raggedleft \mbox{#2 \hspace{1in}}\par}}
+
+\def\maketitle{
+\begin{titlepage}
+\setcounter{page}{0}
+\thispagestyle{empty}
+\parskip 10pt% plus 1fil minus 1fil
+\null\vfill
+\begin{center}
+\vfill
+\large
+\def\baselinestretch{1.2}
+{\def\baselinestretch{1.2}\Huge\bf \@title \par}
+
+submitted by
+
+{\huge \@author}
+
+for the degree of \@degree 
+
+of the 
+
+{\huge University of Bath}
+
+\@department
+
+\@degreemonthyear
+\vfill
+\end{center} 
+\begin{center}
+\bf COPYRIGHT
+\end{center}
+\@standardcopyright
+
+\noindent\@restriction
+\vfill
+\begin{center} 
+\signature{Signature of Author}{\@author}
+\vfill
+\end{center}
+% The \kern0pt pushes any depth into the height.  Thanks to Richard Stone.
+\par\kern 0pt\null
+\end{titlepage}}
+
+%% Redefine the abstract environment so it carries a page number and
+%% the right header:
+\renewcommand{\abstractname}{Summary}
+\def\abstract{\newpage\null\vfil\begin{center}
+ \Large\bf \abstractname
+\end{center}}
+\def\endabstract{\par\vfil\null\newpage}
+
+% If using the report style, use - instead of . in the figure number.
+\@ifundefined{thechapter}{}{\def\thefigure{\thechapter-\arabic{figure}}}
+
+
+
+
+
+
+

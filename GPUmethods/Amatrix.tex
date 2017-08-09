@@ -1,0 +1,391 @@
+\documentclass{standalone}
+
+\usepackage{tikz}
+\usetikzlibrary{calc,3d,arrows,shapes}
+\usepackage{tikz-3dplot}
+\usetikzlibrary{decorations.shapes}
+\usetikzlibrary{arrows,shapes,positioning}
+
+\usetikzlibrary{external}%%
+\tikzexternalize % activate!
+\definecolor{ligthgray}{rgb}{0.9,0.9,0.9}
+\definecolor{ligthblue}{rgb}{0.529411764705882,0.807843137254902,0.9215}
+
+\begin{document}
+
+\tikzset{decorate sep/.style 2 args=
+{decorate,decoration={shape backgrounds,shape=circle,shape size=#1,shape sep=#2}}}
+
+\begin{tikzpicture}
+
+\fill [ligthgray] (2,2) rectangle (3,3);
+\draw [ draw=black, thick] (0,0) grid  (5,5) ;
+\draw [draw=blue,  thick](-1,1) -- (6,5);
+%\draw [draw=black, ultra thick](6+4*0.05,5-7*0.05) -- (6-4*0.05,5+7*0.05);
+\node[blue] at (6,4.98){\textbullet};
+ \node at (6,5.3){$p_1(p_{x1},p_{y1})$};
+\node[blue] at (-1,0.98){\textbullet};
+ \node at (-1.5,1.5){$p_2(p_{x2},p_{y2})$};
+
+%\draw[-latex,thick] (5.8,4) node[below]{$\textbf{d}_j$}
+%	to[out=90,in=-120] (6+4*0.025,5-7*0.025);
+
+\draw [draw=red, line width=0.6mm] (2, 2.7143) -- (2.5,3);
+%
+\draw[-latex,thick] (3.2,2.5) node[right]{$l_{i,j}$}
+	to[out=180,in=-60] (2.25,2.85);
+	
+\draw[-latex,thick] (1.8,3.5) node[avobe]{$\alpha_c$}
+	to[out=0,in=120] (2, 0);	
+	
+\draw [ dotted,draw=gray,line width=0.3mm] (2, 0) -- (2,-1.5);
+\draw [ dotted,draw=gray,line width=0.3mm] (3, 0) -- (3,-1.5);
+\node at (2.5,-1.5){$\alpha_{xu}$}	;
+\draw [dashed,draw=blue, line width=0.4mm] (2, 2.7143-4) -- (3,3.27143-4);
+	
+\draw [ dotted,draw=gray,line width=0.3mm] (7.5, 2) -- (5,2);
+\draw [ dotted,draw=gray,line width=0.3mm] (7.5, 3) -- (5,3);
+\node at (7.3,2.45){$\alpha_{yu}$}	;
+\draw [dashed,draw=blue, line width=0.4mm] (5.5,2) -- (5.5+1.75,3);	
+	
+	
+	
+\draw[-latex,thick] (5.6,4) node[below]{$\alpha_{min}$}
+	to[out=90,in=-20] (5,4.4);	
+\draw[-latex,thick] (-0.9,2.1) node[above]{$\alpha_{max}$}
+	to[out=-60,in=150] (0,1.6);		
+	
+	
+\node at (-0.2,-0.3){$0$}	;
+\node at (1,-0.3){$1$}	;
+\node at (2.5,-0.3){$...$}	;
+\node at (5,-0.3){$N_x-1$}	;
+
+\node at (-0.2,1){$1$}	;
+\node[rotate=90] at (-0.2,2.5){$...$}	;
+\node at (-0.6,5){$N_y-1$}	;
+
+
+
+
+%	
+%\draw[-latex,thick] (5,5.5) node[left]{$\textbf{X-ray}_{j}$}
+%	to[out=0,in=110] (5.5,4.7);
+%%	
+%\draw[-latex,thick] (0.1,2.5) node[left]{$\footnotesize{\textbf{Sample}_{k}}$}
+%	to[out=0,in=90] (0.7,2);
+ 
+
+%\fill [ligthgray] (2,2) rectangle (3,3);
+%\draw [ draw=ligthgray, thick] (0,0) grid  (5,5) ;
+%
+%
+%\draw [fill=ligthgray] plot [smooth cycle] coordinates {(1.5,2)(1.5,3)(2.5,3)(2.5,4)(3.5,4)(3.5,3)(4,3)(4,2) };
+%
+%\draw [fill=gray] plot [smooth cycle] coordinates {(2.7,2.5)(2.7,3)(3.1,3)(3.1,2.5) };
+%
+%
+%
+%\draw [black] (0,0) rectangle (5,5);
+%\draw [draw=blue,  thick](-1,2) -- (6,3.5);
+%\draw[decorate sep={1mm}{4mm},fill,red] (-1,1) -- (6,5);
+%
+%\draw [draw=red,  thick]plot [smooth] coordinates {
+%(-1,6)
+%%(0.63924,4.9024)
+%%(0.99566,4.5746)
+%(1.1306,4.0253)
+%(1.3144,3.525)
+%(1.7603,3.2867)
+%(2.4126,3.2547)
+%(2.9928,3.1507)
+%(3.3046,2.7783)
+%(3.4291,2.2186)
+%(3.642,1.7472)
+%(4.1283,1.5494)
+%%(4.7806,1.5174)
+%%(5.3194,1.3721)
+%(6,0)
+%};
+%
+%\draw [draw=black, ultra thick](5.9,-0.2) -- (6.15,0.2);
+%\node at (6,0.5) 
+%    {$\textbf{d}_k$};
+%
+%\draw [draw=black, ultra thick](6.08,3.3) -- (6,3.7);
+%\node at (6,4) 
+%    {$\textbf{d}_j$};
+
+	
+	
+\end{tikzpicture}
+
+
+
+%\begin{tikzpicture}
+
+
+
+%%\fill [ligthgray] (2,2) rectangle (3,3);
+%%\draw [ draw=black, thick] (0,0) grid  (5,5) ;
+%%\draw [draw=blue, ultra thick](-1,1) -- (6,5);
+%%\draw [draw=red, line width=0.6mm] (2, 2.7143) -- (2.5,3);
+%%
+%%\draw[-latex,thick] (3.2,2.5) node[right]{$a_{i,j}$}
+%%	to[out=180,in=-60] (2.25,2.85);
+%%	
+%%\draw[-latex,thick] (5,5.5) node[left]{$\textbf{X-ray}_{j}$}
+%%	to[out=0,in=110] (5.5,4.7);
+%%	
+%%\draw[-latex,thick] (2.1,1.5) node[left]{$\footnotesize{\textbf{Pixel}_{i}}$}
+%%	to[out=0,in=-90] (2.5,2);
+
+% 
+
+%\fill [ligthgray] (2,2) rectangle (3,3);
+%
+%\draw [ draw=ligthgray, thick] (0,0) grid  (5,5) ;
+%
+%
+%\draw [fill=ligthgray] plot [smooth cycle] coordinates {
+%        (1.3623,1.8623)
+%(1.9237,3.4237)
+%(2.2841,2.7841)
+%(2.4299,3.9299)
+%(3.3623,3.8623)
+%(3.0763,2.5763)
+%(3.8531,2.8531)
+%(4.0477,2.0477) };
+%
+%
+%\draw [fill=gray] plot [smooth cycle] coordinates {
+%(2.5395,2.3395)
+%(2.3638,2.6638)
+%(2.6303,2.5303)
+%(2.8758,2.2758)};
+%
+%
+%\draw [black] (0,0) rectangle (5,5);
+%\draw [draw=blue,  thick]plot [smooth] coordinates {
+%(-01,2)
+%%(-0.54429,2.1715)
+%%(-0.24667,2.1849)
+%%(0.099141,2.2465)
+%%(0.51813,2.3813)
+%(0.98607,2.565)
+%(1.4412,2.7359)
+%(1.8167,2.8272)
+%(2.0783,2.8046)
+%(2.2463,2.6884)
+%(2.3926,2.5505)
+%(2.6103,2.4839)
+%(2.9716,2.561)
+%(3.493,2.7983)
+%(4.1249,3.1459)
+%%(4.7703,3.5072)
+%%(5.3265,3.7791)
+%%(5.7281,3.8966)
+%%(5.9741,3.8583)
+%(6,3.5)
+%};
+%\draw [draw=red,  thick](-1,6) -- (6,0);
+%\draw [draw=black, ultra thick](5.9,-0.2) -- (6.15,0.2);
+%\node at (6,0.5) 
+%    {$\textbf{d}_k$};
+%%\draw[decorate sep={1mm}{4mm},fill,red] (-1,1) -- (6,5);
+%
+%% deformed image
+%
+%\draw [draw=black, ultra thick](6.08,3.3) -- (6,3.7);
+%\node at (6,4) 
+%    {$\textbf{d}_j$};
+%	
+	
+%\end{tikzpicture}
+%
+%
+%\Large
+%
+%\begin{tikzpicture}
+%\draw [ draw=ligthgray, thick] (0,0) grid  (5,5) ;
+%\draw [black] (0,0) rectangle (5,5);
+%\fill [gray] (1.5,1.5) rectangle (2.5,2.5);
+%\draw [black,line width=0.6mm] (6,-0.5) -- (6,5.5);
+%
+%
+%\foreach \x in  {0,1.5,2,2.5,4.5}
+%\draw [yshift=\x cm,->,ultra thick,blue](-1,0.25)--(6,0.25);
+%\fill [blue](-0.5,0.8) circle [radius=1pt];
+%\fill [blue](-0.5,1) circle [radius=1pt];
+%\fill [blue](-0.5,1.2) circle [radius=1pt];
+%
+%\fill [blue](-0.5,3.6) circle [radius=1pt];
+%\fill [blue](-0.5,3.8) circle [radius=1pt];
+%\fill [blue](-0.5,4) circle [radius=1pt];
+%
+%\draw [draw=gray, ultra thick,fill=lightgray]plot [smooth cycle] coordinates {
+%(6+0.3,-0.5) (6+0.3,1.5-0.2)(7+0.3,1.5)(7+0.3,2.5-0.1)(6+0.3,2.5+0.2) (6+0.3,5.5)(6+0.1,5.5)(6+0.1,-0.5)
+%};
+%
+%
+%\node at (2,5.5){$I_{t_0}$};
+%\node at (7,4){$d_{t_0}$};
+%
+%\end{tikzpicture}
+%
+%
+%\begin{tikzpicture}
+%\draw [ draw=ligthgray, thick] (0,0) grid  (5,5) ;
+%\draw [black] (0,0) rectangle (5,5);
+%\fill [gray] (1.5,2.5) rectangle (2.5,3.5);
+%\draw [black,line width=0.6mm] (6,-0.5) -- (6,5.5);
+%\draw [draw=gray, ultra thick,fill=lightgray]plot [smooth] coordinates {
+%(6+0.3,-0.5) (6+0.3,1.5+1-0.1)(7+0.3,1.5+0.2+1)(7+0.3,2.5+0.1+1)(6+0.3,2.5+0.3+1) (6+0.3,5.5)(6+0.1,5.5)(6+0.1,-0.5)
+%};
+%\node at (2,5.5){$I_{t_1}$};
+%\node at (7,4){$d_{t_1}$};
+%
+%\foreach \x in  {0,2.5,3,3.5,4,4.5}
+%\draw [yshift=\x cm,->,ultra thick,blue](-1,0.25)--(6,0.25);
+%
+%\draw [->,ultra thick,red](2,2)--(2,3);
+%\draw [->,ultra thick,red](7,2)--(7,3);
+%
+%\fill [blue](-0.5,1.4) circle [radius=1pt];
+%\fill [blue](-0.5,1.6) circle [radius=1pt];
+%\fill [blue](-0.5,1.8) circle [radius=1pt];
+%\end{tikzpicture}
+%
+%
+%
+%
+%
+%\begin{tikzpicture}
+%
+%\draw [ draw=ligthgray, thick] (0,0) grid  (5,5) ;
+%\draw [black] (0,0) rectangle (5,5);
+%
+%%\fill [gray] (1.5,2.5) rectangle (2.5,3.5);
+%
+%\draw [black,line width=0.6mm] (6,-0.5) -- (6,5.5);
+%
+%\draw [draw=gray, ultra thick,fill=lightgray]plot [smooth cycle] coordinates {
+%(6+0.3,-0.5) (6+0.3,1.5-0.2)(7+0.3,1.5)(7+0.3,2.5-0.1)(6+0.3,2.5+0.2) (6+0.3,5.5)(6+0.1,5.5)(6+0.1,-0.5)
+%};
+%\foreach \x in  {0.9,1.4,1.9,2.4}
+%\draw [yshift=\x cm,->,ultra thick,blue](-1,0.25)--(6,0.25);
+%\fill [blue](-0.5,3.4) circle [radius=1pt];
+%\fill [blue](-0.5,3.6) circle [radius=1pt];
+%\fill [blue](-0.5,3.8) circle [radius=1pt];
+%
+%
+%\node at (2,5.5){$I_{t_0}$};
+%\node at (7,4){$d_{t_0}$};
+%
+%
+%\end{tikzpicture}
+%
+%
+%
+%
+%
+%\begin{tikzpicture}
+%
+%\draw [ draw=ligthgray, thick] (0,0) grid  (5,5) ;
+%\draw [black] (0,0) rectangle (5,5);
+%
+%%\fill [gray] (1.5,2.5) rectangle (2.5,3.5);
+%
+%\draw [black,line width=0.6mm] (6,-0.5) -- (6,5.5);
+%
+%\draw [draw=gray, ultra thick,fill=lightgray]plot [smooth] coordinates {
+%(6+0.3,-0.5) (6+0.3,1.5+1-0.1)(7+0.3,1.5+0.2+1)(7+0.3,2.5+0.1+1)(6+0.3,2.5+0.3+1) (6+0.3,5.5)(6+0.1,5.5)(6+0.1,-0.5)
+%};
+%\node at (2,5.5){$I_{t_0}$};
+%\node at (7,4){$d_{t_1}$};
+%
+%
+%\foreach \x in  {2.3,2.8,3.3,3.8}
+%\draw [yshift=\x cm,->,ultra thick,blue](5.9,0)--(6,0);
+%\foreach \x in  {2.3,2.8,3.3,3.8}
+%\draw[draw=blue, ultra thick]plot [smooth, tension=0.3] coordinates{
+%(-1,\x)
+%(1,\x)
+%(1+0.5,\x-1)
+%(3-0.5,\x-1)
+%(3,\x)
+%(6,\x)
+%};
+%
+%\fill [blue](-0.5,1.4) circle [radius=1pt];
+%\fill [blue](-0.5,1.6) circle [radius=1pt];
+%\fill [blue](-0.5,1.8) circle [radius=1pt];
+%
+%
+%
+%\end{tikzpicture}
+%
+%
+%
+%\begin{tikzpicture}
+%
+%\draw [ draw=ligthgray, thick] (0,0) grid  (5,5) ;
+%\draw [black] (0,0) rectangle (5,5);
+%`
+%\fill [ligthblue] (0.01,0.9+0.25) rectangle (5-0.01,2.4+0.25);
+%
+%\draw [black,line width=0.6mm] (6,-0.5) -- (6,5.5);
+%
+%\draw [draw=gray, ultra thick,fill=lightgray]plot [smooth cycle] coordinates {
+%(6+0.3,-0.5) (6+0.3,1.5-0.2)(7+0.3,1.5)(7+0.3,2.5-0.1)(6+0.3,2.5+0.2) (6+0.3,5.5)(6+0.1,5.5)(6+0.1,-0.5)
+%};
+%\foreach \x in  {0.9,2.4}
+%\draw [yshift=\x cm,ultra thick,blue](-1,0.25)--(6,0.25);
+%\fill [blue](-0.5,3.4) circle [radius=1pt];
+%\fill [blue](-0.5,3.6) circle [radius=1pt];
+%\fill [blue](-0.5,3.8) circle [radius=1pt];
+%
+%
+%\node at (2,5.5){$I_{t_0}$};
+%\node at (7,4){$d_{t_0}$};
+%
+%
+%\end{tikzpicture}
+%
+%
+%
+%\begin{tikzpicture}
+%
+%\draw [ draw=ligthgray, thick] (0,0) grid  (5,5) ;
+%\draw [black] (0,0) rectangle (5,5);
+%
+%%\fill [gray] (1.5,2.5) rectangle (2.5,3.5);
+%
+%\draw [black,line width=0.6mm] (6,-0.5) -- (6,5.5);
+%
+%\draw [draw=gray, ultra thick,fill=lightgray]plot [smooth] coordinates {
+%(6+0.3,-0.5) (6+0.3,1.5+1-0.1)(7+0.3,1.5+0.2+1)(7+0.3,2.5+0.1+1)(6+0.3,2.5+0.3+1) (6+0.3,5.5)(6+0.1,5.5)(6+0.1,-0.5)
+%};
+%\node at (2,5.5){$I_{t_0}$};
+%\node at (7,4){$d_{t_1}$};
+%
+%\foreach \x in  {2.3,3.8}
+%\draw[draw=blue, ultra thick]plot [smooth, tension=0.3] coordinates{
+%(-1,\x)
+%(1,\x)
+%(1+0.5,\x-1)
+%(3-0.5,\x-1)
+%(3,\x)
+%(6,\x)
+%};
+%
+%\fill [blue](-0.5,1.4) circle [radius=1pt];
+%\fill [blue](-0.5,1.6) circle [radius=1pt];
+%\fill [blue](-0.5,1.8) circle [radius=1pt];
+%
+%
+%
+%\end{tikzpicture}
+
+
+\end{document}

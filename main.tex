@@ -1,0 +1,104 @@
+\documentclass[11pt]{report}
+% packages
+\usepackage{baththesis}
+\usepackage{amssymb} %for Blackboard bold etc
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{graphicx} %for including eps graphics
+\usepackage{float}
+\usepackage[english]{babel}
+\usepackage{placeins}
+
+\usepackage{hyperref}
+
+\usepackage{tikz}
+
+
+
+
+
+
+
+
+
+
+\usepackage{algpseudocode,algorithm,algorithmicx}
+%\algrenewcommand\algorithmicrequire{\textbf{Launch:}}
+%%
+%\algrenewcommand\algorithmicensure{\textbf{End Kernel}}
+
+\makeatletter
+\def\ALG@special@indent{%
+    \ifdim\ALG@thistlm=0pt\relax
+        \hskip-\leftmargin
+    \else
+        \hskip\ALG@thistlm
+    \fi
+}
+\newcommand{\Launch}[1]{\item[]\noindent\ALG@special@indent \textbf{Launch:}\ #1}
+\newcommand{\EndKernel}{\item[]\noindent\ALG@special@indent \textbf{End Kernel}}
+\makeatother
+
+\usepackage{subfigure} 
+
+\usepackage{indentfirst}
+\usepackage{booktabs} % for much better looking tables
+\usepackage{array} % for better arrays (eg matrices) in maths
+\usepackage{paralist} % very flexible & customisable lists (eg. enumerate/itemize, etc.)
+\usepackage{verbatim} % adds environment for commenting out blocks of text & for better verb
+\usepackage{matlab-prettifier}
+\renewcommand{\lstlistingname}{Code Snippet}
+\usepackage{multicol}
+\usepackage{caption}
+\usepackage{makecell}
+
+\newcommand{\argmin}{\mathop{\mathrm{arg\,min}}}
+\newcommand{\argmax}{\mathop{\mathrm{arg\,max}}}
+
+
+\makeatletter
+\newcommand{\vast}{\bBigg@{4}}
+\newcommand{\Vast}{\bBigg@{5}}
+\makeatother
+
+
+
+
+
+
+% front matter
+\title{Motion correction in X-ray tomography}
+\author{Ander Biguri}
+\degree{Doctor of Philosophy}
+\department{Department of Electrical and Electronic Engineering}
+\degreemonthyear{September 2017}
+\norestrictions
+
+
+
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+bla
+\end{abstract}
+
+
+\tableofcontents
+
+\chapter{Introduction}\label{ch:intro}
+\chapter{X-ray imaging in medicine}\label{ch:soa}
+%\chapter{The image reconstruction problem}
+\input{RecAlgorithms/RecAlgorithms.tex}\label{ch:rec}
+
+
+%\input{GPUmethods/GPUmethods_SH.tex}\label{ch:GPU}
+\chapter{Applications of TIGRE}\label{ch:apllications}
+%\input{MotionCorrection/motioncorrection.tex}\label{ch:motion}
+\chapter{Tolerance analysis of motion correction}\label{ch:motion analisis}
+\chapter{Conclusions and Future work}\label{ch:conclusions}
+
+\bibliographystyle{plain}
+\bibliography{RecAlgorithms,motioncorrection,GPUmethods}
+\end{document}

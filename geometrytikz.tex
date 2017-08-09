@@ -1,0 +1,161 @@
+\documentclass{article}
+
+\usepackage{tikz}
+\usetikzlibrary{calc,3d,arrows,shapes}
+\usepackage{tikz-3dplot}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usetikzlibrary{external}
+\tikzexternalize % activate!
+\begin{document}
+
+\begin{figure}[H]
+
+\tdplotsetmaincoords{70}{46+90} % rotate 60 degrees around x axis, then 105 degrees about z
+\begin{tikzpicture}[>=stealth',           % arrow tip
+                    tdplot_main_coords,   % Set view as defined by \tdplotsetmaincoords
+                    scale=0.4               % scale
+                    ]  
+                    
+   %%%%%%%Some inside figure preable, for variables that are going to be repated
+   %Trasnlation of CUBE
+   \newcommand{\Tx}{2} 
+   \newcommand{\Ty}{-3} 
+   \newcommand{\Tz}{1}
+   \coordinate (T) at (\Tx,\Ty,\Tz);
+   % Cube coords
+   \newcommand{\CubeSz}{2}
+   \coordinate (P1) at (-\CubeSz,-\CubeSz,-\CubeSz);
+   \coordinate (P2) at (-\CubeSz,-\CubeSz,\CubeSz);
+   \coordinate (P3) at (-\CubeSz,\CubeSz,\CubeSz);
+   \coordinate (P4) at (-\CubeSz,\CubeSz,-\CubeSz);
+   \coordinate (P5) at (\CubeSz,-\CubeSz,-\CubeSz);
+   \coordinate (P6) at (\CubeSz,-\CubeSz,\CubeSz);
+   \coordinate (P7) at (\CubeSz,\CubeSz,\CubeSz);
+   \coordinate (P8) at (\CubeSz,\CubeSz,-\CubeSz);
+   
+  
+   
+   
+   
+   \newcommand{\DetSzOne}{5}
+   \newcommand{\DetSzTwo}{0.2}
+
+   \coordinate (D1) at (-\DetSzTwo,-\DetSzOne,-\DetSzOne);
+   \coordinate (D2) at (-\DetSzTwo,-\DetSzOne,\DetSzOne);
+   \coordinate (D3) at (-\DetSzTwo,\DetSzOne,\DetSzOne);
+   \coordinate (D4) at (-\DetSzTwo,\DetSzOne,-\DetSzOne);
+   \coordinate (D5) at (\DetSzTwo,-\DetSzOne,-\DetSzOne);
+   \coordinate (D6) at (\DetSzTwo,-\DetSzOne,\DetSzOne);
+   \coordinate (D7) at (\DetSzTwo,\DetSzOne,\DetSzOne);
+   \coordinate (D8) at (\DetSzTwo,\DetSzOne,-\DetSzOne);
+    \coordinate (T2) at (-12,-0.5,-0.5);
+   % offset vector
+	\draw[red,thick,->] (0,0,0) -- (T) node[sloped,midway,above]{\tiny $\overrightarrow{V_{orig}}$};  
+	\draw[red,thick,->] (-12,0,0) -- (T2) node[sloped,midway,below]{\tiny $\overrightarrow{V_{det}}$};          
+          
+          %\draw[dotted] (0,0,0) circle (15);
+	
+	%\draw[dotted] (0,0,0) circle (12);
+	\draw[dotted] (0,0,0) ++ (0+247:12) arc (0+247:353.5+247:12);
+    \draw[dotted] (0,0,0) ++ (0+208:15) arc (0+208:325.5+208:15);
+	
+          
+    %% Source
+    \newcommand{\rotatedtangentangle}[1]{%
+    % find directions of projection
+    \path[tdplot_rotated_coords] (1,0,0);
+    \pgfgetlastxy{\axisxx}{\axisxy}
+    \path[tdplot_rotated_coords] (0,1,0);
+    \pgfgetlastxy{\axisyx}{\axisyy}
+    \path[tdplot_rotated_coords] (0,0,1);
+    \pgfgetlastxy{\axiszx}{\axiszy}
+    % angle of tangent
+    \pgfmathsetmacro{\rtang}{atan(-\axiszy/\axiszx)+180}
+    \pgfmathsetmacro{\angkorr}{atan(\axisyy/\axisyx)/2}
+
+    \pgfmathsetmacro{#1}{\rtang+\angkorr}
+}%      
+    \tdplotsetthetaplanecoords{90} % create rotated frame
+    \rotatedtangentangle{\tangent} % compute tanget angle
+    % shift rotated frame to center of cylinder
+    \coordinate (shift) at (15,0,0);
+    \tdplotsetrotatedcoordsorigin{(shift)}
+    % draw cylinder
+    \begin{scope}[tdplot_rotated_coords]
+        \draw[fill=red!30]
+            (0,0,-1.5) ++(\tangent:0.5) -- ++(0,0,1.5) arc (\tangent:\tangent-180:0.5) -- ++(0,0,-1.5);
+        \draw[fill=red!30] (0,0,-1.5) circle [radius=0.5];
+        
+    \end{scope}
+    \node at (15.4,0,0) {S};
+                 
+   % XYZ axis
+   \draw[thick,->] (0,0,0) -- (6,0,0) node[anchor=north east]{\textbf{x}};
+   \draw[thick,->] (0,0,0) -- (0,6,0) node[anchor=north]{\textbf{y}};
+   \draw[thick,->] (0,0,0) -- (0,0,6) node[anchor=south]{\textbf{z}};
+   
+   %UV axis
+   \draw[thick,->] (-11.8,-5.5,-5.5) -- (-11.8,-2,-5.5) node[anchor=north]{\textbf{u}};
+   \draw[thick,->] (-11.8,-5.5,-5.5) -- (-11.8,-5.5,-2) node[anchor=south]{\textbf{v}};   
+   
+   % Origin
+   \draw plot [mark=*, mark size=2] coordinates{(0,0,0)} node[anchor=south west]{$\text{O}$}; 
+   
+   % Middle of CUBE
+   \draw[color=blue] plot [mark=*, mark size=2, fill=blue] coordinates{(T)} node[anchor=south west]{$\text{O}'$}; 
+   %Draw CUBE
+    \draw[black,fill=blue,opacity=0.05] ($(P1)+(T)$) -- ($(P2)+(T)$) -- ($(P3)+(T)$) -- ($(P4)+(T)$) -- cycle;% -X face
+	\draw[black,fill=blue!20,opacity=0.05] ($(P2)+(T)$) -- ($(P3)+(T)$) -- ($(P7)+(T)$) -- ($(P6)+(T)$) -- cycle;% +Z face
+	\draw[black,fill=blue,opacity=0.05] ($(P1)+(T)$) -- ($(P2)+(T)$) -- ($(P6)+(T)$) -- ($(P5)+(T)$) -- cycle;% -Y face
+	\draw[black,fill=blue,opacity=0.05] ($(P3)+(T)$) -- ($(P4)+(T)$) -- ($(P8)+(T)$) -- ($(P7)+(T)$) -- cycle;% Right Face
+	\draw[black,fill=blue,opacity=0.1] ($(P1)+(T)$) -- ($(P4)+(T)$) -- ($(P8)+(T)$) -- ($(P5)+(T)$) -- cycle;% Front Face
+	\draw[black,fill=blue,opacity=0.05] ($(P5)+(T)$) -- ($(P6)+(T)$) -- ($(P7)+(T)$) -- ($(P8)+(T)$) -- cycle;% Top Face
+	
+	%image
+	\node at ($(P2)+(T)+(0,0,0.5)$){\Large $\mathbb{I}$};
+	\node at ($(D2)+(T2)+(0,0,0.5)$){\Large $\mathbb{D}$};
+	
+	
+	
+
+
+
+
+    \draw[->] (0,0,8) ++ (20+40:1.5) arc (20+40:340+40:1.5);
+    
+    \draw[->] (0,0,0) ++ (0:18) arc (0:30:18) node[below,midway,sloped]{$\theta$};
+    
+    \draw[dashed,<->] (0,0,0) -- (2.60,-14.77,0) node[sloped,midway,above]     {\tiny DSO};
+    \draw[dashed,<->] (-6,10.39,0) -- (7.5,-12.99,0) node[sloped,near end,above]     {\tiny \hspace{22pt} DSD};
+    
+    
+
+
+    % Middle of Detector
+   \draw[color=blue] plot [mark=*, mark size=2, fill=blue] coordinates{(T2)} node[anchor=south east]{$\text{D'}$};
+   \draw[color=black] plot [mark=*, mark size=2, fill=black] (-12,0,0) node[anchor=south west]{$\text{D}$}; 
+   %Draw Detector
+    \draw[black,fill=black,opacity=0.05] ($(D1)+(T2)$) -- ($(D2)+(T2)$) -- ($(D3)+(T2)$) -- ($(D4)+(T2)$) -- cycle;% -X face
+	\draw[black,fill=black!20,opacity=0.05] ($(D2)+(T2)$) -- ($(D3)+(T2)$) -- ($(D7)+(T2)$) -- ($(D6)+(T2)$) -- cycle;% +Z face
+	\draw[black,fill=black,opacity=0.1] ($(D1)+(T2)$) -- ($(D2)+(T2)$) -- ($(D6)+(T2)$) -- ($(D5)+(T2)$) -- cycle;% -Y face
+	\draw[black,fill=black!20,opacity=0.05] ($(D3)+(T2)$) -- ($(D4)+(T2)$) -- ($(D8)+(T2)$) -- ($(D7)+(T2)$) -- cycle;% Right Face
+	\draw[black,fill=black,opacity=0.1] ($(D1)+(T2)$) -- ($(D4)+(T2)$) -- ($(D8)+(T2)$) -- ($(D5)+(T2)$) -- cycle;% Front Face
+	\draw[black,fill=black,opacity=0.05] ($(D5)+(T2)$) -- ($(D6)+(T2)$) -- ($(D7)+(T2)$) -- ($(D8)+(T2)$) -- cycle;% Top Face
+% Draw Detector    
+
+      
+  %    \node [cylinder,draw=black,thick,aspect=0.5,minimum height=1cm,minimum %width=0.25cm,shape border      
+%   rotate=0,cylinder uses custom fill, cylinder body fill=red!30,cylinder end fill=red!5] at %(15,0,0){S};
+
+    
+    
+
+    
+\end{tikzpicture}
+\centering
+
+\caption{Geometry of CBCT}
+\end{figure}
+
+\end{document}

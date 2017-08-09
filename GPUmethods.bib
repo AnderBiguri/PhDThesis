@@ -1,0 +1,392 @@
+@article{ASTRA,
+title = "The \{ASTRA\} Toolbox: A platform for advanced algorithm development in electron tomography ",
+journal = "Ultramicroscopy ",
+volume = "157",
+number = "",
+pages = "35 - 47",
+year = "2015",
+note = "",
+issn = "0304-3991",
+doi = "http://dx.doi.org/10.1016/j.ultramic.2015.05.002",
+url = "http://www.sciencedirect.com/science/article/pii/S0304399115001060",
+author = "W. van Aarle and W. Jan Palenstijn and J. De Beenhouwer and T. Altantzis and S. Bals and K. J. Batenburg and J. Sijbers",
+keywords = "Electron tomography",
+keywords = "Reconstruction",
+keywords = "ASTRA Toolbox",
+keywords = "Dual-axis ",
+abstract = "Abstract We present the \{ASTRA\} Toolbox as an open platform for 3D image reconstruction in tomography. Most of the software tools that are currently used in electron tomography offer limited flexibility with respect to the geometrical parameters of the acquisition model and the algorithms used for reconstruction. The \{ASTRA\} Toolbox provides an extensive set of fast and flexible building blocks that can be used to develop advanced reconstruction algorithms, effectively removing these limitations. We demonstrate this flexibility, the resulting reconstruction quality, and the computational efficiency of this toolbox by a series of experiments, based on experimental dual-axis tilt series. "
+}
+@article{Palenstijn2011250,
+title = "Performance improvements for iterative electron tomography reconstruction using graphics processing units ({GPU}s) ",
+journal = "Journal of Structural Biology ",
+volume = "176",
+number = "2",
+pages = "250 - 253",
+year = "2011",
+note = "",
+issn = "1047-8477",
+doi = "http://dx.doi.org/10.1016/j.jsb.2011.07.017",
+url = "http://www.sciencedirect.com/science/article/pii/S1047847711002267",
+author = "Palenstijn, W.J.  and  Batenburg, K.J. and  Sijbers, J.",
+keywords = "Electron tomography",
+keywords = "Reconstruction",
+keywords = "GPU ",
+abstract = "Iterative reconstruction algorithms are becoming increasingly important in electron tomography of biological samples. These algorithms, however, impose major computational demands. Parallelization must be employed to maintain acceptable running times. Graphics Processing Units (GPUs) have been demonstrated to be highly cost-effective for carrying out these computations with a high degree of parallelism. In a recent paper by Xu et al. (2010), a \{GPU\} implementation strategy was presented that obtains a speedup of an order of magnitude over a previously proposed GPU-based electron tomography implementation. In this technical note, we demonstrate that by making alternative design decisions in the \{GPU\} implementation, an additional speedup can be obtained, again of an order of magnitude. By carefully considering memory access locality when dividing the workload among blocks of threads, the GPU�s cache is used more efficiently, making more effective use of the available memory bandwidth. "
+}
+%Lionheart. Proposes a method for speeding up Jacob's by precomputing intersection points in XY.
+% Also proposes the same for exact matched backprojection
+@article{thompson2014gpu,
+  title={{GPU} Accelerated Structure-Exploiting Matched Forward and Back Projection for Algebraic Iterative Cone Beam CT Reconstruction},
+  author={Thompson, William M and Lionheart, William RB},
+  year={2014}
+}
+%Siddon
+
+@article{siddon1985fast,
+  title={Fast calculation of the exact radiological path for a three-dimensional {CT} array},
+  author={Siddon, R.L.},
+  journal={Medical physics},
+  volume={12},
+  number={2},
+  pages={252--255},
+  year={1985},
+  publisher={American Association of Physicists in Medicine}
+}
+%Jacobs
+@article{jacobs1998fast,
+  title={A fast algorithm to calculate the exact radiological path through a pixel or voxel space},
+  author={Jacobs, Filip and Sundermann, Erik and De Sutter, Bjorn and Christiaens, Mark and Lemahieu, Ignace},
+  journal={CIT. Journal of computing and information technology},
+  volume={6},
+  number={1},
+  pages={89--94},
+  year={1998},
+  publisher={SRCE-Sveu{\v{c}}ili{\v{s}}ni ra{\v{c}}unski centar}
+}
+
+% Unmatched analisis.
+@article{zeng2000unmatched,
+  title={Unmatched projector/backprojector pairs in an iterative reconstruction algorithm},
+  author={Zeng, Gengsheng L and Gullberg, Grant T},
+  journal={IEEE transactions on medical imaging},
+  volume={19},
+  number={5},
+  pages={548--555},
+  year={2000},
+  publisher={IEEE}
+}
+% Matched 100% iterative algoritms DO BETTER
+@INPROCEEDINGS{6829349, 
+author={V. G. Nguyen and J. Jeong and S. J. Lee}, 
+booktitle={2013 IEEE Nuclear Science Symposium and Medical Imaging Conference (2013 NSS/MIC)}, 
+title={GPU-accelerated iterative 3D CT reconstruction using exact ray-tracing method for both projection and backprojection}, 
+year={2013}, 
+pages={1-4}, 
+keywords={computerised tomography;graphics processing units;image reconstruction;iterative methods;medical image processing;parallel processing;ray tracing;Beer law;GPU efficiency maximization;GPU-accelerated RTM method;GPU-accelerated iterative 3D CT reconstruction;RTM projector-backprojector pair;X-ray CT reconstruction;analytical methods;approximations;backprojection computational speed;computation time;exact ray tracing method;forward projection;graphics processing units;image quality;iteration number effect;iterative reconstruction errors;low radiation dose condition;low-dose CT reconstruction;low-dose scan reconstruction;model-based iterative reconstruction methods;modeling accuracy;noise regularization;pixel-driven method;projection-backprojection parallelization;unmatched projector-backprojector pairs;Approximation methods;Computed tomography;Detectors;Equations;Graphics processing units;Image reconstruction;Ray tracing}, 
+doi={10.1109/NSSMIC.2013.6829349}, 
+ISSN={1082-3654}, 
+month={Oct},}
+
+% This articel claims faster accelerated GPU code. They provide code.
+%
+% Them: 256x256x192 image, 512x384x668 proj, Ax (52.59s slow, 8.61s theirs) Atb (57s theirs).
+% Us  :  same                                Ax ( 3.12s slow, ?????       ) Atb (2.3s "matched")
+%
+% WTF
+%
+% The articles backproejction is 100% matched, which may explain the computational times of Atb
+@article{gao2012fast,
+  title={Fast parallel algorithms for the x-ray transform and its adjoint},
+  author={Gao, Hao},
+  journal={Medical physics},
+  volume={39},
+  number={11},
+  pages={7110--7120},
+  year={2012},
+  publisher={Wiley Online Library}
+}
+
+% Distance driven GPU proj/backproj
+@inproceedings{schlifske2016fast,
+  title={A fast {GPU}-based approach to branchless distance-driven projection and back-projection in cone beam {CT}},
+  author={Schlifske, Daniel and Medeiros, Henry},
+  booktitle={SPIE Medical Imaging},
+  pages={97832W--97832W},
+  year={2016},
+  organization={International Society for Optics and Photonics}
+}
+%distance driven
+@article{BrunoDeMan,
+  author={Bruno De Man and Samit Basu},
+  title={Distance-driven projection and backprojection in three dimensions},
+  journal={Physics in Medicine and Biology},
+  volume={49},
+  number={11},
+  pages={2463},
+  url={http://stacks.iop.org/0031-9155/49/i=11/a=024},
+  year={2004},
+  abstract={Projection and backprojection are operations that arise frequently in tomographic imaging. Recently, we proposed a new method for projection and backprojection, which we call distance-driven , and that offers low arithmetic cost and a highly sequential memory access pattern. Furthermore, distance-driven projection and backprojection avoid several artefact-inducing approximations characteristic of some other methods. We have previously demonstrated the application of this method to parallel and fan beam geometries. In this paper, we extend the distance-driven framework to three dimensions and demonstrate its application to cone beam reconstruction. We also present experimental results to demonstrate the computational performance, the artefact characteristics and the noise-resolution characteristics of the distance-driven method in three dimensions.}
+}
+	
+% Voxel Driven GPU projection acceleration
+% very nice introduction
+@Article{Du2017,
+author="Du, Yi
+and Yu, Gongyi
+and Xiang, Xincheng
+and Wang, Xiangang",
+title="{GPU} accelerated voxel-driven forward projection for iterative reconstruction of cone-beam {CT}",
+journal="BioMedical Engineering OnLine",
+year="2017",
+volume="16",
+number="1",
+pages="2",
+abstract="For cone-beam computed tomography (CBCT), which has been playing an important role in clinical applications, iterative reconstruction algorithms are able to provide advantageous image qualities over the classical FDK. However, the computational speed of iterative reconstruction is a notable issue for CBCT, of which the forward projection calculation is one of the most time-consuming components.",
+issn="1475-925X",
+doi="10.1186/s12938-016-0293-8",
+url="http://dx.doi.org/10.1186/s12938-016-0293-8"
+}
+
+% Separable footprints
+@article{long20103d,
+  title={{3D} forward and back-projection for {X}-ray {CT} using separable footprints},
+  author={Long, Yong and Fessler, Jeffrey A and Balter, James M},
+  journal={IEEE transactions on medical imaging},
+  volume={29},
+  number={11},
+  pages={1839--1850},
+  year={2010},
+  publisher={IEEE}
+}
+% GPU accelerated separeable footprints
+@inproceedings{wu2011gpu,
+  title={{GPU} acceleration of {3D} forward and backward projection using separable footprints for X-ray {CT} image reconstruction},
+  author={Wu, Meng and Fessler, Jeffrey A},
+  year={2011},
+  booktitle={3rd Workshop on High Performance Image Reconstruction},
+
+}
+
+% this one says interpolation sample rate ~0.5 is great
+@article{jia2012gpu,
+  title={A {GPU} tool for efficient, accurate, and realistic simulation of cone beam {CT} projections},
+  author={Jia, X. and Yan, H. and Cervi{\~n}o, L. and Folkerts, M. and Jiang, S.B}.,
+  journal={Medical physics},
+  volume={39},
+  number={12},
+  pages={7368--7378},
+  year={2012},
+  publisher={American Association of Physicists in Medicine}
+}
+
+
+
+%  Does grid-interpolated+siddon
+@article{xu2010fast,
+  title={Fast implementation of iterative reconstruction with exact ray-driven projector on GPUs},
+  author={Xu, Fang},
+  journal={Tsinghua Science \& Technology},
+  volume={15},
+  number={1},
+  pages={30--35},
+  year={2010},
+  publisher={Elsevier}
+}
+
+% Compares projection methods. Concludes that Siddon is best, closely followed by grid interpolated
+@INPROCEEDINGS{1625152, 
+author={Fang Xu and K. Mueller}, 
+booktitle={3rd IEEE International Symposium on Biomedical Imaging: Nano to Macro, 2006.}, 
+title={A comparative study of popular interpolation and integration methods for use in computed tomography}, 
+year={2006}, 
+pages={1252-1255}, 
+keywords={computer graphics;computerised tomography;image reconstruction;integration;interpolation;medical image processing;CT backprojection;CT projection;Marschner-Lobb dataset;area-based methods;computed tomography;hexagonal subsampling;image reconstruction;integration methods;interpolation methods;line-based methods;parallel-beam projection geometry;programmable commodity graphics hardware;Computed tomography;Computer science;Equations;Filters;Frequency;Interpolation;Kernel;Taylor series;Testing;Visualization}, 
+doi={10.1109/ISBI.2006.1625152}, 
+ISSN={1945-7928}, 
+month={April},}
+
+% alternative to voxels
+@article{lewitt1992alternatives,
+  title={Alternatives to voxels for image representation in iterative reconstruction algorithms},
+  author={Lewitt, Robert M},
+  journal={Physics in Medicine and Biology},
+  volume={37},
+  number={3},
+  pages={705},
+  year={1992},
+  publisher={IOP Publishing}
+}
+
+% FAST ray tracing. READ THIS FOR OPTIMIZATOIPN
+@article{chou2011fast,
+  title={A fast forward projection using multithreads for multirays on {GPU}s in medical image reconstruction},
+  author={Chou, Cheng-Ying and Chuo, Yi-Yen and Hung, Yukai and Wang, Weichung},
+  journal={Medical Physics},
+  volume={38},
+  number={7},
+  pages={4052--4065},
+  year={2011},
+  publisher={Wiley Online Library}
+}
+
+
+@article{phillips2005scalable,
+  title={Scalable molecular dynamics with {NAMD}},
+  author={Phillips, James C and Braun, Rosemary and Wang, Wei and Gumbart, James and Tajkhorshid, Emad and Villa, Elizabeth and Chipot, Christophe and Skeel, Robert D and Kale, Laxmikant and Schulten, Klaus},
+  journal={Journal of computational chemistry},
+  volume={26},
+  number={16},
+  pages={1781--1802},
+  year={2005},
+  publisher={Wiley Online Library}
+}
+@article{CHOLLA,
+  author={Evan E. Schneider and Brant E. Robertson},
+  title={{CHOLLA}: A New Massively Parallel Hydrodynamics Code for Astrophysical Simulation},
+  journal={The Astrophysical Journal Supplement Series},
+  volume={217},
+  number={2},
+  pages={24},
+  url={http://stacks.iop.org/0067-0049/217/i=2/a=24},
+  year={2015},
+  abstract={We present Computational Hydrodynamics On ParaLLel Architectures ( Cholla ), a new three-dimensional hydrodynamics code that harnesses the power of graphics processing units (GPUs) to accelerate astrophysical simulations. Cholla models the Euler equations on a static mesh using state-of-the-art techniques, including the unsplit Corner Transport Upwind algorithm, a variety of exact and approximate Riemann solvers, and multiple spatial reconstruction techniques including the piecewise parabolic method (PPM). Using GPUs, Cholla evolves the fluid properties of thousands of cells simultaneously and can update over 10 million cells per GPU-second while using an exact Riemann solver and PPM reconstruction. Owing to the massively parallel architecture of GPUs and the design of the Cholla code, astrophysical simulations with physically interesting grid resolutions (≳256 3 ) can easily be computed on a single device. We use the Message Passing Interface library to extend calculations onto multiple devices and demonstrate nearly ideal scaling beyond 64 GPUs. A suite of test problems highlights the physical accuracy of our modeling and provides a useful comparison to other codes. We then use Cholla to simulate the interaction of a shock wave with a gas cloud in the interstellar medium, showing that the evolution of the cloud is highly dependent on its density structure. We reconcile the computed mixing time of a turbulent cloud with a realistic density distribution destroyed by a strong shock with the existing analytic theory for spherical cloud destruction by describing the system in terms of its median gas density.}
+}
+	@article{Tensorflow,
+  author    = {Mart{\'{\i}}n Abadi and
+               Ashish Agarwal and
+               Paul Barham and
+               Eugene Brevdo and
+               Zhifeng Chen and
+               Craig Citro and
+               Gregory S. Corrado and
+               Andy Davis and
+               Jeffrey Dean and
+               Matthieu Devin and
+               Sanjay Ghemawat and
+               Ian J. Goodfellow and
+               Andrew Harp and
+               Geoffrey Irving and
+               Michael Isard and
+               Yangqing Jia and
+               Rafal J{\'{o}}zefowicz and
+               Lukasz Kaiser and
+               Manjunath Kudlur and
+               Josh Levenberg and
+               Dan Man{\'{e}} and
+               Rajat Monga and
+               Sherry Moore and
+               Derek Gordon Murray and
+               Chris Olah and
+               Mike Schuster and
+               Jonathon Shlens and
+               Benoit Steiner and
+               Ilya Sutskever and
+               Kunal Talwar and
+               Paul A. Tucker and
+               Vincent Vanhoucke and
+               Vijay Vasudevan and
+               Fernanda B. Vi{\'{e}}gas and
+               Oriol Vinyals and
+               Pete Warden and
+               Martin Wattenberg and
+               Martin Wicke and
+               Yuan Yu and
+               Xiaoqiang Zheng},
+  title     = {Tensor{F}low: Large-Scale Machine Learning on Heterogeneous Distributed
+               Systems},
+  journal   = {CoRR},
+  volume    = {abs/1603.04467},
+  year      = {2016},
+  url       = {http://arxiv.org/abs/1603.04467},
+  timestamp = {Fri, 01 Jul 2016 14:44:15 +0200},
+  biburl    = {http://dblp.uni-trier.de/rec/bib/journals/corr/AbadiABBCCCDDDG16},
+  bibsource = {dblp computer science bibliography, http://dblp.org}
+}
+
+@article{XCAT,
+  title={{4D} {XCAT} phantom for multimodality imaging research},
+  author={Segars, WP and Sturgeon, G and Mendonca, S and Grimes, Jason and Tsui, Benjamin MW},
+  journal={Medical physics},
+  volume={37},
+  number={9},
+  pages={4902--4915},
+  year={2010},
+  publisher={Wiley Online Library}
+}
+
+
+% spherical basis functions
+@article {spherical,
+author = {Ziegler, Andy and Köhler, Thomas and Nielsen, Tim and Proksa, Roland},
+title = {Efficient projection and backprojection scheme for spherically symmetric basis functions in divergent beam geometry},
+journal = {Medical Physics},
+volume = {33},
+number = {12},
+publisher = {American Association of Physicists in Medicine},
+issn = {2473-4209},
+url = {http://dx.doi.org/10.1118/1.2388570},
+doi = {10.1118/1.2388570},
+pages = {4653--4663},
+keywords = {X-ray imaging, Image quality, Image analysis, Numerical approximation and analysis},
+keywords = {diagnostic radiography, image reconstruction, image resolution, image sampling, medical image processing, iterative methods},
+keywords = {Medical imaging, Interpolation, Image reconstruction, Image sensors, Computed tomography, Medical image noise, Position sensitive detectors, Medical image reconstruction, X-ray detectors, Medical image quality},
+year = {2006},
+}
+
+%ray-voxel backprojection
+@article{park2015fully,
+  title={A fully {GPU}-based ray-driven backprojector via a ray-culling scheme with voxel-level parallelization for cone-beam CT reconstruction},
+  author={Park, Hyeong-Gyu and Shin, Yeong-Gil and Lee, Ho},
+  journal={Technology in cancer research \& treatment},
+  volume={14},
+  number={6},
+  pages={709--720},
+  year={2015},
+  publisher={SAGE Publications Sage CA: Los Angeles, CA}
+}
+
+%voxel back
+@article{okitsu2010high,
+  title={High-performance cone beam reconstruction using {CUDA} compatible {GPU}s},
+  author={Okitsu, Yusuke and Ino, Fumihiko and Hagihara, Kenichi},
+  journal={Parallel Computing},
+  volume={36},
+  number={2},
+  pages={129--141},
+  year={2010},
+  publisher={Elsevier}
+}
+%voxel back
+
+@inproceedings{scherl2007fast,
+  title={Fast GPU-based CT reconstruction using the common unified device architecture (CUDA)},
+  author={Scherl, Holger and Keck, Benjamin and Kowarschik, Markus and Hornegger, Joachim},
+  booktitle={Nuclear Science Symposium Conference Record, 2007. NSS'07. IEEE},
+  volume={6},
+  pages={4464--4466},
+  year={2007},
+  organization={IEEE}
+}
+
+@inproceedings{papenhausen2011gpu,
+  title={GPU-accelerated back-projection revisited: squeezing performance by careful tuning},
+  author={Papenhausen, Eric and Zheng, Ziyi and Mueller, Klaus}
+}
+
+@article{zinsser2013systematic,
+  title={Systematic performance optimization of cone-beam back-projection on the Kepler architecture},
+  author={Zinsser, Timo and Keck, Benjamin}
+}
+
+
+%pseudomatched
+@article{jia2011gpu,
+  title={GPU-based iterative cone-beam CT reconstruction using tight frame regularization},
+  author={Jia, Xun and Dong, Bin and Lou, Yifei and Jiang, Steve B},
+  journal={Physics in medicine and biology},
+  volume={56},
+  number={13},
+  pages={3787},
+  year={2011},
+  publisher={IOP Publishing}
+}
