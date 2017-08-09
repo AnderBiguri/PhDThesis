@@ -15,7 +15,7 @@ Iterative algorithms in CT generally reffer to those algorithms that, as the nam
 \begin{equation}
 Ax=b+\tilde{e} \label{eq:linearized model}
 \end{equation}
-on where $x\in \mathbb{R}^{N_{voxels}}$ is a vector representing the lexicographically ordered voxels of the 3D image, $b\in \mathbb{R}^{N_{pixels}} $ a vector of the detector measured pixels. $A$ is the linearized model matrix, a matrix that describes the behaviour of the CT system. Each row of the matrix $A$ is describes the behaviour of the X-rays that affect each single pixel in the detector. The next chapter goes into a bit more detail on how to build matrix $A$. Errors from measurement are inevitable in any application, and there are linearization errors, as no model is perfect. In equation \ref{eq:linearized model}, $\tilde{e}$ represents all those errors.
+on where $x\in \mathbb{R}^{N_{voxels}}$ is a vector representing the lexicographically ordered voxels of the 3D image, $b\in \mathbb{R}^{N_{pixels}} $ a vector of the detector measured pixels. $A$ is the linearized model matrix, a matrix that describes the behaviour of the CT system. Each row of the matrix $A$ is describes the behaviour of the X-rays that affect each single pixel in the detector. However, this matrix is so big that in practize its explicit form is impossible to store, and the matrix product operations $Ax$ (or projection) and $A^Tb$ are implemented instead. The next chapter goes into a bit more detail on how to operate with matrix $A$ and its limitations. Errors from measurement are inevitable in any application, and there are linearization errors, as no model is perfect. In equation \ref{eq:linearized model}, $\tilde{e}$ represents all those errors.
 
 As an exact solution for $x$ can not be found, the problem in equation \ref{eq:linearized model} is minimized as
 \begin{equation}
@@ -28,9 +28,23 @@ on where $R(x)$ is an optional regularization function. This minimization functi
 
 Arguably the most well known iterative algorithm is the method known as the algebraic reconstruction technique (ART)[CITE], known as the Kaczmarz method outside the CT imaging field. The ART algorithm, for matrix elements $a_{ij}\in R$ is defined as
 \begin{equation}
-x^{n+1}=x^n+\frac{b_i-\langle a_i,x^n\rangle}{\lVert{a_i}\rVert^2}a_i,
+x^{n+1}=x^n+\frac{b_i-\langle a_i,x^n\rangle}{\lVert{a_i}\rVert^2}a_i^T,
 \end{equation}
-where $a_i$ is the $i$-th row of matrix $A$ and $\langle \,, \rangle$ denotes the inner product. The ART method projects the image into the hyperplane described by the equation in row $i$. Generally the method includes a relaxation parameter $\lambda_n$ that controls the update size, and that decreases with i
+where $a_i$ is the $i$-th row of matrix $A$ and $\langle \,, \rangle$ denotes the inner product. The ART method projects the image into the hyperplane described by the equation in row $i$. Generally the method includes a relaxation parameter $\lambda_n$ that controls the update size, and that decreases with the iteration number. This generally avoids the cyclical convergence that the method describes when the solution is not unique (the intersection of the hyperplanes is not a single point). By relaxing the update step, the algorithm converges to a single point. Generally the algorithm is also run with some inequality constrains, the most common one being a positivity constrain for $x$, as negative values are not physically possible.
+
+Studies on the convergence of the ART algorithm show\cite{241889} that randomly choosing the order of the rows in each iteration ($n$) increase the convergence rate, even more if the probabilities of picking rows are different than one (different methods propose different probabilities)\cite{strohmer2009randomized}\cite{liu2016accelerated}. 
+
+However, the ART method has a major disadvantage: the image $x^{n+1}$ needs to be updated $i$ times each iteration. In current CT applications, and specifically in CBCT, the amount of rows in the matrix i.e. the total amount of independent pixel measurements in the detector is a massive number. Following the same definition of standard medical image size from the thesis, a $512\times512$ detector, with 360 projection means that the amount of rows is in the order of $10^8$. In order to update the image less, the Simultaneous Iterative Reconstruction Technique (SIRT)\cite{SIRT} can be used, a method that is very similar to Cimmino's method, that updates the image using simultaneously (instead of sequentially) all data in the measurement $b$, thus each iteration is a single update. While SIRT generally solves the problem of the high amount of updates in ART, it suffers from a very slow convergence in comparison, and will generally plateau in a solution that is not as good as what ART provides. The SIRT algorithm can be described in matrix form as
+\begin{equation}
+x^{n+1}=x^n+\lambda_n V A^T W^{-1}\left(b-Ax\right)
+\end{equation}
+where $V=1/\text{diag}\bigl({\sum_j a_{ij}}\bigr)$ and  $W=\text{diag}\bigl({\sum_i a_{ij}}\bigr)$.
+
+However, middle ground has also been proposed. Kak and Andersen proposed\cite{SART} the Simultaneous Algebraic Reconstruction Technique (SART) on where the image is updated using simultaneously all data from each X-ray projection, but still updating the image multiple times per iteration. Finally, the update can also be done using block-based methods, or Oriented Subsets (OS) with a variety of methods generally described as OS-SART\cite{OS_SART} methods.
+
+ Similarly as with ART, the order of the subsets in both OS-SART and SART have influence in the convergence. In this work an three methods have been implemented, a completely ordered method, a randomized ordered method with full sampling (i.e. all projections are ensured to be used once and only once per iteration) and an angular distance based one. This last one orders the subsets by choosing them such as the angular distance between them is close to $\pi/2$, heuristically chosen. the rationale is that the projections at $\pi/2$ distance update the image by a bigger step than projections angularly near. In all further result in this thesis, the default ordering is random, unless otherwise explicitly stated.
+ 
+ %% SHOW CONVERGENCE WITH DIFFERENT ORDERING
 
 \subsubsection{Relaxation parameter $\lambda$}
 

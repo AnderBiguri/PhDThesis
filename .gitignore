@@ -218,3 +218,6 @@ TSWLatexianTemp*
 
 # expex forward references with \gathertags
 *-tags.tex
+
+# Only pdfs in the root (so not pdfs in the images folder)
+/*.pdf
