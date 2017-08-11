@@ -19,14 +19,14 @@ on where $x\in \mathbb{R}^{N_{voxels}}$ is a vector representing the lexicograph
 
 As an exact solution for $x$ can not be found, the problem in equation \ref{eq:linearized model} is minimized as
 \begin{equation}
-\hat{x}=\argmin_x \lVert Ax-b\rVert^2+R(x),
+\hat{x}=\argmin_x \lVert Ax-b\rVert^2+R(x),\label{eq:THE equation}
 \end{equation}
 on where $R(x)$ is an optional regularization function. This minimization function has been widely studied in mathematics and there are multiple algorithms that can solve it. However not all algorithms that solve the equation can be used in CT reconstruction, due to the nature of the $A$ matrix, as it is very big (approximately $10^8\times 10^8$ in a standard medical image) and very sparse (approximately $0.0017\%$ of sparsity in a standard medical image). This makes the matrix severely ill-conditioned and impossible to store in memory. Additionally, often the CT problem can be underdetermined, making the problem ill-posed and further constraining the possible algorithms that can be used. That said, a wide variety of algorithm have been proposed to solve the CT algebraic problem and new ones are still being published. This section discusses a few of the available and most common algorithms that have been studied in this work.
 
 
 \subsection{Algebraic Reconstruction Techniques}
 
-Arguably the most well known iterative algorithm is the method known as the algebraic reconstruction technique (ART)[CITE], known as the Kaczmarz method outside the CT imaging field. The ART algorithm, for matrix elements $a_{ij}\in R$ is defined as
+Arguably the most well known iterative algorithm is the method known as the algebraic reconstruction technique (ART)\cite{K-1937}, known as the Kaczmarz method outside the CT imaging field. The ART algorithm, for matrix elements $a_{ij}\in R$ is defined as
 \begin{equation}
 x^{n+1}=x^n+\frac{b_i-\langle a_i,x^n\rangle}{\lVert{a_i}\rVert^2}a_i^T,
 \end{equation}
@@ -36,19 +36,41 @@ Studies on the convergence of the ART algorithm show\cite{241889} that randomly 
 
 However, the ART method has a major disadvantage: the image $x^{n+1}$ needs to be updated $i$ times each iteration. In current CT applications, and specifically in CBCT, the amount of rows in the matrix i.e. the total amount of independent pixel measurements in the detector is a massive number. Following the same definition of standard medical image size from the thesis, a $512\times512$ detector, with 360 projection means that the amount of rows is in the order of $10^8$. In order to update the image less, the Simultaneous Iterative Reconstruction Technique (SIRT)\cite{SIRT} can be used, a method that is very similar to Cimmino's method, that updates the image using simultaneously (instead of sequentially) all data in the measurement $b$, thus each iteration is a single update. While SIRT generally solves the problem of the high amount of updates in ART, it suffers from a very slow convergence in comparison, and will generally plateau in a solution that is not as good as what ART provides. The SIRT algorithm can be described in matrix form as
 \begin{equation}
-x^{n+1}=x^n+\lambda_n V A^T W^{-1}\left(b-Ax\right)
+x^{n+1}=x^n+\lambda_n V A^T W^{-1}\left(b-Ax\right) \label{eq:SIRT}
 \end{equation}
 where $V=1/\text{diag}\bigl({\sum_j a_{ij}}\bigr)$ and  $W=\text{diag}\bigl({\sum_i a_{ij}}\bigr)$.
 
 However, middle ground has also been proposed. Kak and Andersen proposed\cite{SART} the Simultaneous Algebraic Reconstruction Technique (SART) on where the image is updated using simultaneously all data from each X-ray projection, but still updating the image multiple times per iteration. Finally, the update can also be done using block-based methods, or Oriented Subsets (OS) with a variety of methods generally described as OS-SART\cite{OS_SART} methods.
 
- Similarly as with ART, the order of the subsets in both OS-SART and SART have influence in the convergence. In this work an three methods have been implemented, a completely ordered method, a randomized ordered method with full sampling (i.e. all projections are ensured to be used once and only once per iteration) and an angular distance based one. This last one orders the subsets by choosing them such as the angular distance between them is close to $\pi/2$, heuristically chosen. the rationale is that the projections at $\pi/2$ distance update the image by a bigger step than projections angularly near. In all further result in this thesis, the default ordering is random, unless otherwise explicitly stated.
+ Similarly as with ART, the order of the subsets in both OS-SART and SART have influence in the convergence, with a lower impact than in ART. In this work an three methods have been implemented, a completely ordered method, a randomized ordered method with full sampling (i.e. all projections are ensured to be used once and only once per iteration) and an angular distance based one. This last one orders the subsets by selecting the next one as the subset with largest angular distance from the ones already used. The heuristic rationale is that the projections at larger angular distance update the image by a bigger step than projections angularly near. In all further result in this thesis, the default ordering is random, unless otherwise explicitly stated.
  
  %% SHOW CONVERGENCE WITH DIFFERENT ORDERING
 
+
+
 \subsubsection{Relaxation parameter $\lambda$}
 
+As previously mentioned, changing the relaxation parameter per iteration can be of advantage, by avoiding cyclical convergence and often by increasing the general convergence rate. On of the commonly used methods for the reduction of lambda is simply reducing it by a reduction factor each iteration as
+\begin{equation}
+\lambda_{n+1}=\lambda_n*r_\lambda
+\end{equation}
+where $r_\lambda$ is some value close to one, such as $r_\lambda=0.99$ or $r_\lambda=0.999$. Alternatively, convergence studies for SART/OS-SART/SIRT algorithms have shown\cite{jiang2003convergenc} that an update of the relaxation parameter in the form of
+\begin{equation}
+\lambda_{n+1}=\frac{\lambda_0}{1+n^\alpha}
+\end{equation}
+where $\lambda_0$ is an initial value of the relaxation parameter (usually 1) and $0<\alpha\leq 1$. this can improve the convergence of the algorithms. 
+
+It is worth noticing that this family of algorithms is very closely related to the well known gradient descend methods, as the gradient of equation \ref{eq:THE equation} is  proportional to $A^T(Ax-b)$, or in other words $V=I$ and $W=I$ in equation \ref{eq:SIRT}. The gradient descend methods have been widely studied in the past years\cite{sutskever2013importance}\cite{DBLP:journals/corr/Ruder16}, as the Neural Networks community tries to find faster converging methods to train the nets they research. Among other methods proposed, Nesterov proposed an accelerated version of the gradient descend\cite{nesterov1983method}, that obtains a rate of convergence of $1/n^2$. The proposed update   updates the result image in each iteration by pushing it in the current update and previous update direction combined. Nesterovs Accelerated Gradient (NAG) defines
+\begin{align}
+\lambda_{n+1}&=\frac{1+\sqrt{1+4\lambda_{n}^2}}{2}\\
+\gamma_n&=\frac{1-\lambda_n}{\lambda_{n+1}}\\
+y^{n+1}&=x^{n}-\frac{1}{\beta}\nabla f(x^n)\label{eq:Nesterov update 1}\\ 
+x^{n+1}&=(1-\gamma_n)y^{n+1}+\gamma y^n
+\end{align}
+with $\lambda_0=1$ and $\beta$ being the Lipschitz smoothness of the function $f$. The line in equation \ref{eq:Nesterov update 1} can be replaced by the SART/OS-SART/SIRT update on equation \ref{eq:SIRT} to obtain an accelerated convergence rate. Some experimental results on the convergence of the algorithms can be found in Chapter 5.
 \subsection{Conjugate Gradient Least Squares}
+
+
 \subsection{Statistical inversion}
 \subsection{Total variation minimization with POCS}
 
@@ -62,7 +84,7 @@ The total variation norm is defined as the sum of the 2-norms of the directional
 
 Applied to CT imaging, the total variation norm is the sum of the total change occurred in the image. An image with less total variation would be an image that would have less change, or more flat, same valued regions. Regularizing with the TV norm as a minimization term will yield an image that is piecewise smooth and it happens that most of the objects imaged in CT scanners are piecewise smooth in linear attenuation, even more in medical CT imaging. 
 
-However, solving the minimization problem in equation XX is not trivial with the TV regularization. One of the first robust algorithm is the so called Adaptive Steepest Descend, Projection Onto Convex Subsets, or ASD-POCS algorithm [CITE]. This algorithm not only minimizes the data constrain with TV regularization but also adaptively controls the TV minimization update, in order to adapt its strength according to the data constrain update. Several adaptations and improvements of this algorithm have been proposed in the literature[CITES], all based in the same mathematical basis.  
+However, solving the minimization problem in equation XX is not trivial with the TV regularization. One of the first robust algorithm is the so called Adaptive Steepest Descend, Projection Onto Convex Subsets, or ASD-POCS algorithm\cite{ASD_POCS}. This algorithm not only minimizes the data constrain with TV regularization but also adaptively controls the TV minimization update, in order to adapt its strength according to the data constrain update. Several adaptations and improvements of this algorithm have been proposed in the literature[CITES], all based in the same mathematical basis.  
 
 
 \subsubsection{ASD-POCS}
