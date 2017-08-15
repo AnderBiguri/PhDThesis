@@ -54,7 +54,7 @@ As previously mentioned, changing the relaxation parameter per iteration can be 
 \begin{equation}
 \lambda_{n+1}=\lambda_n*r_\lambda
 \end{equation}
-where $r_\lambda$ is some value close to one, such as $r_\lambda=0.99$ or $r_\lambda=0.999$. Alternatively, convergence studies for SART/OS-SART/SIRT algorithms have shown\cite{jiang2003convergenc} that an update of the relaxation parameter in the form of
+where $r_\lambda$ is some value close to one, such as $r_\lambda=0.99$ or $r_\lambda=0.999$. Alternatively, convergence studies for SART/OS-SART/SIRT algorithms have shown\cite{jiang2003convergence} that an update of the relaxation parameter in the form of
 \begin{equation}
 \lambda_{n+1}=\frac{\lambda_0}{1+n^\alpha}
 \end{equation}
@@ -264,8 +264,9 @@ This is the term that the total variation regularization algorithm minimizes wit
 
 This derivative can be expanded to a 3 component value for each $x_{ijk}$ as:
 \begin{align}
-\left(\nabla_x \lVert x \rVert_\text{TV}\right)_{ijk}&= \frac{\partial}{\partial x_{ijk}} \lVert x \rVert_\text{TV} = \partial_{x_{ijk}} \sum\limits_{i^\prime j^\prime k^\prime} \sqrt{\sum\limits_\alpha \left(\partial_\alpha x_{i^\prime j^\prime k^\prime}\right)^2}= \sum\limits_{i^\prime j^\prime k^\prime} \partial_{x_{ijk}}\sqrt{\sum\limits_\alpha \left(\partial_\alpha x_{i^\prime j^\prime k^\prime}\right)^2}\nonumber
-\\ 
+\left(\nabla_x \lVert x \rVert_\text{TV}\right)_{ijk}&= \frac{\partial}{\partial x_{ijk}} \lVert x \rVert_\text{TV} = \partial_{x_{ijk}} \sum\limits_{i^\prime j^\prime k^\prime} \sqrt{\sum\limits_\alpha \left(\partial_\alpha x_{i^\prime j^\prime k^\prime}\right)^2}\nonumber
+\\
+&= \sum\limits_{i^\prime j^\prime k^\prime} \partial_{x_{ijk}}\sqrt{\sum\limits_\alpha \left(\partial_\alpha x_{i^\prime j^\prime k^\prime}\right)^2} \nonumber \\ 
 &=\sum\limits_{i^\prime j^\prime k^\prime} \frac{\sum_\alpha\left(\partial_\alpha x_{i^\prime j^\prime k^\prime}\right) \partial_{x_{ijk}} \left(\partial_\alpha x_{i^\prime j^\prime k^\prime}\right)}{\sqrt{\sum\limits_\alpha \left(\partial_\alpha x_{i^\prime j^\prime k^\prime}\right)^2}}.\label{eq:gradientTVdisc}
 \end{align}
 
@@ -279,9 +280,9 @@ This term now contains $\partial_\alpha$ derivatives, i.e. derivatives in the Ca
 
 However, $x$ is discrete, thus the limit definition of the derivative can not be used to numerically compute it, but an approximation of it can. By setting $h=1$, equation \ref{eq:derivativedef} becomes the backward finite differences of the first order approximation of a derivative, a very computationally cheap operation. The derivative w.r.t. the Cartesian coordinate can be rewritten as
 
-\begin{equation}
-\partial_\alpha x_{i^\prime j^\prime k^\prime}=\delta_{\alpha x} \left(x_{i^\prime,j^\prime,k^\prime}-x_{i^\prime-1, j^\prime, k^\prime}\right)+ \delta_{\alpha y} \left(x_{i^\prime,j^\prime,k^\prime}-x_{i^\prime, j^\prime-1, k^\prime}\right)  + \delta_{\alpha z} \left(x_{i^\prime,j^\prime,k^\prime}-x_{i^\prime ,j^\prime, k^\prime-1}\right)\
-\end{equation}
+\begin{align}
+\partial_\alpha x_{i^\prime j^\prime k^\prime}=\delta_{\alpha x} \left(x_{i^\prime,j^\prime,k^\prime}-x_{i^\prime-1, j^\prime, k^\prime}\right)&+ \delta_{\alpha y} \left(x_{i^\prime,j^\prime,k^\prime}-x_{i^\prime, j^\prime-1, k^\prime}\right)  \notag \\ &+ \delta_{\alpha z} \left(x_{i^\prime,j^\prime,k^\prime}-x_{i^\prime ,j^\prime, k^\prime-1}\right)\
+\end{align}
  where $\delta_\alpha$ is a Kronecker delta for the Cartesian axis. The other partial derivative term that appears in equation \ref{eq:gradientTVdisc} is $\partial_{x_{ijk}} \left(\partial_\alpha x_{i^\prime j^\prime k^\prime}\right)$. As the derivative is w.r.t. $x_{ijk}$, each component of $x$ is an independent variable, thus $\partial_{x_{ijk}} \left(\partial_\alpha x_{i^\prime j^\prime k^\prime}\right)$ is zero everywhere but in indices $i=i^\prime \wedge j=j^\prime \wedge k=k^\prime$, where the derivative is 1. The term then becomes 
  \begin{align}
 \partial_{x_{ijk}} \partial_x x_{i^\prime j^\prime k^\prime}&=\partial_{x_{ijk}}\left(x_{i^\prime,j^\prime,k^\prime}-x_{i^\prime-1, j^\prime, k^\prime}\right)=\delta_{i^\prime,i}\delta_{j^\prime,j}\delta_{k^\prime,k} - \delta_{i^\prime-1,i}\delta_{j^\prime,j}\delta_{k^\prime,k}\nonumber\\
@@ -386,6 +387,9 @@ The PDU algorithm consists in updating $\textbf{p}$ and $x$ iteratively, by alte
 The same update is used in this work, as the images in their work are structurally similar to CT images and empirical test showed satisfactory results. The algorithm can be shown to converge as it is shown in \cite{zhu2010duality} that the primal-dual gap decreases with each update of $x^n$, and the gap is suggested as a control variable for the stopping criteria. In this work the algorithm has been implemented without the stopping criteria check, and an user specified parameter for the number of iterations is passed as an input, with a default value of 50, as it empirically showed good results.
 
 The discretization of the divergence and gradient operators are a key factor when numerically computing the PDU algorithm, as they need to be consequent with each other. Thus, the gradient can be approximated using forward differences, but as the divergence is the adjoint of the gradient, it must be approximated with backwards differences.
+
+
+
 
 
 
