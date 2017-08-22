@@ -54,11 +54,11 @@ As previously mentioned, changing the relaxation parameter per iteration can be 
 \begin{equation}
 \lambda_{n+1}=\lambda_n*r_\lambda
 \end{equation}
-where $r_\lambda$ is some value close to one, such as $r_\lambda=0.99$ or $r_\lambda=0.999$. Alternatively, convergence studies for SART/OS-SART/SIRT algorithms have shown\cite{jiang2003convergence} that an update of the relaxation parameter in the form of
-\begin{equation}
-\lambda_{n+1}=\frac{\lambda_0}{1+n^\alpha}
-\end{equation}
-where $\lambda_0$ is an initial value of the relaxation parameter (usually 1) and $0<\alpha\leq 1$. this can improve the convergence of the algorithms. 
+where $r_\lambda$ is some value close to one, such as $r_\lambda=0.99$ or $r_\lambda=0.999$. However this method, while useful to avoid cyclical convergence in ART methods, is of less use in simultaneous methods, as it generally slows the convergence rate.% Alternatively, convergence studies for SART/OS-SART/SIRT algorithms have shown\cite{jiang2003convergence} that an update of the relaxation parameter in the form of
+%\begin{equation}
+%\lambda_{n+1}=\frac{\lambda_0}{1+n^\alpha}
+%\end{equation}
+%where $\lambda_0$ is an initial value of the relaxation parameter (usually 1) and $0<%\alpha\leq 1$. this can improve the convergence of the algorithms. 
 
 It is worth noticing that this family of algorithms is very closely related to the well known gradient descend methods, as the gradient of equation \ref{eq:THE equation} is  proportional to $A^T(Ax-b)$, or in other words $V=I$ and $W=I$ in equation \ref{eq:SIRT}. The gradient descend methods have been widely studied in the past years\cite{sutskever2013importance}\cite{DBLP:journals/corr/Ruder16}, as the Neural Networks community tries to find faster converging methods to train the nets they research. Among other methods proposed, Nesterov proposed an accelerated version of the gradient descend\cite{nesterov1983method}, that obtains a rate of convergence of $1/n^2$. The proposed update   updates the result image in each iteration by pushing it in the current update and previous update direction combined. Nesterovs Accelerated Gradient (NAG) defines
 \begin{align}
