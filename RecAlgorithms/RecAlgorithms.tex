@@ -175,7 +175,7 @@ Figure \ref{fig:POCSAlgo} shows a conceptual diagram of the ASD-POCS algorithm. 
 The pseudocode for the algorithm can be seen in algorithm \ref{alg:ASD-POCS}. The algorithm is essentially solving the two vector in equation \ref{eq:KKTvectors}, the data vector in lines [5-8] and the TV vector in lines [18-22]. Line [9] enforces the positivity constrain. In the algorithm, $dtv$ is initialized according to $\alpha$, an user specified   TV hyperparameter for TV, together with $dp$, the step size performed by the data constrain. After the TV minimization is performed, the step size of the TV vector is rechecked. If the TV minimization step is too big (bigger than the data step size), and the desired $\epsilon$ is still not achieved, the step size is reduced further. This method of adaptively setting the step size of the TV iteration relating to the data step size is what ensures the optimal condition is achieved. Finally, the stopping criteria relies in either achieving the desired $\epsilon$ with with a desired $\cos \theta$, or stopping due to reaching a maximum amount of iterations ($\beta$ decreases with iteration number). In the original proposition of the ASD-POCS algorithm (and shown here), the data constrain is solved using SART, however any other algorithm solving the same minimization problem can be used here (e.g. CGLS or OS-SART).
 
 
-The algorithm has 7 parameters that need to be set up: $\beta$ and $\beta_{red}$ are the initial value and reduction ratio of the SART hyperparameter, similarly $\alpha$ and $\alpha_{red}$ serve as hyperparameter and reduction ratio for the TV minimization. $r_{max}$ controls the maximum allowed ratio of change between the data minimization and the TV minimization, in order to adapt the step sizes. The number of iterations the TV minimization performs per iteration of the data minimization is defined as $n_{TV}$. Finally, the allowed data error is $\epsilon$, as described before. The initial values of the variables in the algorithm are a key factor on its convergence. Empirical tests show that wrong parametrization of the algorithm can lead to severely noisy reconstructions. An study of the sensitivity of these parameters to changes has been performed by Lohvithee \emph{et al}[CITE VEEs PAPER, at least as "future"]. The study shows that some parameters can be safely set up to a static value regardless of the data, such as the data hyperparameters, but that $\epsilon$, $n_{TV}$ and $\alpha$ are critical parameters to tune in order to get an usable reconstruction, and they are heavily data dependant. While some algorithms have successfully replaced the initial set of $\alpha$ by some data based heuristics [CITE PCSD]\footnote{These algorithms, namely PCSD and Aw-PCSD, are also available in TIGRE, by Manasavee Lohvithee.} to the best of the authors knowledge there is no mathematical proposal for setting these parameters. The biggest drawback of this method is that several reconstructions may be needed to find the best parameters for an specific application.
+The algorithm has 7 parameters that need to be set up: $\beta$ and $\beta_{red}$ are the initial value and reduction ratio of the SART hyperparameter, similarly $\alpha$ and $\alpha_{red}$ serve as hyperparameter and reduction ratio for the TV minimization. $r_{max}$ controls the maximum allowed ratio of change between the data minimization and the TV minimization, in order to adapt the step sizes. The number of iterations the TV minimization performs per iteration of the data minimization is defined as $n_{TV}$. Finally, the allowed data error is $\epsilon$, as described before. The initial values of the variables in the algorithm are a key factor on its convergence. Empirical tests show that wrong parametrization of the algorithm can lead to severely noisy reconstructions. An study of the sensitivity of these parameters to changes has been performed by Lohvithee \emph{et al}\cite{Vee}. The study shows that some parameters can be safely set up to a static value regardless of the data, such as the data hyperparameters, but that $\epsilon$, $n_{TV}$ and $\alpha$ are critical parameters to tune in order to get an usable reconstruction, and they are heavily data dependant. While some algorithms have successfully replaced the initial set of $\alpha$ by some data based heuristics [CITE PCSD]\footnote{These algorithms, namely PCSD and Aw-PCSD, are also available in TIGRE, by Manasavee Lohvithee.} to the best of the authors knowledge there is no mathematical proposal for setting these parameters. The biggest drawback of this method is that several reconstructions may be needed to find the best parameters for an specific application.
 
 Note that this minimization approach, while used for TV minimization in the original article, can be used for a variety of different minimization functions. For example, the TV minimization step could be replaced by a prior image minimization[CITE PICS], or any other convex minimization function. Similarly, the data minimization step can be replaced by any other minimization algorithm, as long as it minimizes the problem in equation XX
 \begin{algorithm}
@@ -232,12 +232,33 @@ Note that this minimization approach, while used for TV minimization in the orig
 \end{algorithm}
 
 
+\FloatBarrier
 
+\subsubsection{B-ASD-POCS-$\beta$}
 
+Xue \textit{et al}[CITE] proposed a faster converging modification of the ASD-POCS algorithm by adding a relaxed Bregman iteration to the overall algorithm. The Bregman iteration updates the projection data with part of the remaining error, thus reducing the residual faster and reaching convergence faster. The top level pseudo-code of the B-ASD-POCS-$\beta$  can be seen in algorithm \ref{alg:B-ASD-POCS}.
+%
 
+\begin{algorithm}
 
+\caption{B-ASD-POCS-$\beta$
+\label{alg:B-ASD-POCS}}
+\begin{algorithmic}[1]
+\State{Set: $\beta, \beta_{red}, n_{TViter}, \alpha, \alpha_{red}, r_{max} $}
+\State{$\beta$ update ratio:$c<1$}
+\State{$\beta$ update period: $T$}
+\State{$\vec{x}=0$};
+\While{Stopping criteria not met}
+\For{$n_{Bregman}$}
+\State ASD-POCS algorithm
+\EndFor
+\State $\vec{b}=\vec{b}+\beta\cdot(\vec{b}^0-A\cdot\vec{x})$
+\State Update $\beta=c\cdot\beta$ if current iteration is update period $T$ multiplier 
+\EndWhile
 
+\end{algorithmic}
 
+\end{algorithm}
 
 \FloatBarrier
 \subsubsection{The gradient of the TV norm}

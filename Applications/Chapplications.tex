@@ -89,12 +89,8 @@ In figure \ref{fig:SARTlambdaplot}, the solution found by the three algorithms u
 \subsection{Total variation minimization}
 There are 4 total variation minimizing algorithms in TIGRE, with 2 different minimization functional in total. As previously described, ASD-POCS, OS-ASD-POCS and b-ASD-POCS-$\beta$ minimize the TV using a POCS minimization technique by minimizing the data constrain and TV norm independently using gradient descend. SART-TV however uses the ROF model for the TV-minimization step. The total variation algorithms are designed for applications on where the image is piecewise-smooth, as they will try to minimize the gradient on the image, by creating single valued patches in the image. In CT, the most noisy images are reconstructed when either the data is very noisy (generally due to small acquisition times and/or low energy X-rays) or when the data is limited, either from limited angle or more importantly limited amount of projections. 
 
-An example of the behaviour of the TV algorithms with the same dataset as in figures \ref{fig:XCAT} and \ref{fig:XCATproj} is shown in figure XXXX. In this case, 30 uniformly sampled projections are used, perturbed with Poisson and Gaussian noise, to simulate photon scattering and electronic noise respectively. The figure shows FDK and OS-SART reconstructions, and the 4 mentioned TV algorithms. It is visually clear that the TV algorithms do provide a smoother reconstruction, and with less Normalized root mean squared error (NRMSE), as seen in table \ref{tab:NRMSE TVs}.
-
-
-
-
-
+An example of the behaviour of the TV algorithms with the same dataset as in figures \ref{fig:XCAT} and \ref{fig:XCATproj} is shown in figure \ref{fig:TVXCAT}. In this case, 30 uniformly sampled projections are used, perturbed with Poisson and Gaussian noise, to simulate photon scattering and electronic noise respectively. The figure shows FDK and OS-SART reconstructions, and the 4 mentioned TV algorithms. It is visually clear that the TV algorithms do provide a smoother reconstruction, and with less Normalized root mean squared error (NRMSE), as seen in table \ref{tab:NRMSE TVs}.
+The reconstruction by FDk is plagued with noise, and while the main structural features can be seen, most of the detail is lost. Even the bones themselves are practically indistinguishable from noise. OS-SART does reconstruct a smoother image, something predictable as it minimizes de 2-norm, and while one can see the more details in the image, it is still low. The rest 4 TV algorithms can be seen to flatten out the attenuation levels to similar values, thus reducing most of the noise. Additionally most of the features get clearly separated from the attenuation levels of the surrounding tissues and some of the algorithms (such as ASD-POCS) are able to reconstruct even single wide pixel structures correctly. It is important to note that while the parameters used to tune this specific TV reconstruction (available in the demo number 9 in the TIGRE toolbox), they are far from optimal and very sensitive\cite{Vee}. When choosing the exact optimal parameters for the TV reconstruction algorithms, the result images tend to be significantly better than the ones shown here, but the parameter space is very data dependant and massive, thus to the author's knowledge, no parameter selection method has been proposed in the literature. 
 
 
 \begin{figure}
@@ -106,7 +102,7 @@ An example of the behaviour of the TV algorithms with the same dataset as in fig
 \path (A.south east) -- (A.north east) node[pos=.18, below, rotate=90] {OS-ASD-POCS} node[pos=.5, below, rotate=90] {SART-TV} node[pos=.82, below, rotate=90] {OS-SART};
 
 \node (B)at (0.5\textwidth,0) {\includegraphics[width=0.4\textwidth]{Applications/TVs2.png} };
-\path (B.south west) -- (B.north west) node[pos=.18, above, rotate=90] {SIRT} node[pos=.5, above, rotate=90] {OS-SART} node[pos=.82, above, rotate=90] {SART};
+\path (B.south west) -- (B.north west) node[pos=.18, above, rotate=90] {ASD-POCS} node[pos=.5, above, rotate=90] {b-ASD-POCS-$\beta$} node[pos=.82, above, rotate=90] {FDK};
 \path (B.south east) -- (B.north east) node[pos=.18, below, rotate=90] {OS-ASD-POCS} node[pos=.5, below, rotate=90] {SART-TV} node[pos=.82, below, rotate=90] {OS-SART};
 
 \end{tikzpicture}
@@ -137,13 +133,24 @@ NRMSE&  0.1373  &  0.0678  &  0.0338   & 0.0267 &   0.0304 &   0.0442\\
 
 
 
+To illustrate the sensitivity to parameter selection, the algorithm SART-TV is run with 3 different values for number of TV-iterations per SART iteration for the same data set used in the previous test. The results can be seen in figure \ref{fig:SARTTVparams}, where one can clearly see how a small changes can have a devastating effect in the output image.   If a few more TV iterations are added to (b), the image gets a bit smoother and some detail is lost, as expected. However, if few iterations are removed from (b), the image can get completely destroyed. Note that these values are only applicable to this image with the exact amount of noise and projections. Different experiments may not show this behaviour or may be more intolerant to parameter change. This is arguably the biggest limitation for the common use of TV algorithms in real application. As an advantageous point, once the good parameters are found, generally the algorithm will perform similarly in similar images, thus application specific parameters may be an option.
 
 
 
 
 
 
+\begin{figure}
+\centering
+\begin{tikzpicture}
 
+\node (A) {\includegraphics[width=0.7\textwidth]{Applications/TVs3.png} };
+%\path (A.south west) -- (A.north west) node[pos=.18, above, rotate=90] {ASD-POCS} node[pos=.5, above, rotate=90] {b-ASD-POCS-$\beta$} node[pos=.82, above, rotate=90] {FDK};
+\path (A.south west) -- (A.south east) node[pos=.18, below] {(a)} node[pos=.5, below] {(b)} node[pos=.82, below] {(c)};
+
+\end{tikzpicture}
+\caption[SART-TV algorithms with different parameters]{\label{fig:SARTTVparams}SART-TV algorithms with different amount of TV iterations per SART iteration, (a) 32 iterations, (b) 40 iterations, (c) 48 iterations.}
+\end{figure}
 
 
 
@@ -156,3 +163,5 @@ This section tries to illustrate the effect of different algorithms within the T
 Cryo soft X-ray tomography (Cryo-SXT) is a relatively new[CITE] technology to image micrometer size biological samples in full 3D. Generally, cell-imaging is performed with electron microscopy (EM) machines and all its variants (transmission electron microscopy, scanning electron microscopy, cryo-electron microscopy, electron tomography, etcetera), however these techniques have very limited penetration (less than 1$\mu$m) and thus often require slicing of the samples for volumetric imaging. Cryo-SXT uses the so called water window for X-ray energies around the 500eV energy range. Unlike in higher energies, where everything is invisible, water becomes transparent but carbon-based tissues are clearly visible on that range. Thus, while with lower resolution than most EM, cryooSXT allows for full volumetric visualization of the cells without damaging the samples. In order to be able to image in the extremely accurate setup in both sample handling and X-ray parameters, these cryoSXT images are captured in synchrotron facilities. The data used in this work is from the B24 beam-line at the Diamond Light Source.
 
 However, cryoSXT data has several sources of errors that make its reconstructed images significantly noisy. The typical penetration depth of soft X-rays is around 10$\mu$m, while the samples are generally an order of magnitude bigger than that in height and width. Thus cryoSXT is a limited angle problem, where most of the datasets are sampled over a 120 degrees arc. In the extrema of this range, the images in the detector tend to have little or none information in some parts of the image due to photons not reaching the detector. Additionally, the low intensity and small sample size do mean that there the detector data is very noisy, as photons spread out more (in pixel dimension) and less photons reach the detector. The size of the sample also comes with errors in the mechanical systems of the imaging set up. When working in a scale of microns, any small vibration is visible and considerably offsets/perturbs the measured data. Generally this type of errors are removed by pre-processing using alignment techniques, but the algorithms involved are often not fault proof, and the data used in reconstruction ends up having some misalignment errors. Few of these errors can be seen in the sinogram of the dataset labelled as ``2017\_0207\_Trypanosoma\_33'', on where misalignment and missing data problems are visually perceptible.
+
+
