@@ -165,3 +165,69 @@ Cryo soft X-ray tomography (Cryo-SXT) is a relatively new[CITE] technology to im
 However, cryoSXT data has several sources of errors that make its reconstructed images significantly noisy. The typical penetration depth of soft X-rays is around 10$\mu$m, while the samples are generally an order of magnitude bigger than that in height and width. Thus cryoSXT is a limited angle problem, where most of the datasets are sampled over a 120 degrees arc. In the extrema of this range, the images in the detector tend to have little or none information in some parts of the image due to photons not reaching the detector. Additionally, the low intensity and small sample size do mean that there the detector data is very noisy, as photons spread out more (in pixel dimension) and less photons reach the detector. The size of the sample also comes with errors in the mechanical systems of the imaging set up. When working in a scale of microns, any small vibration is visible and considerably offsets/perturbs the measured data. Generally this type of errors are removed by pre-processing using alignment techniques, but the algorithms involved are often not fault proof, and the data used in reconstruction ends up having some misalignment errors. Few of these errors can be seen in the sinogram of the dataset labelled as ``2017\_0207\_Trypanosoma\_33'', on where misalignment and missing data problems are visually perceptible.
 
 
+Few datasets have been reconstructed from this imaging modality using various algorithms and using various algorithms. Objective evaluation of the quality of the reconstructed image with each algorithm is not possible, as due to the noisy nature of the images, classifying some of the visual artefacts as data or noise is hard. Thus this section does not intend to claim that any of the algorithms perform better than the filtered backprojection (FBP), just highlight the differences.
+
+\subsubsection{The ``2017\_0207\_Trypanosoma\_33'' dataset.} Several algorithms have been used to test the efect of iterative algorithms.
+Initially SIRT and CGLS have been chosen. Both of these algorithms are expected to generate images with very few noise, but perhaps lose the most detailed information, or at least create smoother boundaries than FBP, as they minimize the L2 norm using all data in one go (per iteration). Result of these, compared to FBP can be seen in figure \ref{fig:CGLSSIRT}. SIRT generates a very smooth image without barely any noise, however the details are very smoothed also, specially the boundaries of the objects. However, very few iterations of SIRT have been performed in this dataset. More iterations will likely improve the quality of the result, but it is likely that hundreds of them are needed to obtain a good image. CGLS however seemsto separate data from noise better, while also creating some smooth (not as much as SIRT) boundaries. However it is unclear to me how much of this is caused by misalignments on the data and how much by the algorithms themselves.
+
+As shown before in this chapter, OS-SART can improve the convergence speed of SIRT sacrificing some computational time. SART can further this, however as these images are too big, the SART solution would take too long (around 7 hours for 50 iterations). Additionally, total variation minimization can be applied to remove the noise that the images have. Figure \ref{fig:OS} shows FBP, OS-SART, and ASD-POCS with 20 total variation iterations and using OS-SART instead of SART as data fidelity update (OS-ASD-POCS).
+
+Note that the images have a darker vertical ``band'', not as obvious in SIRT and CGLS. This is caused by some errors in the projections that with proper preprocessing step could be removed. OS-SART reconstruct a similar result than FBP, with slightly lower noise levels and extreme values. Les iteration of OS-SART would probably generate a less noisy image, however they will also likely show less contrast and features (similar as SIRT before). The total variation version of OS-SART generates a cleaner image, but it has a slight ``watercolor'' texture. The strength of the total variation can be controlled by the amount of iterations, increasing them enhances this effect. Figure \ref{fig:OStv} shows 0, 20 and 5 TV iterations. While the tuning of this value can not (yet) be done automatically, once the desired one is found it generally works for all similar images. The actual value of the reconstructed voxels is different in each algorithm. This can be explained by the nature of the data, as for example, half of the values are negative, which makes no sense physically. Thus, the visualization range has been tweaked to match histograms in the figures.
+
+
+\begin{figure}
+\begin{center}
+
+\includegraphics[width=\textwidth]{Applications/FBP_SIRT_CGLSm.png} 
+\includegraphics[width=\textwidth]{Applications/FBP_SIRT_CGLSz1.png} 
+\includegraphics[width=\textwidth]{Applications/FBP_SIRT_CGLSz2.png} 
+
+\end{center}
+
+\caption{\label{fig:CGLSSIRT} Columns: FBP, SIRT (20 iterations) and CGLS (7 iterations)} 
+\end{figure}
+
+
+\begin{figure}
+\begin{center}
+
+\includegraphics[width=\textwidth]{Applications/FBP_OSSART_TV.png} 
+\includegraphics[width=\textwidth]{Applications/FBP_OSSART_TVz1.png} 
+\includegraphics[width=\textwidth]{Applications/FBP_OSSART_TVz2.png} 
+
+\end{center}
+
+\caption{\label{fig:OS}Columns: FBP, OS-SART (20 iterations) and OS-ASD-POCS (20 iterations, 20 TV iterations each)} 
+\end{figure}
+
+
+\begin{figure}
+\begin{center}
+
+\includegraphics[width=\textwidth]{Applications/OSSART_0_20_5_TViters.png} 
+\includegraphics[width=\textwidth]{Applications/OSSART_0_20_5_TVitersz1.png} 
+\includegraphics[width=\textwidth]{Applications/OSSART_0_20_5_TVitersz2.png} 
+
+\end{center}
+
+\caption{\label{fig:OStv}Columns: OS-SART (20 iterations, 0 TV iterations), OS-ASD-POCS (20 iterations, 20 TV iterations each), OS-ASD-POCS (20 iterations, 5 TV iterations each)} 
+\end{figure}
+
+\FloatBarrier
+
+\subsubsection{The ``3\_20160218\_tomo\_65t55\_p5\_area\_2MB1\_Export'' dataset.}
+
+
+
+\begin{figure}
+\begin{center}
+
+\includegraphics[width=\textwidth]{Applications/Diamond1_full.png} 
+\includegraphics[width=\textwidth]{Applications/Diamond1zoom1.png} 
+\includegraphics[width=\textwidth]{Applications/Diamond1zoom2.png} 
+\includegraphics[width=\textwidth]{Applications/Diamond1zoom3.png} 
+
+\end{center}
+
+\caption{\label{fig:OStv}Columns: OS-SART (20 iterations, 0 TV iterations), OS-ASD-POCS (20 iterations, 20 TV iterations each), OS-ASD-POCS (20 iterations, 5 TV iterations each)} 
+\end{figure}
