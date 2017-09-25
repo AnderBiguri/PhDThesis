@@ -167,8 +167,10 @@ However, cryoSXT data has several sources of errors that make its reconstructed 
 
 Few datasets have been reconstructed from this imaging modality using various algorithms and using various algorithms. Objective evaluation of the quality of the reconstructed image with each algorithm is not possible, as due to the noisy nature of the images, classifying some of the visual artefacts as data or noise is hard. Thus this section does not intend to claim that any of the algorithms perform better than the filtered backprojection (FBP), just highlight the differences.
 
-\subsubsection{The ``2017\_0207\_Trypanosoma\_33'' dataset.} Several algorithms have been used to test the efect of iterative algorithms.
-Initially SIRT and CGLS have been chosen. Both of these algorithms are expected to generate images with very few noise, but perhaps lose the most detailed information, or at least create smoother boundaries than FBP, as they minimize the L2 norm using all data in one go (per iteration). Result of these, compared to FBP can be seen in figure \ref{fig:CGLSSIRT}. SIRT generates a very smooth image without barely any noise, however the details are very smoothed also, specially the boundaries of the objects. However, very few iterations of SIRT have been performed in this dataset. More iterations will likely improve the quality of the result, but it is likely that hundreds of them are needed to obtain a good image. CGLS however seemsto separate data from noise better, while also creating some smooth (not as much as SIRT) boundaries. However it is unclear to me how much of this is caused by misalignments on the data and how much by the algorithms themselves.
+\subsubsection{The ``2017\_0207\_Trypanosoma\_33'' dataset.} This dataset contains a section of an image containing few Trypanosoma, a unicellular parasitic protozoa that cause different illnesses, such as the sleeping sickness. In the images, the big circle within each of them, of similar attenuation level as the rest of the cells is the nucleus while the smaller circular features are organelles of the cell.
+
+ Several algorithms have been used to test the effect of iterative algorithms.
+Initially SIRT and CGLS have been chosen. Both of these algorithms are expected to generate images with very few noise, but perhaps lose the most detailed information, or at least create smoother boundaries than FBP, as they minimize the L2 norm using all data in one go (per iteration). Result of these, compared to FBP can be seen in figure \ref{fig:CGLSSIRT}. SIRT generates a very smooth image without barely any noise, however the details are very smoothed also, specially the boundaries of the objects. However, very few iterations of SIRT have been performed in this dataset. More iterations will likely improve the quality of the result, but it is likely that hundreds of them are needed to obtain a good image. CGLS however seems to separate data from noise better, while also creating some smooth (not as much as SIRT) boundaries. However it is unclear to me how much of this is caused by misalignments on the data and how much by the algorithms themselves.
 
 As shown before in this chapter, OS-SART can improve the convergence speed of SIRT sacrificing some computational time. SART can further this, however as these images are too big, the SART solution would take too long (around 7 hours for 50 iterations). Additionally, total variation minimization can be applied to remove the noise that the images have. Figure \ref{fig:OS} shows FBP, OS-SART, and ASD-POCS with 20 total variation iterations and using OS-SART instead of SART as data fidelity update (OS-ASD-POCS).
 
@@ -210,24 +212,36 @@ Note that the images have a darker vertical ``band'', not as obvious in SIRT and
 
 \end{center}
 
-\caption{\label{fig:OStv}Columns: OS-SART (20 iterations, 0 TV iterations), OS-ASD-POCS (20 iterations, 20 TV iterations each), OS-ASD-POCS (20 iterations, 5 TV iterations each)} 
+\caption{\label{fig:OStv}Columns: OS-SART (20 iterations, 0 TV iterations), OS-ASD-POCS (20 iterations, 20 TV iterations each), OS-ASD-POCS (20 iterations, 5 TV iterations each).} 
 \end{figure}
 
 \FloatBarrier
 
-\subsubsection{The ``3\_20160218\_tomo\_65t55\_p5\_area\_2MB1\_Export'' dataset.}
+\subsubsection{The ``3\_20160218\_tomo\_65t55\_p5\_area\_2MB1\_Export'' dataset.} This dataset contains the zoomed area of a XXXXXXXXXXXXXX cell. The big smooth area in the top left side is the nucleus of the cell, while the rest are organelles on the cytoplasm of the cell. This dataset has is noisier than the previous one, and has a higher amount of small details on it. In figure \ref{fig:Diamond2} the recosntructed image can be seen, on where the columns show FBP, OS-SART, CGLS and OS-ASD-POCS algorithms, and the rows different zoomed areas of the image. In this dataset the iterative algorithms to have a strong influence in the removal of the noise. This is clearly apparent in the second row of the figure \ref{fig:Diamond2}, on where the three iterative algorithms, specially the TV based one, remove significantly the noise of the organelles both in the left and right side of the image. in the left, a mostly smooth organelle is reconstructed with the iterative algorithms while FBP is very riddled with random-looking noise. In the right side of the image in this row, one can  distinguish the black dots of inside the big circle in the iterative algorithms, where in FBP selecting these black dots as data rather than noise would be harder both to a trained human eye or a segmentation algorithm.
 
-
-
+\subsubsection{The ``Grid1\_Area2\_Cell2\_tomo3-All\_60t60\_p5d\_6s\_mb1\_Export'' dataset}
+This images also show a cell, with part nucleus and part organelles, as in the previous dataset. The same algorithms have been used, and the results can be seen in figure \ref{fig:Diamond3}.
 \begin{figure}
 \begin{center}
 
-\includegraphics[width=\textwidth]{Applications/Diamond1_full.png} 
+\includegraphics[width=\textwidth]{Applications/Diamond1_full_marked.png} 
 \includegraphics[width=\textwidth]{Applications/Diamond1zoom1.png} 
 \includegraphics[width=\textwidth]{Applications/Diamond1zoom2.png} 
 \includegraphics[width=\textwidth]{Applications/Diamond1zoom3.png} 
 
 \end{center}
 
-\caption{\label{fig:OStv}Columns: OS-SART (20 iterations, 0 TV iterations), OS-ASD-POCS (20 iterations, 20 TV iterations each), OS-ASD-POCS (20 iterations, 5 TV iterations each)} 
+\caption{[Cell image recosntructed with different algorithms 2]\label{fig:Diamond2} Columns: FBP, OS-SART (30 iterations), CGLS (7 iterations) and OS-ASD-POCS (30 iterations, 10 TV iterations each) The zoomed areas are highlighted in the FBP image.} 
+\end{figure}
+\begin{figure}
+\begin{center}
+
+\includegraphics[width=\textwidth]{Applications/Diamond5.png} 
+\includegraphics[width=\textwidth]{Applications/Diamond5zoom1.png} 
+\includegraphics[width=\textwidth]{Applications/Diamond5zoom2.png} 
+\includegraphics[width=\textwidth]{Applications/Diamond5zoom3.png} 
+
+\end{center}
+
+\caption{[Cell image recosntructed with different algorithms 3]\label{fig:Diamond3} Columns: FBP, OS-SART (30 iterations), CGLS (7 iterations) and OS-ASD-POCS (30 iterations, 10 TV iterations each). The zoomed areas are highlighted in the FBP image.} 
 \end{figure}
