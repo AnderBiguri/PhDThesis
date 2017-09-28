@@ -160,9 +160,22 @@ This section tries to illustrate the effect of different algorithms within the T
 \subsection{Medical Head CBCT from  The Christie Hospital}
 \subsection{Cryo Soft X-Ray Tomography at Diamond Light Source}
 
-Cryo soft X-ray tomography (Cryo-SXT) is a relatively new[CITE] technology to image micrometer size biological samples in full 3D. Generally, cell-imaging is performed with electron microscopy (EM) machines and all its variants (transmission electron microscopy, scanning electron microscopy, cryo-electron microscopy, electron tomography, etcetera), however these techniques have very limited penetration (less than 1$\mu$m) and thus often require slicing of the samples for volumetric imaging. Cryo-SXT uses the so called water window for X-ray energies around the 500eV energy range. Unlike in higher energies, where everything is invisible, water becomes transparent but carbon-based tissues are clearly visible on that range. Thus, while with lower resolution than most EM, cryooSXT allows for full volumetric visualization of the cells without damaging the samples. In order to be able to image in the extremely accurate setup in both sample handling and X-ray parameters, these cryoSXT images are captured in synchrotron facilities. The data used in this work is from the B24 beam-line at the Diamond Light Source.
+Cryo soft X-ray tomography (Cryo-SXT) is a relatively new[CITE] technology to image micrometer size biological samples in full 3D. Generally, cell-imaging is performed with electron microscopy (EM) machines and all its variants (transmission electron microscopy, scanning electron microscopy, cryo-electron microscopy, electron tomography, etcetera), however these techniques have very limited penetration (less than 1$\mu$m) and thus often require slicing of the samples for volumetric imaging. Cryo-SXT uses the so called water window for X-ray energies around the 500eV energy range. Unlike in higher energies, where everything is invisible, water becomes transparent but carbon-based tissues are clearly visible on that range. Thus, while with lower resolution than most EM, Cryo-SXT allows for full volumetric visualization of the cells without damaging the samples. In order to be able to image in the extremely accurate setup in both sample handling and X-ray parameters, these Cryo-SXT images are captured in synchrotron facilities. The data used in this work is from the B24 beam-line at the Diamond Light Source.
 
-However, cryoSXT data has several sources of errors that make its reconstructed images significantly noisy. The typical penetration depth of soft X-rays is around 10$\mu$m, while the samples are generally an order of magnitude bigger than that in height and width. Thus cryoSXT is a limited angle problem, where most of the datasets are sampled over a 120 degrees arc. In the extrema of this range, the images in the detector tend to have little or none information in some parts of the image due to photons not reaching the detector. Additionally, the low intensity and small sample size do mean that there the detector data is very noisy, as photons spread out more (in pixel dimension) and less photons reach the detector. The size of the sample also comes with errors in the mechanical systems of the imaging set up. When working in a scale of microns, any small vibration is visible and considerably offsets/perturbs the measured data. Generally this type of errors are removed by pre-processing using alignment techniques, but the algorithms involved are often not fault proof, and the data used in reconstruction ends up having some misalignment errors. Few of these errors can be seen in the sinogram of the dataset labelled as ``2017\_0207\_Trypanosoma\_33'', on where misalignment and missing data problems are visually perceptible.
+However, Cryo-SXT data has several sources of errors that make its reconstructed images significantly noisy. The typical penetration depth of soft X-rays is around 10$\mu$m, while the samples are generally an order of magnitude bigger than that in height and width. Thus Cryo-SXT is a limited angle problem, where most of the datasets are sampled over a 120 degrees arc. In the extrema of this range, the images in the detector tend to have little or none information in some parts of the image due to photons not reaching the detector. Additionally, the low intensity and small sample size do mean that there the detector data is very noisy, as photons spread out more (in pixel dimension) and less photons reach the detector. The size of the sample also comes with errors in the mechanical systems of the imaging set up. When working in a scale of microns, any small vibration is visible and considerably offsets/perturbs the measured data. Generally this type of errors are removed by pre-processing using alignment techniques, but the algorithms involved are often not fault proof, and the data used in reconstruction ends up having some misalignment errors. Figure \ref{fig:Cryo-SXT} shows two of the sinograms of the datasets, in where the noisy nature of the data can be visually appreciated. In the top figure,attenuation artefacts are visible. In the bottom figure one can see the darkening of the areas at high angles (upper and lower parts of the figure, at 25\% of distance from the left) and areas that have been filled by the aligneation algorithm with a single value (mid-left edge and bottom right edge). These last errors do have no influence in FBP, as the high pass filtering of the data sets their values at zero, but are a source of artefacts in iterative algorithms. Both sinograms show a considerably high amount of random noise.
+
+\begin{figure}
+\begin{center}
+
+\includegraphics[width=\textwidth]{Applications/sinobad.png} 
+\includegraphics[width=\textwidth]{Applications/sinogrammod.png} 
+
+\end{center}
+
+\caption[Sinograms of the data from a Cryo-SXT]{\label{fig:Cryo-SXT} Sinograms of the data from a Cryo-SXT. The top figure shows attenuation artefacts over different individual measurements of the data and significant random noise over the whole sinogram. The bottom figure shows strong attenuation in high angles and artefacts generated by alignment. } 
+\end{figure}
+
+
 
 
 Few datasets have been reconstructed from this imaging modality using various algorithms and using various algorithms. Objective evaluation of the quality of the reconstructed image with each algorithm is not possible, as due to the noisy nature of the images, classifying some of the visual artefacts as data or noise is hard. Thus this section does not intend to claim that any of the algorithms perform better than the filtered backprojection (FBP), just highlight the differences.
@@ -186,7 +199,7 @@ Note that the images have a darker vertical ``band'', not as obvious in SIRT and
 
 \end{center}
 
-\caption{\label{fig:CGLSSIRT} Columns: FBP, SIRT (20 iterations) and CGLS (7 iterations)} 
+\caption[Cell image recosntructed with different algorithms 1-1]{\label{fig:CGLSSIRT} Columns: FBP, SIRT (20 iterations) and CGLS (7 iterations)} 
 \end{figure}
 
 
@@ -199,7 +212,7 @@ Note that the images have a darker vertical ``band'', not as obvious in SIRT and
 
 \end{center}
 
-\caption{\label{fig:OS}Columns: FBP, OS-SART (20 iterations) and OS-ASD-POCS (20 iterations, 20 TV iterations each)} 
+\caption[Cell image recosntructed with different algorithms 1-2]{\label{fig:OS}Columns: FBP, OS-SART (20 iterations) and OS-ASD-POCS (20 iterations, 20 TV iterations each)} 
 \end{figure}
 
 
@@ -212,7 +225,7 @@ Note that the images have a darker vertical ``band'', not as obvious in SIRT and
 
 \end{center}
 
-\caption{\label{fig:OStv}Columns: OS-SART (20 iterations, 0 TV iterations), OS-ASD-POCS (20 iterations, 20 TV iterations each), OS-ASD-POCS (20 iterations, 5 TV iterations each).} 
+\caption[Cell image recosntructed with different algorithms 1-3]{\label{fig:OStv}Columns: OS-SART (20 iterations, 0 TV iterations), OS-ASD-POCS (20 iterations, 20 TV iterations each), OS-ASD-POCS (20 iterations, 5 TV iterations each).} 
 \end{figure}
 
 \FloatBarrier
@@ -231,7 +244,7 @@ This images also show a cell, with part nucleus and part organelles, as in the p
 
 \end{center}
 
-\caption{[Cell image recosntructed with different algorithms 2]\label{fig:Diamond2} Columns: FBP, OS-SART (30 iterations), CGLS (7 iterations) and OS-ASD-POCS (30 iterations, 10 TV iterations each) The zoomed areas are highlighted in the FBP image.} 
+\caption[Cell image recosntructed with different algorithms 2]{\label{fig:Diamond2} Columns: FBP, OS-SART (30 iterations), CGLS (7 iterations) and OS-ASD-POCS (30 iterations, 10 TV iterations each) The zoomed areas are highlighted in the FBP image.} 
 \end{figure}
 \begin{figure}
 \begin{center}
@@ -243,5 +256,5 @@ This images also show a cell, with part nucleus and part organelles, as in the p
 
 \end{center}
 
-\caption{[Cell image recosntructed with different algorithms 3]\label{fig:Diamond3} Columns: FBP, OS-SART (30 iterations), CGLS (7 iterations) and OS-ASD-POCS (30 iterations, 10 TV iterations each). The zoomed areas are highlighted in the FBP image.} 
+\caption[Cell image recosntructed with different algorithms 3]{\label{fig:Diamond3} Columns: FBP, OS-SART (30 iterations), CGLS (7 iterations) and OS-ASD-POCS (30 iterations, 10 TV iterations each). The zoomed areas are highlighted in the FBP image.} 
 \end{figure}
