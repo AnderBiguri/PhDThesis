@@ -17,7 +17,17 @@
 \usepackage{epstopdf}
 
 
-
+%\usepackage[printwatermark]{xwatermark}
+%\newsavebox\mybox
+%\savebox\mybox{\tikz[color=red,opacity=0.3]\node{CONFIDENTIAL};}
+%\newwatermark*[
+%  allpages,
+%  angle=45,
+%  scale=6,
+%  xpos=-20,
+%  ypos=15
+%]{\usebox\mybox}
+%
 
 
 
@@ -67,7 +77,7 @@
 
 
 % front matter
-\title{Motion correction in X-ray tomography}
+\title{Motion compensation in X-ray tomography}
 \author{Ander Biguri}
 \degree{Doctor of Philosophy}
 \department{Department of Electrical and Electronic Engineering}
@@ -80,25 +90,23 @@
 \begin{document}
 \maketitle
 
-\begin{abstract}
-bla
-\end{abstract}
+%\begin{abstract}
+%bla
+%\end{abstract}
 
 
 \tableofcontents
 
 \chapter{Introduction}\label{ch:intro}
 \chapter{X-ray imaging in medicine}\label{ch:soa}
-%\chapter{The image reconstruction problem}
 \input{RecAlgorithms/RecAlgorithms.tex}\label{ch:rec}
 
 
 \input{GPUmethods/GPUmethods_SH.tex}\label{ch:GPU}
-%\chapter{Applications of TIGRE}\label{ch:apllications}
 \input{applications/Chapplications.tex}\label{ch:apllications}
 
 \input{MotionCorrection/motioncorrection.tex}\label{ch:motion}
-\chapter{Quality analysis of motion correction}\label{ch:motion analisis}
+\input{accuracyMC/accuracyMC.tex}\label{ch:motion analisis}
 \chapter{Conclusions and Future work}\label{ch:conclusions}
 
 \bibliographystyle{plain}
