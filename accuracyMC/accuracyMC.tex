@@ -7,12 +7,139 @@ This chapter looks more specifically at these challenges and compares the motion
 
 The objectives of this chapter are twofold: Firstly, the improved image quality obtainable by iterative algorithms is highlighted, showing how 4D CBCT binning methods can be improved by using better reconstruction algorithms, even with low data. Secondly, the flexibility and error behaviour of the algorithm is studied. The algorithm will reconstruct the image without any motion artefacts if the motion is perfectly know, however respiratory motion is variable between patients and within the patients themselves. The error behaviour with uncertainties in the DVF crucial for the future possibility of the method in clinical cases, as while the motion correction method removes almost in its entirety any motion artefacts with very accurately known DVFs, obtaining very accurate motion models of patients is not possible. Thus, the performance of the method with low resolution and approximately accurate DVFs is studied in this work. Additionally, some proposed methods for 4D CBCT rely in computing DVFs and then deforming a high resolution image with them. This work also studies why using reconstruction for motion correction produces better results than deforming a static image.
 
-\section{Methods to evaluate quality}
-This chapter reconstruct 4D images in all frames, and compare them to the ground truth. The iterative algorithms used in this section are SART and ASD-POCS, relatively arbitrarily chosen. To demonstrate the flexibility of the method, more than one algorithm is presented, and SART is chosen because its a well understood and common algorithm, while ASD-POCS is chosen because its a more advanced algorithm with more complex constrains, however it is quite well known also. One would expect that more advanced and newer algorithms to work even better than these two, but using those may obscure the results of the analysis that this chapter attempt to study.
+
+
+\section{Materials and methods}
+
+An small introduction of the POPI dataset, reconstruction methods, methods for deformation vector field computation an reconstructed image quality evaluation parameters are described in this section. 
+
+
+
+
+
+
+\subsubsection{4D POPI model}
+
+The dataset that is going to be used is the same as in the previous chapter, a 4D-CT (10 bins) treatment planning scan of a lung cancer patient, known as the POPI model. In Figure \ref{fig:POPIfull} a snapshot of the whole breathing pattern can be seen in the cranial-caudal direction, with a zoomed section of the tumour, on where the motion is better appreciated. Figure \ref{fig:POPI3} shows the only frames 0, 3 and 6, for an amplified image.
+
+\begin{figure}
+\begin{center}
+
+\includegraphics[width=\textwidth]{accuracyMC/imagerall.png} 
+\includegraphics[width=\textwidth]{accuracyMC/tumourall.png} 
+
+
+\end{center}
+
+\caption[The whole 4D dataset in CC direction]{\label{fig:POPIfull} The POPI dataset for all frames in the cranial-caudal direction, and a zoomed area of the tumour.} 
+\end{figure}
+\begin{figure}
+\begin{center}
+
+\includegraphics[width=0.9\textwidth]{accuracyMC/imager3.png} 
+\includegraphics[width=0.9\textwidth]{accuracyMC/tumour3.png} 
+
+
+\end{center}
+
+\caption[Three frames of the 4D dataset in CC direction]{\label{fig:POPI3} The POPI dataset for three frames (0,3 and 6) in the cranial-caudal direction, and a zoomed area of the tumour.} 
+\end{figure}
+
+\subsubsection{Image reconstruction}
+
+This chapter reconstruct 4D images in all frames, and compare them to the ground truth. The iterative algorithms used in this section are SART and ASD-POCS. The rationale is that to demonstrate the flexibility of the method, more than one algorithm is presented, and SART is chosen because its a well understood and common algorithm, while ASD-POCS is chosen because its a more advanced algorithm with more complex constrains, however it is also quite well known one. One would expect that more advanced and newer algorithms to work even better than these two, but using those may obscure the results of the analysis that this chapter attempt to study, the quality of the reconstruction with the common errors in 4D CBCT.
+
+\subsubsection{Deformation vector field computation}
+
+As images in all frames are reconstructed in this chapter, deformation fields from and to any arbitrary time snapshot are required by the algorithm. For 10 frames, this makes 90 deformation vector fields + 10 identity fields (all zeroes). The DVfs used in the previous chapter that are provided with the POPI model only register to a single time slice (the second one, labelled 1), thus they are not enough to reconstruct the data in this chapter. In order to obtain the needed DVFs, a third party software has been used, the Elastix\cite{elastix} package. Elastix is an open source software that provides a big variety of multimodal nonrigid image registration tools. 
+
+From the algorithms available in the package, a nD+t B-spline group-wise cyclic registration\cite{metz2011nonrigid} approach has been chosen. This method is an optimization based algorithm, that registers 4D images (in this case) with B-splines. This allows for an analytic representation of the deformation using a simple yet fast method. The algorithms assumes deformation only in the spacial domain, and smoothness, as it is mean to represent intra-patient deformation. An assumption is made that a correctly registered image should have the same pixel intensity value in each corresponding spacial location, thus a cost function of the following form is defined:
+
+\begin{equation}
+C(\mu)=\frac{1}{\lVert \mathcal{S} \rVert\lVert \mathcal{T}\rVert}\sum_{x\in \mathcal{S}} \sum_{t\in\mathcal{T}}\left(I(T_\mu(x,t)) - \bar{I_\mu}(x)\right)^2,
+\end{equation}
+where $I$ is a n-dimensional image, $\bar{I_\mu}(x)$ is the average intensity value over time (after applying the transformation), $T_\mu(x,t)$ is the B-splice coordinate transformation, $\mu$ the B-spline parameters, and $\mathcal{S}$ and $\mathcal{T}$ the set of spacial and temporal coordinates respectively. As multiple solutions exist for this equation, an additional constrain is added. As the registration is cyclical, a constrain in the coordinate transformation is added, that the average transformation must be the identity, as in
+\begin{equation}
+\frac{1}{\lVert \mathcal{T}\rVert}\sum_{t\in\mathcal{T}}T_\mu(x,t)=x.
+\end{equation}
+
+The minimization equation therefore is
+\begin{equation}
+\hat{\mu}=\argmin_\mu C(\mu) \text{  subject to  } (7.2).
+\end{equation}
+
+This equation is minimized using adaptive stochastic gradient descend, a faster converging version of gradient descend\cite{klein2009adaptive}. For more details about the specific implementation, refer to the article\cite{metz2011nonrigid}.
+
+This algorithm needs an initial grid of spatial points to register and link via B-splines. The grid size used in this work is an uniformly distributed grid with samples every 13x13x1 voxels.
+\subsubsection{Quantitative reconstruction quality parameters}
 
 To evaluate the quality of the reconstruction, the tumour is going to be the focus, as  in the previous chapter. The metrics RMSE and UQI and Segmentation mismatch will also be used, however an additional metric to compute the binary shape location of the tumour will also be used.  Using the same tumour area, the tumour will be extracted using morphological operators on images, via binarization with Otsu's method, image dilation and erosion and labelling using connected components. The biggest segmented blob will be then used to compute the geometric center, and the euclidean distance between this and the ground truth will be used as metric of quality. This is due to CBCT not reconstructing HU units of images with the best accuracy, thus the quality of the result on image attenuation coefficient values is less important than the quality of the shape of the tumour. The attenuation coefficients are actually important for RT planning, however CBCT is mainly used to know the tumour shape and location on the treatment.
 
-\section{Iterative Algorithms for 4D CBCT}
-\section{Substandard Deformation Vector Fields}
-\subsection{Coarse Deformation Vector Fields}
-\subsection{Cropped Vector Fields}
+
+
+
+\section{Results}
+
+In order to evaluate the flexibility of the motion compensated iterative algorithms various numerical test are performed and the qualitative parameters computed in the results. The first test shows the quality of using iterative algorithms versus FDK in 4D CBCT applications, without motion compensation. Then the motion compensated method will be compared to 4DCBCT, using only a tenth of projections. The lasts tests will focus on DVFs and quality of DVFs. Three different studies are presented. The first shows the effect of a highly under-sampled DVF, the second reconstruct images with 10\% of the projections being labelled in the wrong bin (thus using the wrong DVFs) and the last one tests the reconstruction quality in case where DVFs are only available for the tumour area. Comparison to the 3D CBCT image with motion artefacts is not performed in this chapter, needless to say it performs worse than the motion compensation algorithms in all cases except on frame number 4, on where the tumour average lies approximately, thus locating its centroid with the same accuracy as motion compensated methods.
+
+\subsection{Iterative algorithms vs FDK in 4D CBCT}
+The standard procedure for a 4D CBCT image used currently in the clinic is to obtain projections of the patient breathing of the order of 1000-1600\cite{thengumpallil2016difference} projections per session while monitoring the breathing phase with some external surrogate. Then the projections are binned for each breathing phase (generally 6-10 different phases) and the images are reconstructed for each bin, with the FDK algorithm. For an dataset of 100 noiseless projections per bin, where all projections have been perfectly binned, and there is no intra-bin motion, figure \ref{fig:4dCBCT3static} shows the reference images and reconstruction with FDK, SART and ASD-POCS (rows) for bins 0, 3 and 6 (columns), with 50 iterations in the iterative algorithms. The improved quality of the iterative algorithms compared to FDK is clearly visible. This just reafirms the results presented in other studies\cite{schmidt2014clinical}\cite{shieh2014image}, where iterative algorithms have been shown to be superior than FDK in 4D CBCT. Figure \ref{fig:4dCBCTquality} shows the quality parameters computed for the tumour area for each frame and algorithm. Iterative algorithms perform better, ASD-POCS obtaining the best result in almost all parameters.
+ 
+\begin{figure}
+\begin{center}
+
+\includegraphics[width=\textwidth]{accuracyMC/4DCBCT3stage.png} 
+
+
+\end{center}
+
+\caption[Three frames of the 4D CBCT recosntruction with different algorithm]{\label{fig:4dCBCT3static} The POPI dataset for three frames (0,3 and 6) and reconstruction of each frame using 100 projections by FDK, SART and ASD-POCS, from top to bottom.} 
+\end{figure}
+
+\begin{figure}
+\begin{center}
+
+\includegraphics[width=0.9\textwidth]{accuracyMC/4DCBCTparams.png} 
+
+
+\end{center}
+
+\caption[Recustruction quality comparison of 4D CBCT algorithms]{\label{fig:4dCBCTquality} Reconstruction quality comparison of 4D CBCT algorithms for each frame. Iterative algorithms show better performance compared to FDK in all cases.} 
+\end{figure}
+
+\subsection{Motion Compensated vs 4D CBCT}
+
+The motion compensated reconstruction is compared to 4D CBCT reconstruction in this section. It is important to remember that the motion compensated reconstruction uses only 100 projections in total, the same projections to reconstruct each of the different frames. In the 4D CBCT algorithms the total number of projections is 1000, binned in 10 frames. Figure XX shows the real data, 4D CBCT using FDK and reconstruction using motion compensated algorithms, SART and ASD-POCS respectively. SART has a similar noise level than FDK, while ASD-POCS removes most of that noise. Figure XX shows the quality parameters for 4D CBCT FDK, motion compensated SART and ASD-POCS, and the frame number 4 deformed by the DVFs. This last one is presented to present the quality of the DVFs used. While in the real case the original image would be unknown, especially with this quality, its comparison here is of use. The motion compensated algorithms rely in this data, thus in case where the algorithm itself would have no errors and the DVFs would be completely coherent (perfect match on motion from and to the frames) the warped original image would be the best case scenario for the algorithms. These are not the best quality DVFs (e.g. the ones provided with the POPI model for frame number 1 are better), however they are a good example of smooth DVFs that one can obtain in 4DCBCT.
+
+In the results one can see that while the quality of the reconstruction is lower than in 4D-CBCT, it is still good in general terms. The center of the tumour is located within 1mm of error on most cases, less than the error in proton therapy dose delivery. 
+
+
+\begin{figure}
+\begin{center}
+
+\includegraphics[width=\textwidth]{accuracyMC/MCCBCT3stage.png} 
+
+
+\end{center}
+
+\caption[Three frames of the motion compensated CBCT recosntruction with different algorithm]{\label{fig:MCCBCT3static} The POPI dataset for three frames (0,3 and 6) and reconstruction of each frame 4D CBCT FDK, motion compensated SART and motion compensated ASD-POCS, from top to bottom.} 
+\end{figure}
+
+\begin{figure}
+\begin{center}
+
+\includegraphics[width=0.9\textwidth]{accuracyMC/MCCBCTparams.png} 
+
+
+\end{center}
+
+\caption[Recustruction quality comparison of motioc compesnation]{\label{fig:MCCBCTquality} Reconstruction quality comparison of 4D CBCT FDK, motion compensated methods (SART and ASD-POCS) and the 4th frame after deformation.} 
+\end{figure}
+
+\subsection{Substandard Deformation Vector Fields}
+\subsubsection{Undersampled DVFs}
+\subsubsection{Binning errors in projections}
+\subsubsection{Only tumour motion information}
+
+\section{Discussion}
+When observing the tumour segmentation mismatch the data shows that most of the mismatch is a 1 pixel wide surface around the motion compensated methods that is missing to obtain the correct pixels, similar as in figure \ref{fig:error23}. This hints that edge preserving algorithms may perform better.
