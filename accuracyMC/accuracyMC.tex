@@ -31,7 +31,7 @@ The dataset that is going to be used is the same as in the previous chapter, a 4
 
 \end{center}
 
-\caption[The whole 4D dataset in CC direction]{\label{fig:POPIfull} The POPI dataset for all frames in the cranial-caudal direction, and a zoomed area of the tumour.} 
+\caption[The whole 4D dataset in CC direction]{\label{fig:POPIfull} The POPI dataset for all frames in the cranial-caudal direction, and a zoomed area of the tumour.  The colour scale is linear attenuation coefficient in the range [0-2000].} 
 \end{figure}
 \begin{figure}
 \begin{center}
@@ -42,7 +42,7 @@ The dataset that is going to be used is the same as in the previous chapter, a 4
 
 \end{center}
 
-\caption[Three frames of the 4D dataset in CC direction]{\label{fig:POPI3} The POPI dataset for three frames (0,3 and 6) in the cranial-caudal direction, and a zoomed area of the tumour.} 
+\caption[Three frames of the 4D dataset in CC direction]{\label{fig:POPI3} The POPI dataset for three frames (0,3 and 6) in the cranial-caudal direction, and a zoomed area of the tumour.  The colour scale is linear attenuation coefficient in the range [0-2000].} 
 \end{figure}
 
 \subsubsection{Image reconstruction}
@@ -93,7 +93,7 @@ The standard procedure for a 4D CBCT image used currently in the clinic is to ob
 
 \end{center}
 
-\caption[Three frames of the 4D CBCT recosntruction with different algorithm]{\label{fig:4dCBCT3static} The POPI dataset for three frames (0,3 and 6) and reconstruction of each frame using 100 projections by FDK, SART and ASD-POCS, from top to bottom.} 
+\caption[Three frames of the 4D CBCT recosntruction with different algorithm]{\label{fig:4dCBCT3static} The POPI dataset for three frames (0,3 and 6) and reconstruction of each frame using 100 projections by FDK, SART and ASD-POCS, from top to bottom.  The colour scale is linear attenuation coefficient in the range [0-2000].} 
 \end{figure}
 
 \begin{figure}
@@ -104,12 +104,12 @@ The standard procedure for a 4D CBCT image used currently in the clinic is to ob
 
 \end{center}
 
-\caption[Recustruction quality comparison of 4D CBCT algorithms]{\label{fig:4dCBCTquality} Reconstruction quality comparison of 4D CBCT algorithms for each frame. Iterative algorithms show better performance compared to FDK in all cases.} 
+\caption[Reconstruction quality comparison of 4D CBCT algorithms]{\label{fig:4dCBCTquality} Reconstruction quality comparison of 4D CBCT algorithms for each frame. Iterative algorithms show better performance compared to FDK in all cases.} 
 \end{figure}
 
 \subsection{Motion Compensated vs 4D CBCT}
 
-The motion compensated reconstruction is compared to 4D CBCT reconstruction in this section. It is important to remember that the motion compensated reconstruction uses only 100 projections in total, the same projections to reconstruct each of the different frames. In the 4D CBCT algorithms the total number of projections is 1000, binned in 10 frames. Figure XX shows the real data, 4D CBCT using FDK and reconstruction using motion compensated algorithms, SART and ASD-POCS respectively. SART has a similar noise level than FDK, while ASD-POCS removes most of that noise. Figure XX shows the quality parameters for 4D CBCT FDK, motion compensated SART and ASD-POCS, and the frame number 4 deformed by the DVFs. This last one is presented to present the quality of the DVFs used. While in the real case the original image would be unknown, especially with this quality, its comparison here is of use. The motion compensated algorithms rely in this data, thus in case where the algorithm itself would have no errors and the DVFs would be completely coherent (perfect match on motion from and to the frames) the warped original image would be the best case scenario for the algorithms. These are not the best quality DVFs (e.g. the ones provided with the POPI model for frame number 1 are better), however they are a good example of smooth DVFs that one can obtain in 4DCBCT.
+The motion compensated reconstruction is compared to 4D CBCT reconstruction in this section. It is important to remember that the motion compensated reconstruction uses only 100 projections in total, the same projections to reconstruct each of the different frames. In the 4D CBCT algorithms the total number of projections is 1000, binned in 10 frames. Figure \ref{fig:MCCBCT3static} shows the real data, 4D CBCT using FDK and reconstruction using motion compensated algorithms, SART and ASD-POCS respectively. SART has a similar noise level than FDK, while ASD-POCS removes most of that noise. Figure \ref{fig:MCCBCTquality} shows the quality parameters for 4D CBCT FDK, motion compensated SART and ASD-POCS, and the frame number 4 deformed by the DVFs. This last one is presented to present the quality of the DVFs used. While in the real case the original image would be unknown, especially with this quality, its comparison here is of use. The motion compensated algorithms rely in this data, thus in case where the algorithm itself would have no errors and the DVFs would be completely coherent (perfect match on motion from and to the frames) the warped original image would be the best case scenario for the algorithms. These are not the best quality DVFs (e.g. the ones provided with the POPI model for frame number 1 are better), however they are a good example of smooth DVFs that one can obtain in 4DCBCT.
 
 In the results one can see that while the quality of the reconstruction is lower than in 4D-CBCT, it is still good in general terms. The center of the tumour is located within 1mm of error on most cases, less than the error in proton therapy dose delivery. 
 
@@ -122,7 +122,7 @@ In the results one can see that while the quality of the reconstruction is lower
 
 \end{center}
 
-\caption[Three frames of the motion compensated CBCT recosntruction with different algorithm]{\label{fig:MCCBCT3static} The POPI dataset for three frames (0,3 and 6) and reconstruction of each frame 4D CBCT FDK, motion compensated SART and motion compensated ASD-POCS, from top to bottom.} 
+\caption[Three frames of the motion compensated CBCT recosntruction with different algorithm]{\label{fig:MCCBCT3static} The POPI dataset for three frames (0,3 and 6) and reconstruction of each frame 4D CBCT FDK, motion compensated SART and motion compensated ASD-POCS, from top to bottom.  The colour scale is linear attenuation coefficient in the range [0-2000].} 
 \end{figure}
 
 \begin{figure}
@@ -133,13 +133,41 @@ In the results one can see that while the quality of the reconstruction is lower
 
 \end{center}
 
-\caption[Recustruction quality comparison of motioc compesnation]{\label{fig:MCCBCTquality} Reconstruction quality comparison of 4D CBCT FDK, motion compensated methods (SART and ASD-POCS) and the 4th frame after deformation.} 
+\caption[Reconstruction quality comparison of motion compensation]{\label{fig:MCCBCTquality} Reconstruction quality comparison of 4D CBCT FDK, motion compensated methods (SART and ASD-POCS) and the 4th frame after deformation.} 
 \end{figure}
 
 \subsection{Substandard Deformation Vector Fields}
+The biggest single challenge of the motion compensation method is the fact that obtaining accurate patient specific DVFs is not possible with the current methods. Thus, evaluating numerically how accurately the DVFs need to be known for the algorithm to perform within reasonable limits is an important factor. The previous chapter shows that if the DVFs are perfectly known the motion compensated method can completely eliminate the motions influence in the final image, and the first section of this chapter shows that a smooth cyclic DVF computation algorithm can, while with more error, lead to accurate reconstruction. This section pushes the limits of the DVFs numerically in order to evaluate ho much the reconstruction quality deteriorates with each of the effects. The motion compensated methods with full DVFs are taken as a baseline for comparison.
+
 \subsubsection{Undersampled DVFs}
+While obtaining accurate DVFs may be a problem, it is easier to obtain broad smooth DVFs in a coarse grid that show roughly the motion of the area. Obtaining these is both numerically robust and  computationally cheap, making it a viable option in a clinical case. While the DVFs computed for the previous sections of chapter have been defined in a 13x13x1 spaced grid, the intermediate points are calculated with B-spline, thus allowing more complex behaviour than with linear interpolation in the intermediate voxels. In this simulation, the DVFs defined voxel by voxel is down-sampled to a 16x16x16 spaced grid, resulting on a 22x30x9 grid, that is linearly interpolated. 
+
+Visually the results are very similar to the full DVF motion compensation method, so the difference between them is visualized in figure XX for SART and ASD-POCS. The quality parameters are compared to the full DVF motion compensation and 4D CBCT FDK in figure \ref{fig:UMCCBCTquality}. In there, while an obvious lower accuracy than the full DVF method is obtained by the undersanpled one, the deterioration is not very significant. The location of the tumour is still below 1.5 mm of error for all frames, around 1mm on average.
+
+\begin{figure}
+\begin{center}
+
+\includegraphics[width=\textwidth]{accuracyMC/diffUMCCBCT3stage.png} 
+
+
+\end{center}
+
+\caption[Three difference frames of the undersampled motion compensation methods]{\label{fig:UMCCBCT3static} Absolute difference plots in frames (0,3 and 6) for the motion compensation methods with full DVFs and undersampled DVFs, for SART and ASD-POCS, from top to bottom..  The colour scale is linear attenuation coefficient in the range [0-400].} 
+\end{figure}
+
+
+\begin{figure}
+\begin{center}
+
+\includegraphics[width=0.9\textwidth]{accuracyMC/UMCCBCTparams.png} 
+
+
+\end{center}
+
+\caption[Reconstruction quality comparison of motion compensation]{\label{fig:UMCCBCTquality} Reconstruction quality comparison of 4D CBCT FDK, motion compensated methods (SART and ASD-POCS) and the 4th frame after deformation.} 
+\end{figure}
 \subsubsection{Binning errors in projections}
 \subsubsection{Only tumour motion information}
 
 \section{Discussion}
-When observing the tumour segmentation mismatch the data shows that most of the mismatch is a 1 pixel wide surface around the motion compensated methods that is missing to obtain the correct pixels, similar as in figure \ref{fig:error23}. This hints that edge preserving algorithms may perform better.
+When observing the tumour segmentation mismatch the data shows that most of the mismatch is a 1 pixel wide surface around the motion compensated methods that is missing to obtain the correct pixels, similar as in figure \ref{fig:error23}. This hints that edge preserving algorithms may delineate the tumour better thus reducing most of the mismatch appearing in the motion compensated reconstruction. Alternatively smarter segmentation methods may also achieve a better delineation of the tumour thus showing a smaller error.
