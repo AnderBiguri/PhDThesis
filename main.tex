@@ -33,9 +33,9 @@
 
 
 \usepackage{algpseudocode,algorithm,algorithmicx}
-%\algrenewcommand\algorithmicrequire{\textbf{Launch:}}
-%%
-%\algrenewcommand\algorithmicensure{\textbf{End Kernel}}
+\algrenewcommand\algorithmicrequire{\textbf{Launch:}}
+%%%
+\algrenewcommand\algorithmicensure{\textbf{End Kernel}}
 
 \makeatletter
 \def\ALG@special@indent{%
@@ -98,7 +98,8 @@
 \tableofcontents
 
 \chapter{Introduction}\label{ch:intro}
-\chapter{X-ray imaging in medicine}\label{ch:soa}
+%\chapter{X-ray imaging in medicine}
+\input{StateOfArt/stateofart.tex}
 \input{RecAlgorithms/RecAlgorithms.tex}\label{ch:rec}
 
 
@@ -110,5 +111,5 @@
 \chapter{Conclusions and Future work}\label{ch:conclusions}
 
 \bibliographystyle{plain}
-\bibliography{RecAlgorithms,motioncorrection,GPUmethods,motioncorrection2}
+\bibliography{RecAlgorithms,motioncorrection,intro,GPUmethods,motioncorrection2}
 \end{document}

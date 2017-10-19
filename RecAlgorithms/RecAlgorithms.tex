@@ -91,7 +91,7 @@ The total variation norm is defined as the sum of the 2-norms of the directional
 
 Applied to CT imaging, the total variation norm is the sum of the total change occurred in the image. An image with less total variation would be an image that would have less change, or more flat, same valued regions. Regularizing with the TV norm as a minimization term will yield an image that is piecewise smooth and it happens that most of the objects imaged in CT scanners are piecewise smooth in linear attenuation, even more in medical CT imaging. 
 
-However, solving the minimization problem in equation \ref{eq:THE equation} is not trivial with the TV regularization. One of the first robust algorithm is the so called Adaptive Steepest Descend, Projection Onto Convex Subsets, or ASD-POCS algorithm\cite{ASD_POCS}. This algorithm not only minimizes the data constrain with TV regularization but also adaptively controls the TV minimization update, in order to adapt its strength according to the data constrain update. Several adaptations and improvements of this algorithm have been proposed in the literature[CITES], all based in the same mathematical basis.  
+However, solving the minimization problem in equation \ref{eq:THE equation} is not trivial with the TV regularization. One of the first robust algorithm is the so called Adaptive Steepest Descend, Projection Onto Convex Subsets, or ASD-POCS algorithm\cite{ASD_POCS}. This algorithm not only minimizes the data constrain with TV regularization but also adaptively controls the TV minimization update, in order to adapt its strength according to the data constrain update. Several adaptations and improvements of this algorithm have been proposed in the literature\cite{liu2012adaptive}\cite{tian2011low}\cite{liu2013nonparametric}, all based in the same mathematical basis.  
 
 
 \subsubsection{ASD-POCS}
@@ -179,10 +179,10 @@ Figure \ref{fig:POCSAlgo} shows a conceptual diagram of the ASD-POCS algorithm. 
 \end{equation}
 
 
-The pseudocode for the algorithm can be seen in algorithm \ref{alg:ASD-POCS}. The algorithm is essentially solving the two vector in equation \ref{eq:KKTvectors}, the data vector in lines [5-8] and the TV vector in lines [18-22]. Line [9] enforces the positivity constrain. In the algorithm, $dtv$ is initialized according to $\alpha$, an user specified   TV hyperparameter for TV, together with $dp$, the step size performed by the data constrain. After the TV minimization is performed, the step size of the TV vector is rechecked. If the TV minimization step is too big (bigger than the data step size), and the desired $\epsilon$ is still not achieved, the step size is reduced further. This method of adaptively setting the step size of the TV iteration relating to the data step size is what ensures the optimal condition is achieved. Finally, the stopping criteria relies in either achieving the desired $\epsilon$ with with a desired $\cos \theta$, or stopping due to reaching a maximum amount of iterations ($\beta$ decreases with iteration number). In the original proposition of the ASD-POCS algorithm (and shown here), the data constrain is solved using SART, however any other algorithm solving the same minimization problem can be used here (e.g. CGLS or OS-SART).
+The pseudocode for ASD-POCS can be seen in algorithm \ref{alg:ASD-POCS}. The algorithm is essentially solving the two vector in equation \ref{eq:KKTvectors}, the data vector in lines [5-8] and the TV vector in lines [18-22]. Line [9] enforces the positivity constrain. In the algorithm, $dtv$ is initialized according to $\alpha$, an user specified   TV hyperparameter for TV, together with $dp$, the step size performed by the data constrain. After the TV minimization is performed, the step size of the TV vector is rechecked. If the TV minimization step is too big (bigger than the data step size), and the desired $\epsilon$ is still not achieved, the step size is reduced further. This method of adaptively setting the step size of the TV iteration relating to the data step size is what ensures the optimal condition is achieved. Finally, the stopping criteria relies in either achieving the desired $\epsilon$ with with a desired $\cos \theta$, or stopping due to reaching a maximum amount of iterations ($\beta$ decreases with iteration number). In the original proposition of the ASD-POCS algorithm (and shown here), the data constrain is solved using SART, however any other algorithm solving the same minimization problem can be used here (e.g. CGLS or OS-SART).
 
 
-The algorithm has 7 parameters that need to be set up: $\beta$ and $\beta_{red}$ are the initial value and reduction ratio of the SART hyperparameter, similarly $\alpha$ and $\alpha_{red}$ serve as hyperparameter and reduction ratio for the TV minimization. $r_{max}$ controls the maximum allowed ratio of change between the data minimization and the TV minimization, in order to adapt the step sizes. The number of iterations the TV minimization performs per iteration of the data minimization is defined as $n_{TV}$. Finally, the allowed data error is $\epsilon$, as described before. The initial values of the variables in the algorithm are a key factor on its convergence. Empirical tests show that wrong parametrization of the algorithm can lead to severely noisy reconstructions. An study of the sensitivity of these parameters to changes has been performed by Lohvithee \emph{et al}\cite{Vee}. The study shows that some parameters can be safely set up to a static value regardless of the data, such as the data hyperparameters, but that $\epsilon$, $n_{TV}$ and $\alpha$ are critical parameters to tune in order to get an usable reconstruction, and they are heavily data dependant. While some algorithms have successfully replaced the initial set of $\alpha$ by some data based heuristics [CITE PCSD]\footnote{These algorithms, namely PCSD and Aw-PCSD, are also available in TIGRE, by Manasavee Lohvithee.} to the best of the authors knowledge there is no mathematical proposal for setting these parameters. The biggest drawback of this method is that several reconstructions may be needed to find the best parameters for an specific application.
+The algorithm has 7 parameters that need to be set up: $\beta$ and $\beta_{red}$ are the initial value and reduction ratio of the SART hyperparameter, similarly $\alpha$ and $\alpha_{red}$ serve as hyperparameter and reduction ratio for the TV minimization. $r_{max}$ controls the maximum allowed ratio of change between the data minimization and the TV minimization, in order to adapt the step sizes. The number of iterations the TV minimization performs per iteration of the data minimization is defined as $n_{TV}$. Finally, the allowed data error is $\epsilon$, as described before. The initial values of the variables in the algorithm are a key factor on its convergence. Empirical tests show that wrong parametrization of the algorithm can lead to severely noisy reconstructions. An study of the sensitivity of these parameters to changes has been performed by Lohvithee \emph{et al}\cite{Vee}. The study shows that some parameters can be safely set up to a static value regardless of the data, such as the data hyperparameters, but that $\epsilon$, $n_{TV}$ and $\alpha$ are critical parameters to tune in order to get an usable reconstruction, and they are heavily data dependant. While some algorithms have successfully replaced the initial set of $\alpha$ by some data based heuristics\cite{liu2015reconstruction}\footnote{These algorithms, namely PCSD and Aw-PCSD, are also available in TIGRE, by Manasavee Lohvithee.} to the best of the authors knowledge there is no mathematical proposal for setting these parameters. The biggest drawback of this method is that several reconstructions may be needed to find the best parameters for an specific application.
 
 Note that this minimization approach, while used for TV minimization in the original article, can be used for a variety of different minimization functions. For example, the TV minimization step could be replaced by a prior image minimization[CITE PICS], or any other convex minimization function. Similarly, the data minimization step can be replaced by any other minimization algorithm, as long as it minimizes the problem in equation XX
 \begin{algorithm}
@@ -350,8 +350,8 @@ A different minimization approach to POCS is the approach proposed by Jia \texti
 \end{equation}
 being $\alpha$ the set of Cartesian coordinates, then the problem can be split into the following equations, where $g$ is a auxiliary function and $\mu>0$:
 \begin{align}
-\lambda\frac{\partial}{\partial x_\alpha}\lVert x\rVert_{TV}=\mu (x-g)\\
-\frac{\partial}{\partial x_\alpha}\lVert Ax-b \rVert^2=-\mu (x-g).
+\lambda\frac{\partial}{\partial x_\alpha}\lVert x\rVert_{TV}=\mu\cdot (x-g)\\
+\frac{\partial}{\partial x_\alpha}\lVert Ax-b \rVert^2=-\mu \cdot(x-g).
 \end{align}
 
 By solving for $g$, the simplified version of the algorithm can be seen in \ref{alg:SART-TV}.
@@ -362,14 +362,14 @@ By solving for $g$, the simplified version of the algorithm can be seen in \ref{
 \begin{algorithmic}[1]
 \State Solve: $g=x-\frac{\lambda}{\mu} \frac{\partial}{\partial x_\alpha}\lVert Ax-b \rVert^2$
 \Comment SART
-\State Minimize: $x=\argmin_x  \lVert x\rVert_{TV}+0.5*\mu \lVert x-g \rVert^2$
+\State Minimize: $x=\argmin_x  \lVert x\rVert_{TV}+0.5\cdot\mu \lVert x-g \rVert^2$
 
 \State Enforce positivity: $x=\max(0,x) $
 \end{algorithmic}
 
 \end{algorithm}
 
-The first line of the algorithm its essentially a gradient descend iteration, which can be replaced with a SART iteration. Note that the this iteration can be replaced by other data-minimization algorithms such as CGLS. The second line is the ROF model, widely researched in image denoising. The ROF model tries to find the image $x$ with minimum total variation subject to having the minimal deviation from its original value $g$. By changing the value of he hyperparameter $\mu$, the strength of this regularization is controlled. A high $\mu$ will ensure that the image is very similar to its original value, while a small $\mu$ will be more lax. The advantage of this approach compared to the ASD-POCS algorithm is that it requires no extra projection or backprojection operations. Additionally, minimizing the ROF model is a very well studied problem in the image processing field, and it has lead to finding computationally efficient methods.
+The first line of the algorithm its essentially a gradient descend iteration, which can be replaced with a SART iteration. Note that the this iteration can be replaced by other data-minimization algorithms such as CGLS. The second line is the ROF model, widely researched in image denoising. The ROF model tries to find the image $x$ with minimum total variation subject to having the minimal deviation from its original value $g$. By changing the value of the hyperparameter $\mu$, the strength of this regularization is controlled. A high $\mu$ will ensure that the image is very similar to its original value, while a small $\mu$ will be more lax. The advantage of this approach compared to the ASD-POCS algorithm is that it requires no extra projection or backprojection operations. Additionally, minimizing the ROF model is a very well studied problem in the image processing field, and it has lead to finding highly computationally efficient methods.
 
  In the article by Jia \emph{et al}, they solve the ROF model via gradient descend and controlling its step size with Armijo's rule. In this work a different approach is taken, based on the image processing literature.
  
@@ -392,7 +392,7 @@ where $\textbf{p}=(p^1,p^2,p^3)^T$ (for the 3D case) is the said dual variable. 
 
 The primal and dual updates can be both obtained from this equation. For the primal update, differentiating the equation according to $x$ results in
 \begin{equation}
-- \nabla \cdot\textbf{p}+\mu(x-g)=0,
+- \nabla \cdot\textbf{p}+\mu\cdot(x-g)=0,
 \end{equation}
 and one can solve it for $x$ by performing a gradient descend update as
 \begin{equation}
@@ -416,7 +416,7 @@ The PDU algorithm consists in updating $\textbf{p}$ and $x$ iteratively, by alte
 
 The same update is used in this work, as the images in their work are structurally similar to CT images and empirical test showed satisfactory results. The algorithm can be shown to converge as it is shown in \cite{zhu2010duality} that the primal-dual gap decreases with each update of $x^n$, and the gap is suggested as a control variable for the stopping criteria. In this work the algorithm has been implemented without the stopping criteria check, and an user specified parameter for the number of iterations is passed as an input, with a default value of 50, as it empirically showed good results.
 
-The discretization of the divergence and gradient operators are a key factor when numerically computing the PDU algorithm, as they need to be consequent with each other. Thus, the gradient can be approximated using forward differences, but as the divergence is the adjoint of the gradient, it must be approximated with backwards differences.
+The discretization of the divergence and gradient operators are a key factor when numerically computing the PDU algorithm, as they need to be consequent with each other. Thus, the gradient can be approximated using forward differences, but as the divergence is the adjoint of the gradient, it must be approximated with backward differences.
 
 
 

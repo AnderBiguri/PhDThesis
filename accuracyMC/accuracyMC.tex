@@ -104,7 +104,7 @@ The standard procedure for a 4D CBCT image used currently in the clinic is to ob
 
 \end{center}
 
-\caption[Reconstruction quality comparison of 4D CBCT algorithms]{\label{fig:4dCBCTquality} Reconstruction quality comparison of 4D CBCT algorithms for each frame. Iterative algorithms show better performance compared to FDK in all cases.} 
+\caption[Reconstruction quality comparison of 4D CBCT algorithms]{\label{fig:4dCBCTquality} Reconstruction quality comparison of 4D CBCT algorithms for each frame. Horizontal axis shows frame number and vertical axis the value of the quality parameter. Iterative algorithms show better performance compared to FDK in all cases.} 
 \end{figure}
 
 \subsection{Motion Compensated vs 4D CBCT}
@@ -133,7 +133,7 @@ In the results one can see that while the quality of the reconstruction is lower
 
 \end{center}
 
-\caption[Reconstruction quality comparison of motion compensation]{\label{fig:MCCBCTquality} Reconstruction quality comparison of 4D CBCT FDK, motion compensated methods (SART and ASD-POCS) and the 4th frame after deformation.} 
+\caption[Reconstruction quality comparison of motion compensation]{\label{fig:MCCBCTquality} Reconstruction quality comparison of 4D CBCT FDK, motion compensated methods (SART and ASD-POCS) and the 4th frame after deformation. Horizontal axis shows frame number and vertical axis the value of the quality parameter.} 
 \end{figure}
 
 \subsection{Substandard Deformation Vector Fields}
@@ -164,7 +164,7 @@ Visually the results are very similar to the full DVF motion compensation method
 
 \end{center}
 
-\caption[Reconstruction quality comparison of motion compensation]{\label{fig:UMCCBCTquality} Reconstruction quality comparison of 4D CBCT FDK, motion compensated methods (MC-SART and MC-ASD-POCS) and motion compensated methods with undersampled DVFs (U-MC-SART and U-MC-ASD-POCS).} 
+\caption[Reconstruction quality comparison of motion compensation]{\label{fig:UMCCBCTquality} Reconstruction quality comparison of 4D CBCT FDK, motion compensated methods (MC-SART and MC-ASD-POCS) and motion compensated methods with undersampled DVFs (U-MC-SART and U-MC-ASD-POCS). Horizontal axis shows frame number and vertical axis the value of the quality parameter.} 
 \end{figure}
 \subsubsection{Binning errors in projections}
 Another of the most common errors in 4D CBCT is the mislabelling of projections to the wrong breathing phase. When binning the projection, the breathing surrogates monitoring the phase may fail, either due to inherent unavoidable system errors or because the patient changed its breathing pattern during data acquisition. It is thus often a common error that projections are labelled wrongly, generally by 1 bin (e.g. a projection from phase number 4 is labelled as 3 or 5). In this experiment 10\% of the projections are randomly mislabelled to an adjacent bin, thus using the wrong DVFs in reconstruction. The effects of this mislabelling can be seen in comparison to correct DVFs in figure \ref{fig:binMCCBCT3static} and the quality parameters can be seen in figure \ref{fig:binMCCBCTquality}. The results show that for SART, the error in most parameters increase a bit, however for ASD-POCS, the effect is negligible. This is an expected behaviour, as mislabelling of the projections would lead to a wider transition in tumour edges, however the total variation algorithm does sharpen smooth edges, thus removing this effect.
@@ -190,26 +190,55 @@ Another of the most common errors in 4D CBCT is the mislabelling of projections 
 
 \end{center}
 
-\caption[Reconstruction quality comparison of motion compensation]{\label{fig:binMCCBCTquality}  Reconstruction quality comparison of 4D CBCT FDK, motion compensated methods (MC-SART and MC-ASD-POCS) and motion compensated methods with errors in projection binning (MC-SART (binning error) and MC-ASD-POCS (binning error)).} 
+\caption[Reconstruction quality comparison of motion compensation]{\label{fig:binMCCBCTquality}  Reconstruction quality comparison of 4D CBCT FDK, motion compensated methods (MC-SART and MC-ASD-POCS) and motion compensated methods with errors in projection binning (MC-SART (binning error) and MC-ASD-POCS (binning error)). Horizontal axis shows frame number and vertical axis the value of the quality parameter.} 
 \end{figure}
 
 
 
 \subsubsection{Only tumour motion information}
 
-Nowadays clinically used breathing surrogates only give 1D signals of the breathing phase, and there are potential options for obtaining live 1D motion information of the tumour, such as implanted fiducials, ultrasound imaging\cite{western2015ultrasound} or electrical impedance tomography\cite{song2009non}\cite{pengpan2010motion} systems. Thus, evaluating the performance of the motion correction method for when only the motion of the tumour is known is crucial, as this would be the most likely introduction of the method to clinical cases, as the technology already exists. For the tests of this section, the DVFs are cropped to the same area as the tumour is for the quality evaluation, and set to zeros in the rest.
+Nowadays clinically used breathing surrogates only give 1D signals of the breathing phase, and there are potential options for obtaining live 1D motion information of the tumour, such as implanted fiducials, ultrasound imaging\cite{western2015ultrasound} or electrical impedance tomography\cite{song2009non}\cite{pengpan2010motion} systems. Thus, evaluating the performance of the motion correction method for when only the motion of the tumour is known is crucial, as this would be the most likely introduction of the method to clinical cases, as the technology already exists. For the tests of this section, the DVFs are cropped to the same area as the tumour is for the quality evaluation plus 2 pixels in each direction, and set to zeros in the rest.
 
+Figure \ref{fig:tumourMCCBCT3static} shows the difference between the motion compensation methods and the cropped DVF motion compensation for SART and ASD-POCS. Note that while the error is big in all of the image, the tumour are itself has no error. Similarly, figure \ref{fig:tumourMCCBCTquality} shows how the quality parameters are barely deteriorated after cropping most of the DVFs. This is an important result, as the motion is not only appearing in the tumour area for the specific X-rays that cross it, nevertheless the algorithm can discriminate the error and reconstruct accurately the tumour area, pushing the resultant motion errors outside the region of interest (observe box-like pattern around the tumour area).
+
+
+
+\begin{figure}
+\begin{center}
+
+\includegraphics[width=\textwidth]{accuracyMC/difftumourMCCBCT3stage.png} 
+
+
+\end{center}
+
+\caption[Three difference frames of the  motion compensation methods with DVFs only in the tumour]{\label{fig:tumourMCCBCT3static} Absolute difference plots in frames (0,3 and 6) for the motion compensation methods with full DVFs or only DVFs if the tumour area, for SART and ASD-POCS, from top to bottom.  The colour scale is linear attenuation coefficient in the range [0-400].} 
+
+\end{figure}
+
+
+\begin{figure}
+\begin{center}
+
+\includegraphics[width=0.9\textwidth]{accuracyMC/tumourMCCBCTparams.png} 
+
+
+\end{center}
+
+\caption[Reconstruction quality comparison of motion compensation]{\label{fig:tumourMCCBCTquality}  Reconstruction quality comparison of 4D CBCT FDK, motion compensated methods (MC-SART and MC-ASD-POCS) and motion compensated methods with only DVFs in the tumour (MC-SART (only tumour) and MC-ASD-POCS (only tumour)). Horizontal axis shows frame number and vertical axis the value of the quality parameter.} 
+\end{figure}
 
 \FloatBarrier
 \section{Discussion}
 
-This chapter has show the numerical accuracy of the motion compensated method proposed in this thesis as well as its comparison with standard 4D CBCT methods and its behaviour when the DVFs are suboptimal. First, iterative algorithms perform considerably better than FDK in 4D CBCT reconstruction, as others have already shown. The importance of choosing good algorithms for improved image quality is remarked. The results also hint that the motion compensated method can deliver 4D images using a tenth of the data needed for a 4D CBCT, thus reducing the dose to the patient by a significant amount. It should be also highlighted the robustness of the method to errors in DVFs, most importantly for binning errors and localized motion information. Binning errors are almost unavoidable in clinical cases, and the results clearly show the little effect it has in motion compensated iterative algorithms, especially in noise removing ones, such as ASD-POCS. This not only makes the algorithm robust to mislabels, but also to single breathing inhale-exhale phases that have different amplitude than expected, an effect that happens if a patient takes a deeper or shallower breath than usual. On top of that, the solid results for localized motion information is one of the strongest points in favour of the clinical application of this method, as accurate knowledge of only the tumour location would be enough to obtain a good delineation of the tumour using the motion compensated method.
+This chapter has show the numerical accuracy of the motion compensated method proposed in this thesis as well as its comparison with standard 4D CBCT methods and its behaviour when the DVFs are suboptimal. First, iterative algorithms perform considerably better than FDK in 4D CBCT reconstruction, as others have already shown. The importance of choosing good algorithms for improved image quality is remarked. The results also hint that the motion compensated method can deliver 4D images using a tenth of the data needed for a 4D CBCT, thus reducing the dose to the patient by a significant amount. It should be also highlighted the robustness of the method to errors in DVFs, most importantly for binning errors and localized motion information. Binning errors are almost unavoidable in clinical cases, and the results clearly show the little effect it has in motion compensated iterative algorithms, especially in noise removing ones, such as ASD-POCS. This not only makes the algorithm robust to mislabels, but also to single breathing inhale-exhale phases that have different amplitude than expected, an effect that happens if a patient takes a deeper or shallower breath than usual. 
+
+On top of that, the solid results for localized motion information is one of the strongest points in favour of the clinical application of this method, as it not only means that as long as the tumour position is known one can reconstruct it accurately, it also means that computationally fast methods for reconstruction can be easily designed. One of the biggest computational drawback is the need of memory storage of 3 times the size of the image for each different DVF, and equally 3 more texture memory samples in the projection operator, the biggest time constrain in the kernels. Only needing to perform this operations in a fraction of the image would speed the total time of the algorithm to  standard reconstruction in practical terms. Additionally, as previously mentioned, it is considerably more feasible to obtain real time location of the tumour only rather than the entire DVFs. 
 
 The quality parameters are may need to be redefined to better evaluate the quality of the methods, however. RMSE and UQI are quite straightforward, but they are very limiting when evaluating the performance of reconstruction of something with spatial structure, as e.g. small random noise can increase their values significantly while maintaining the tumour delineation methods equally as accurate. When observing the tumour segmentation mismatch, the data shows that most of the mismatch is a missing 1 pixel wide surface around the motion compensated reconstruction, similar as in figure \ref{fig:tumourCC_err}. This hints that edge preserving algorithms may delineate the tumour better thus reducing most of the mismatch appearing in the motion compensated reconstruction. Alternatively smarter segmentation methods may also achieve a better delineation of the tumour thus showing a smaller error. The inter-method variation of the quality parameters is something also not expected on average. For example, most algorithms perform a bit worse around the frame 6, and this is highly likely due to DVS errors for this dataset on those frames. If the study were to be performed with multiple datasets, then the error is expected to be the same in all frames on average (assuming DVFs have the same average errors). 
 
 This last observation highlights the biggest limit of the study shown in this chapter: it contains a single dataset. But this doesn't mean that the results are not valid, or that multiple datasets would show a different behaviour, as the cause of the change in quality of the reconstruction is clearly the caused by the algorithms used or the disturbances to DVFs introduced. The variation within each of the frames however, is not of big significance. However, if further use of the motion compensation methods for clinical use is desired, the results must be evaluated for multiple datasets. Additionally, the method should be evaluated with real CBCT projections, not only with simulated data.
 
-This chapter strengthens the idea that motion compensated algorithms can have a significant improvement of image quality while reducing the dose to the patients by an order of magnitude. 
+This chapter strengthens the idea that motion compensated algorithms can have a significant improvement of image quality while reducing the dose to the patients by an order of magnitude, and that the existing tumour motion detection technologies may be enough information for the accurate usage of the algorithm on clinical cases. 
 
 
 
