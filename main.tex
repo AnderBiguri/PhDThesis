@@ -12,7 +12,9 @@
 \usepackage{hyperref}
 
 \usepackage{tikz}
-
+\usepackage{wrapfig}
+\usepackage{titlecaps}
+\usepackage{sectsty}% http://ctan.org/pkg/sectsty
 
 \usepackage{epstopdf}
 
@@ -96,7 +98,12 @@
 
 
 \tableofcontents
+\chapterfont{\titlecap}
+\sectionfont{\titlecap}
+\subsectionfont{\titlecap}
+\subsubsectionfont{\titlecap}
 
+\Addlcwords{the on by in of and at from via}
 %\chapter{X-ray imaging in medicine}
 \input{Introduction/intro.tex}
 \input{StateOfArt/stateofart.tex}
