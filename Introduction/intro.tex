@@ -5,7 +5,7 @@ Lung cancer is the most common cancer in the world in men, both in amount of cas
 
 \begin{figure}[ht]
 \begin{center}
-\includegraphics[width=0.98\columnwidth]{StateOfArt/worldmap.png}
+\includegraphics[width=0.8\columnwidth]{StateOfArt/worldmap.png}
 \caption[Lung cancer incidence in the world]{Lung cancer incidence per country, age adjusted data. Map and data from {GLOBOCAN}\cite{GLOBOCAN2010}.}
 %IARC has proprietary rights to the materials on the Website. Publications/data made available by IARC/WHO enjoy copyright protection in accordance with the provisions of Protocol 2 of the Universal Copyright Convention. All rights are reserved. Materials (fact sheets, maps, estimates or data) may be used "as is" for research, educational or other non-commercial purposes, but the corresponding reference must be cited in all cases.
 \label{fig:world}
@@ -52,15 +52,59 @@ All the research presented here has been made public as part of the TIGRE Toolbo
 
 \section{Thesis organization}
 
-The following chapters of the thesis are organized as following:
+The chapters of this thesis try to be self a contained document however, it can be separated into to main topics: GPU-based CT reconstruction (Chapters 3, 4 and 5) and motion compensation methods for IGRT (Chapters 2, 6 and 7). The contents for the contents of each chapter are summarized as follows:
 
 \subsubsection{Chapter 2: Image Guided Radiation Therapy and Computed Tomography}
-\subsubsection{Chapter 3: The Image Reconstruction Problem}
-\subsubsection{Chapter 4: GPU methods in tomography}
-\subsubsection{Chapter 5: motion compensation modelling}
-\subsubsection{Chapter 7: Numerical Study of Motion Compensation}
-\subsubsection{Chapter 8: Discussion and conclusions}
 
+An introduction to IGRT, focusing on imaging and the challenges on providing quality imaging for radiation treatment for both photon and hadron radiation therapy. As CBCT is one of the most widely used imaging systems for IGRT, a further study in the innovations of CBCT is presented, focusing after in the research available for dealing with non-rigid motion, such as respiratory motion. This exhaustive research shows that the vast majority of motion compensation algorithm are based on binning the data according to breathing phase and reconstructing an image for each bin, while very few publications exist with asimilar concept for motion compensation as the phase space tomography, with no computational focus. Finally a brief description of the more wide uses CT in general has, from research to industry.
+
+\subsubsection{Chapter 3: The Image Reconstruction Problem}
+
+\begin{wrapfigure}{L}{0.3\textwidth}
+\centering
+\includegraphics[width=0.28\textwidth]{RecAlgorithms/POCS.pdf}
+\end{wrapfigure}
+
+CT image reconstruction is an ill-posed problem, where for some types (such as circular CBCT) a unique mathematical solution does not exist. Substandard conditions on the data acquisition process (such as noise, or geometric errors) and limited data can have severe influence in the quality of the image reconstructed, especially using the Feldkamp Davis and Kress (FDK) method that approximates the analytic solution. However FDK is the most commonly used algorithm across the field. The reconstruction problem can however be described as an algebraic minimization problem, and iterative solvers can be used for minimization. This chapter describes briefly FDK and continues to showcase the mathematics of a variety of different iterative solvers for CBCT.
+\FloatBarrier
+\subsubsection{Chapter 4: GPU methods in tomography}
+
+
+
+\begin{wrapfigure}{L}{0.3\textwidth}
+\centering
+\includegraphics[width=0.28\textwidth]{GPUmethods/projcoord-figure0.pdf}
+\end{wrapfigure}
+
+The CT reconstruction, and specifically CBCT, is a computationally very expensive problem. Iterative algorithms only enhance this problem, as they require sometimes hundreds of iterations, being each of them more costly than a single FDK solution. This chapter shows how GPU computing can accelerate the image reconstruction by tailoring very fast algorithms to GPU computational structure. It describes how the projection and backprojection operators (the basic building blocks of CT reconstruction) are implemented to reach state of the art speeds and how those have been used together with the mathematics of Chapter 3 to build the TIGRE Toolbox, an easy to use, modular and fast MATLAB and Python with CUDA toolbox.
+\FloatBarrier
+\subsubsection{Chapter 5: Experiments and applications}
+
+\begin{wrapfigure}{L}{0.3\textwidth}
+\centering
+\includegraphics[width=0.28\textwidth]{Applications/thumnail.png}
+\end{wrapfigure}
+
+This chapter explores some behaviour of iterative algorithms implemented on GPUs and shows how various of the algorithms behave with different datasets. Firstly some numerical experiments are performed for digital phantoms, for effect of angle ordering  on SART-type algorithms, hyperparameter reduction methods and TV algorithms. Then some real datasets are showcased, from medicine (a head phantom), micro-tomography (the Sofia-beads dataset) and synchrotron tomography (some cryo soft X-ray tomograms). One of these last datasets is then segmented using the SuRVoS workbench to highlight the differences.
+\FloatBarrier
+\subsubsection{Chapter 6: motion compensation modelling}
+
+\begin{wrapfigure}{L}{0.3\textwidth}
+\centering
+\includegraphics[width=0.26\textwidth]{MotionCorrection/diagrammotion1.pdf}
+\end{wrapfigure}
+
+Using the theory from phase space tomography at CERN, this chapters proposes a motion compensation algorithm for when the motion is approximately known. By modelling the X-rays as warped paths instead of straight lines on the GPU. The GPU implementation is described and two experiments are presented, one with synthetic data and deformation  vector fields, and another one using a 4D-CT dataset. Results show that when the motion is perfectly known the method performs equally to a reconstruction without motion and that the method can give better information about the tumour using the same amount of projections than a CBCT image. As the method relies in modelling the motion in the basic building blocks if CT reconstruction, it can be used in any existing iterative algorithm.
+\FloatBarrier
+\subsubsection{Chapter 7: Numerical Study of Motion Compensation}
+
+\begin{wrapfigure}{L}{0.3\textwidth}
+\centering
+\includegraphics[width=0.28\textwidth]{accuracyMC/4DCBCT3stage.png}
+\end{wrapfigure}
+
+The previous chapter described a method for motion compensation. This chapter focuses on numerically testing the limits of the method, as obtaining motion information is an almost impossible task in medical applications. The chapter shows that the performance of the method is very similar (with minor bigger error) than 4D-CBCT, with an order of magnitude less projections, thus less radiation to the patient. Tests against the most common numerical errors in medical applications are performed: very low resolution motion information, errors in the binning process of projections (thus in the motion information) and the case where only the motion of the tumour is known. In all cases, the motion compensation method has errors of less than a voxel in tumour location, and very small mismatch in the volume selection of the tumour.
+\FloatBarrier
 \section{Publications and contributions}
 
 The work on this thesis was been published either by open source software or publications in conferences and peer reviewed journals. The following publications directly relate to the content of this thesis:
@@ -73,11 +117,11 @@ The work on this thesis was been published either by open source software or pub
 
 This work has been also presented in various conferences and meetings, via posters or presentations talks. Posters have been presented in ToScA 2016 with the title ``TIGRE: Tomographic Iterative GPU-based Reconstruction toolbox''\cite{biguri_ander_2016_159016}, in the ENLIGHT 2016 meeting titled ``Motion correction in X-ray tomography using a priori known deformation vector fields and iterative reconstruction methods''\cite{biguri2016motion} and in BIGART 2017 titled ``Improvement of image quality in 4D-CBCT respiratory correlated and motion-compensated reconstruction using iterative algorithms and GPU acceleration''\cite{biguri2017motion}. The work has also been presented in various talks and seminars. Finally, a Medical Physics Web article by Tami Freeman is available for wider audiences at \href{http://medicalphysicsweb.org/cws/article/research/66343}{http://medicalphysicsweb.org/cws/article/research/66343}.
 
-The TIGRE Toolbox and specifically some of the total variation based image recosntruction code has been also used in the article ``Parameter selection in limited data cone-beam CT reconstruction using edge-preserving total variation algorithms'' by Lovithee \textit{et al}\cite{Vee}.
+The TIGRE Toolbox and specifically some of the total variation based image recosntruction code has been also used in the article ``Parameter selection in limited data cone-beam CT reconstruction using edge-preserving total variation algorithms'' by Lohvithee \textit{et al}\cite{Vee}.
 
 \subsubsection{Other publications}
 
-During the length of the PhD, mainly in the early stages, other work was published mainly focused in dual modality electrical impedance tomography (EIT) - CBCT, as some initial work explored the use of EIT for real time tumour tracking. This work is not presented in this thesis, but has been published in few items. The work is summarized in a peer reviewed journal article ``Tracking boundary movement and exterior shape modelling in lung EIT imaging''\cite{biguri2015tracking}, and extended in peer-reviewed conference articles for the EIT 2015 meeting in the works titled ``Statistical and deterministic approaches for electrode movement in lung EIT''\cite{biguri2015statistical} and ``4D FEM models of the human thorax''\cite{biguri20154d}. Initial work on this field was also presented as a poster in the ENLIGHT 2014 meeting titled ``Dual modality EIT-CBCT for lung radiation therapy''\cite{biguri2015dual} and in AIP 2015 as ``Electrode movement due to breathing in lung EIT imaging''\cite{biguri2015electrode}.
+During the length of the PhD, mainly in the early stages, other work was published focused in dual modality electrical impedance tomography (EIT) - CBCT, as some initial work explored the use of EIT for real time tumour tracking. This work is not presented in this thesis, but has been published in few items. The work is summarized in a peer reviewed journal article ``Tracking boundary movement and exterior shape modelling in lung EIT imaging''\cite{biguri2015tracking}, and extended in peer-reviewed conference articles for the EIT 2015 meeting in the works titled ``Statistical and deterministic approaches for electrode movement in lung EIT''\cite{biguri2015statistical} and ``4D FEM models of the human thorax''\cite{biguri20154d}. Initial work on this field was also presented as a poster in the ENLIGHT 2014 meeting titled ``Dual modality EIT-CBCT for lung radiation therapy''\cite{biguri2015dual} and in AIP 2015 as ``Electrode movement due to breathing in lung EIT imaging''\cite{biguri2015electrode}.
 
 
 
