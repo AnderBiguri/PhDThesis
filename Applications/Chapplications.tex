@@ -162,6 +162,64 @@ To illustrate the sensitivity to parameter selection, the algorithm SART-TV is r
 \section{Iterative algorithms in different CT applications}
 This section tries to illustrate the effect of different algorithms within the TIGRE Toolbox for a series of datasets. 
 \subsection{Medical head CBCT from  The Christie Hospital}
+
+This dataset is a RANDO head phantom that represents a head of an adult. The dataset was acquired in The Christie Hospital in Manchester, and consists of 360 equiangular projections over a full rotation. The dataset has mechanical offsets and high noise, as it has been tuned to work for head CBCT, so its low intensity X-rays (exact parameters not known). In this test, the sample has been reconstructed using FDK, CGLS, OS-SART and OS-ASD-POCS (ASD-POCS with OS-SART instead of SART for the data constraint). Figure \ref{fig:RANDO360} shows the reconstruction using 360 angles, while figure \ref{fig:RANDO90} shows the reconstruction using 90 angles. While in all algorithms the quality is worse when reducing the amount of data, most features are clear in the iterative algorithms with 90 projections, while some are a slightly obscured in the low exultation FDK, specially the thin bone walls.
+
+\begin{figure}
+\begin{center}
+\begin{tikzpicture}
+
+\node (A) {\includegraphics[width=0.4\textheight]{Applications/randofull.png}  };
+\path (A.south west) -- (A.north west) node[pos=.25, above, rotate=90] {OS-SART} node[pos=.75, above, rotate=90] {FDK};
+\path (A.south east) -- (A.north east) node[pos=.25, below, rotate=90] {OS-ASD-POCS} node[pos=.75, below, rotate=90] {CGLS} ;
+
+\end{tikzpicture}
+
+\end{center}
+
+\caption[RANDO head using 360 projections and 4 algorithms]{\label{fig:RANDO360} RANDO head using 360 equiangular projections, with 4 different algorithms, FDK, CGLS, OS-SART and OS-ASD-POCS. The displaying window is [0-0.05]} 
+\end{figure}
+\begin{figure}
+\begin{center}
+\begin{tikzpicture}
+
+\node (A) {\includegraphics[width=0.4\textheight]{Applications/rando90.png}  };
+\path (A.south west) -- (A.north west) node[pos=.25, above, rotate=90] {OS-SART} node[pos=.75, above, rotate=90] {FDK};
+\path (A.south east) -- (A.north east) node[pos=.25, below, rotate=90] {OS-ASD-POCS} node[pos=.75, below, rotate=90] {CGLS} ;
+
+\end{tikzpicture}
+
+\end{center}
+
+\caption[RANDO head using 90 projections and 4 algorithms]{\label{fig:RANDO90} RANDO head using 90 equiangular projections, with 4 different algorithms, FDK, CGLS, OS-SART and OS-ASD-POCS. The displaying window is [0-0.05]} 
+\end{figure}
+
+\FloatBarrier
+
+\subsection{Micro-tomography: SophiaBeads dataset}
+Another widespread application of tomography is industrial tomography,and specifically micro-tomography, for inspecting pieces from manufacturing processes. A dataset presented for testing algorithms in these conditions was published by Sophia \textit{et al}\cite{coban_2015_16539}\cite{coban2015sophiabeads} that has a pile of beads in a tube. The description of the data from their webpage\cite{coban_2015_16474} reads: ``SophiaBeads Dataset are acquired specifically for testing and comparing reconstruction methods for x-ray computed tomography. The sample is a plastic tube with a diameter of 25mm, filled with uniform Soda-Lime Glass (SiO2-Na2O) beads of diameters 2.5mm (with standard deviation 0.1mm)''. The dataset containing 256 projections has been reconstructed in a 500x500x200 voxels image using FDK and CGLS, and the reconstructed images can be seen in figure \ref{fig:sophia1}. The red line shows a profile path that is shown for both FDK and CGLS in figure \ref{fig:sophiaprofile}. The FDK image can be seen to have higher noise in the profile.
+
+\begin{figure}
+\begin{center}
+
+\includegraphics[width=\textwidth]{Applications/sophiaFDKCGLS.png} 
+
+\end{center}
+
+\caption[SophiaBeads dataset with FDK and CGLS]{\label{fig:sophia1} SophiaBeads dataset with FDK and CGLS (15 iterations), using 256 projections. The red line shows the profile evaluated. The display window is [0-0.15]. } 
+\end{figure}
+\begin{figure}
+\begin{center}
+
+\includegraphics[width=0.65\textwidth]{Applications/spophiaprofile.png} 
+
+\end{center}
+
+\caption[SophiaBeads dataset with FDK and CGLS]{\label{fig:sophiaprofile} Image profile on the SophiaBeads dataset with FDK and CGLS (15 iterations), using 256 projections.} 
+\end{figure}
+
+
+\FloatBarrier
 \subsection{Cryo soft X-ray tomography at the Diamond Light Source}
 
 Cryo soft X-ray tomography (Cryo-SXT) is a relatively new\cite{carzaniga2014cryo} technology to image micron size biological samples in full 3D. Generally, cell-imaging is performed with electron microscopy (EM) and all its variants (transmission electron microscopy, scanning electron microscopy, cryo-electron microscopy, electron tomography, etcetera), however these techniques have very limited penetration (less than 1$\mu$m) and thus often require slicing of the samples for volumetric imaging. Cryo-SXT uses the so called water window for X-ray energies around the 500eV energy range. Unlike at higher energies, where everything is invisible, water becomes transparent but carbon-based tissues are clearly visible in that range. Thus, while with lower resolution than most EM, Cryo-SXT allows full volumetric visualization of the cells without damaging the samples. In order to be able to image with an extremely accurate setup in both sample handling and X-ray parameters, these Cryo-SXT images are captured in synchrotron facilities. The data used in this work is from the B24 beam-line at the Diamond Light Source.
@@ -239,7 +297,10 @@ Note that the images have a darker vertical ``band'', not as obvious in SIRT and
  The big smooth area in the top left side is the nucleus of the cell, while the rest are organelles on the cytoplasm of the cell.  In figure \ref{fig:Diamond2} the reconstructed image can be seen, on where the columns show FBP, OS-SART, CGLS and OS-ASD-POCS algorithms, and the rows different zoomed areas of the image. Due to hinger noise in the projections, the iterative algorithms to have a strong influence in the removal of the noise in this dataset. This is clearly apparent in the second row of the figure \ref{fig:Diamond2}, on where the three iterative algorithms, specially the TV based one, remove significantly the noise of the organelles both in the left and right side of the image. 
 
 \subsubsection{The ``Grid1\_Area2\_Cell2\_tomo3-All\_60t60\_p5d\_6s\_mb1\_Export'' dataset}
-This images also show a PC-12 cell, with part nucleus and part organelles, as in the previous dataset. The same algorithms have been used, and the results can be seen in figure \ref{fig:Diamond3}.
+This images also show a PC-12 cell, with part nucleus and part organelles, as in the previous dataset. The same algorithms have been used, and the results can be seen in figure \ref{fig:Diamond3}. Tho further try to evaluate the quality of the reconstruction, the Super-Region Volume Segmentation (SuRVoS)\cite{LUENGO201743} workbench is used on this dataset. SuRVoS is an image segmentation workbench designed for X-ray images such as this ones, where classic segmentation techniques do not work due to the noisy nature of the data. SuRVoS takes few manually labelled areas in the image and attempts to segment and label the entire image based on that, using machine learning techniques. Figure \ref{fig:survos} shows automatic segmentation of the cell for FBP and OS-ASD-POCS. OS-ASD-POCS results in a different segmentation for the boundary between the nucleus and the rest of the cell (purple-green boundary) by leaving the wall in the opposite side than FBP, and has some error in the bottom zoomed area. However, organelles (pink) are segmented with a better shape, and less mislabelling happens as last 2 zoomed areas have both mislabelled areas in FBP that are not present in OS-ASD-POCS.
+
+
+
 \begin{figure}
 \begin{center}
 
@@ -264,5 +325,19 @@ This images also show a PC-12 cell, with part nucleus and part organelles, as in
 
 \caption[Cell image recosntructed with different algorithms 3]{\label{fig:Diamond3} Columns: FBP, OS-SART (30 iterations), CGLS (7 iterations) and OS-ASD-POCS (30 iterations, 10 TV iterations each). The zoomed areas are highlighted in the FBP image. The red squares in the first row show the location of the zoomed-in areas from the second third and fourth row.} 
 \end{figure}
+
+
+\begin{figure}
+\begin{center}
+
+\includegraphics[height=0.8\textheight]{Applications/survos.png} 
+
+\end{center}
+
+\caption[Cell images segmented using SuRVoS for FBP and TV]{\label{fig:survos} Automatic segmentation using manual labels as training data using the SuRVoS workbench, for two different algorithms. Columns: FBP and OS-ASD-POCS (30 iterations, 10 TV iterations each). The zoomed areas are highlighted in the FBP image. The red squares in the first row show the location of the zoomed-in areas from the second third and fourth row. Colours show different labels chosen by the automatic segmentation.} 
+\end{figure}
 \FloatBarrier
 \section{Discussion}
+This chapter explores X-ray tomography experiments and showcases the reconstruction differences between iterative algorithms in TIGRE, for different geometries and tomography types. The first part of the chapter highlights the behaviour difference between some setting of algorithms in TIGRE. The importance of algorithm and hyperparameter selection is hopefully stressed enough, so the behaviour of the TV algorithms under parameter change. Some of the behaviour presented, especially the divergent behaviour, is not intrinsic of the mathematics used, but it happens due to the fast implementation of the methods on GPUs. This is an expected behaviour in most fast reconstruction methods, as it happens due to the mismatch between the projector and backprojector. Existing matched operations exists, but are slower, as generally they require projecting multiple times to compute the perfect adjoint. 
+
+For the real datasets, note that No pre or post processing has been applied to the data, but some minor one for the Cryo-SXT. This is to highlight the effect of the algorithms in the final image, instead of data processing techniques. It is a challenge to evaluate the quality of iterative algorithms using real datasets. Here a few have been shown and different algorithms used on them. For all the datasets, the stronger noise cancelling effect that iterative algorithms have is clear. The tests with SuRVoS on the Cryo-SXT hint that TV algorithms can lead to a more robust image for automatic segmentation methods, however more test would be need to confirm or refute this claim. The clear step to evaluate the quality of iterative algorithms would be to perform the segmentation steps proposed in the SophiaBeads dataset. Unfortunately time limitations did not allow this test to be carried in this thesis. 
