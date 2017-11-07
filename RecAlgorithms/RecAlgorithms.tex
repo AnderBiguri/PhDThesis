@@ -272,9 +272,9 @@ In the article, the authors show that this approach results in a faster (less am
 \FloatBarrier
 \subsubsection{The gradient of the TV norm}
 
-In order to minimize the TV norm via gradient descent, the gradient of the TV norm needs to be computed, $ \nabla_{\vec{x}} ||\vec x ||_{TV}$, being $\vec x$ the vectorized form of a N-dimensional image.
+In order to minimize the TV norm via gradient descent\footnote{Special thanks to Andr\'as De\'ak for the help\cite{Andras} in this section.}, the gradient of the TV norm needs to be computed, $ \nabla_{\vec{x}} ||\vec x ||_{TV}$, being $\vec x$ the vectorized form of a N-dimensional image.
 
-The main challenge wit the $ \nabla_{\vec{x}} ||\vec x ||_{TV}$ term is that $ ||\vec x ||_{TV}$ is not differentiable in the general case. However, in the CT case, $\vec{x}$ can be described as $x_{ijk}$, a regularly discretized mesh of directional indices $i,j,k$ of maximum value $i_{max},j_{max},k_{max}$. The gradient of $x$ has an additional Cartesian index $\alpha$:
+The main challenge with the $ \nabla_{\vec{x}} ||\vec x ||_{TV}$ term is that $ ||\vec x ||_{TV}$ is not differentiable in the general case. However, in the CT case, $\vec{x}$ can be described as $x_{ijk}$, a regularly discretized mesh of directional indices $i,j,k$ of maximum value $i_{max},j_{max},k_{max}$. The gradient of $x$ has an additional Cartesian index $\alpha$:
 
 \begin{align}
 g^\alpha &=\left(\nabla x\right)^\alpha=\partial_\alpha x\\

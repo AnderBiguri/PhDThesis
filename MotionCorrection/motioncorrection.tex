@@ -52,7 +52,7 @@ The idea is illustrated in figure \ref{fig:motion}, where two different states o
 \includegraphics[width=0.45\linewidth]{MotionCorrection/diagrammotion2.pdf} 
 \label{fig:fig21b} 
 }
-\caption{\label{fig:motion} The integral over a path in image (a) yields the same result as the integral over the same coloured path in the deformed image (b).} 
+\caption[Basic block diagram of the motion modelling approach]{\label{fig:motion} The integral over a path in image (a) yields the same result as the integral over the same coloured path in the deformed image (b).} 
 \end{center} 
 \end{figure}
 
@@ -153,7 +153,7 @@ V(x,y,z) = \bigl(\nonumber\\
 \includegraphics[width=0.45\linewidth]{MotionCorrection/thorax1XCAT.png} 
 \label{fig:motion_Res2b} 
 }
-\caption{\label{fig:motion_Res2} Transverse plane of the thorax phantom (a) without deformation and (b) at maximum deformation.  A regular mesh overlay illustrates the motion map, although the actual voxels of the phantom are much smaller than this mesh size. The colour scale is linear attenuation coefficient in the range [0-0.045].} 
+\caption[Digital phantom with simulated deformation]{\label{fig:motion_Res2} Transverse plane of the thorax phantom (a) without deformation and (b) at maximum deformation.  A regular mesh overlay illustrates the motion map, although the actual voxels of the phantom are much smaller than this mesh size. The colour scale is linear attenuation coefficient in the range [0-0.045].} 
 \end{center} 
 \end{figure}
 
@@ -167,7 +167,7 @@ The error between the original phantom and each of the reconstructions is shown 
 \begin{center}
 \includegraphics[width=1\linewidth]{MotionCorrection/motion2XCAT2.png}
 \hspace{0.1cm}{\footnotesize (a)}\hspace{4.3cm}{\footnotesize (b)}\hspace{4.3cm}{\footnotesize (c)}
-\caption{\label{fig:result21} Transverse cross-section of the CBCT reconstruction made (a) using SART in the absence of motion; (b) with motion using uncompensated SART; (c) with motion using compensated SART. The colour scale is linear attenuation coefficient in the range [0-0.045].} 
+\caption[Recosntruction of SART, SART with motion and motion compensated SART]{\label{fig:result21} Transverse cross-section of the CBCT reconstruction made (a) using SART in the absence of motion; (b) with motion using uncompensated SART; (c) with motion using compensated SART. The colour scale is linear attenuation coefficient in the range [0-0.045].} 
 \end{center}
 \end{figure}
 
@@ -176,7 +176,7 @@ The error between the original phantom and each of the reconstructions is shown 
 \includegraphics[width=1\linewidth]{MotionCorrection/motion21errorXCAT2.png}
 \hspace{0.1cm}{\footnotesize (a)}\hspace{4.3cm}{\footnotesize (b)}\hspace{4.3cm}{\footnotesize (c)}
 
-\caption{\label{fig:error2} Transverse cross-section of the difference between the known phantom (figure \ref{fig:motion_Res2a}) and the CBCT reconstruction made (a) using SART in the absence of motion; (b) with motion using uncompensated SART; (c) with motion using compensated SART.  The display range is significantly enhanced with respect to that of figure \ref{fig:result21}. The colour scale is linear attenuation coefficient in the range [0-0.01].} 
+\caption[Errors between the original and recosntructed image]{\label{fig:error2} Transverse cross-section of the difference between the known phantom (figure \ref{fig:motion_Res2a}) and the CBCT reconstruction made (a) using SART in the absence of motion; (b) with motion using uncompensated SART; (c) with motion using compensated SART.  The display range is significantly enhanced with respect to that of figure \ref{fig:result21}. The colour scale is linear attenuation coefficient in the range [0-0.01].} 
 \end{center}
 \end{figure}
 
@@ -186,7 +186,7 @@ Tellingly, the difference between the static reconstruction and the motion compe
 \begin{center}
 \includegraphics[width=0.6\linewidth]{MotionCorrection/motion2errorXCAT2.png} 
 \end{center}
-\caption{\label{fig:error23} Transverse cross-section of the difference between the static reconstruction of figure \ref{fig:error2}(a) and the motion-compensated one of figure \ref{fig:error2}(c). The colour scale is linear attenuation coefficient in the range [0-0.005].} 
+\caption[Error between SART and MC-SART]{\label{fig:error23} Transverse cross-section of the difference between the static reconstruction of figure \ref{fig:error2}(a) and the motion-compensated one of figure \ref{fig:error2}(c). The colour scale is linear attenuation coefficient in the range [0-0.005].} 
 \end{figure}
 
 This test demonstrates that the new method can handle arbitrary, non-cyclic motion and that it works well even when the inverse deformation map is not perfectly known.
@@ -221,7 +221,7 @@ The second test is performed using clinical data with precomputed DVFs, which ar
 }\hfill
 \hspace*{\fill} 
 
-\caption{\label{fig:realthorax} 3D-CT scan of a lung radiation therapy patient at breathing phase ``1'' cut to show the tumour (located inside the green rectangle) in the (a) transverse, (b) coronal and (c) sagittal planes.  The colour scale is linear attenuation coefficient in the range [0-2000].} 
+\caption[A single 3D CT image from the POPI model]{\label{fig:realthorax} 3D-CT scan of a lung radiation therapy patient at breathing phase ``1'' cut to show the tumour (located inside the green rectangle) in the (a) transverse, (b) coronal and (c) sagittal planes.  The colour scale is linear attenuation coefficient in the range [0-2000].} 
 \end{center} 
 \end{figure}
 
@@ -241,7 +241,7 @@ Figure \ref{fig:res3} shows cuts of four different CBCT reconstructions of the r
 \includegraphics[width=1\linewidth]{MotionCorrection/res32.png} 
 \hspace{0.1cm}{\footnotesize (a)}\hspace{3.2cm}{\footnotesize (b)}\hspace{3.2cm}{\footnotesize (c)}\hspace{3.2cm}{\footnotesize (d)}
 
-\caption{\label{fig:res3}  Transverse cross-section of the CBCT reconstruction made (a) using SART in the absence of motion; (b) with motion using uncompensated SART; (c) with motion using compensated SART; (d) with motion using compensated ASD-POCS. The colour scale is linear attenuation coefficient in the range [0-2000].} 
+\caption[Reconstruction of POPI with SART, SART and motion, MC-SART and MC-ASD-POCS]{\label{fig:res3}  Transverse cross-section of the CBCT reconstruction made (a) using SART in the absence of motion; (b) with motion using uncompensated SART; (c) with motion using compensated SART; (d) with motion using compensated ASD-POCS. The colour scale is linear attenuation coefficient in the range [0-2000].} 
 \end{center} 
 \end{figure}
 
@@ -249,7 +249,7 @@ Figure \ref{fig:res3} shows cuts of four different CBCT reconstructions of the r
 \begin{center} 
 \includegraphics[width=1\linewidth]{MotionCorrection/res3err2.png} 
 \hspace{0.1cm}{\footnotesize (a)}\hspace{3.2cm}{\footnotesize (b)}\hspace{3.2cm}{\footnotesize (c)}\hspace{3.2cm}{\footnotesize (d)}
-\caption{\label{fig:res3err}  Transverse cross-section of the difference  between the original 3D-CT image (figure \ref{fig:realthorax}(a)) and the CBCT reconstruction made (a) using SART in the absence of motion; (b) with motion using uncompensated SART; (c) with motion using compensated SART; (d) with motion using compensated ASD-POCS. The colour scale is linear attenuation coefficient in the range [0-400].} 
+\caption[Errors between the POPI model and recosntructed images]{\label{fig:res3err}  Transverse cross-section of the difference  between the original 3D-CT image (figure \ref{fig:realthorax}(a)) and the CBCT reconstruction made (a) using SART in the absence of motion; (b) with motion using uncompensated SART; (c) with motion using compensated SART; (d) with motion using compensated ASD-POCS. The colour scale is linear attenuation coefficient in the range [0-400].} 
 \end{center} 
 \end{figure}
 
@@ -257,7 +257,7 @@ Figure \ref{fig:res3} shows cuts of four different CBCT reconstructions of the r
 \begin{center} 
 \includegraphics[width=1\linewidth]{MotionCorrection/tumourCC2.png}
 \hspace{0.1cm}{\footnotesize (a)}\hspace{3.2cm}{\footnotesize (b)}\hspace{3.2cm}{\footnotesize (c)}\hspace{3.2cm}{\footnotesize (d)} 
-\caption{\label{fig:tumourCC}  Zoom on the region where the tumour is located in a coronal cross-section of the CBCT reconstruction made (a) using SART in the absence of motion; (b) with motion using uncompensated SART; (c) with motion using compensated SART; (d) with motion using compensated ASD-POCS. The colour scale is linear attenuation coefficient in the range [0-2000].} 
+\caption[Zoomed area of the tumour for SART, SART with motion, MC-SART and MC-ASD-POCS]{\label{fig:tumourCC}  Zoom on the region where the tumour is located in a coronal cross-section of the CBCT reconstruction made (a) using SART in the absence of motion; (b) with motion using uncompensated SART; (c) with motion using compensated SART; (d) with motion using compensated ASD-POCS. The colour scale is linear attenuation coefficient in the range [0-2000].} 
 \end{center} 
 \end{figure}
 
@@ -265,7 +265,7 @@ Figure \ref{fig:res3} shows cuts of four different CBCT reconstructions of the r
 \begin{center} 
 \includegraphics[width=1\linewidth]{MotionCorrection/tumourCC_err2.png}
 \hspace{0.1cm}{\footnotesize (a)}\hspace{3.2cm}{\footnotesize (b)}\hspace{3.2cm}{\footnotesize (c)}\hspace{3.2cm}{\footnotesize (d)} 
-\caption{\label{fig:tumourCC_err}  Zoom on the region where the tumour is located in a coronal cross-section of the difference  between the original 3D-CT image (figure \ref{fig:realthorax}) and the CBCT reconstruction made (a) using SART in the absence of motion; (b) with motion using uncompensated SART; (c) with motion using compensated SART; (d) with motion using compensated ASD-POCS. The colour scale is linear attenuation coefficient in the range [0-400].} 
+\caption[Errors in the tumour area between the POPI model and recosntructed images]{\label{fig:tumourCC_err}  Zoom on the region where the tumour is located in a coronal cross-section of the difference  between the original 3D-CT image (figure \ref{fig:realthorax}) and the CBCT reconstruction made (a) using SART in the absence of motion; (b) with motion using uncompensated SART; (c) with motion using compensated SART; (d) with motion using compensated ASD-POCS. The colour scale is linear attenuation coefficient in the range [0-400].} 
 \end{center} 
 \end{figure}
 
