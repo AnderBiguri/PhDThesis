@@ -5,7 +5,7 @@ Lung cancer is the most common cancer in the world in men, both in amount of cas
 
 \begin{figure}[ht]
 \begin{center}
-\includegraphics[width=0.8\columnwidth]{StateOfArt/worldmap.png}
+\includegraphics[width=0.7\columnwidth]{StateOfArt/worldmap.png}
 \caption[Lung cancer incidence in the world]{Lung cancer incidence per country, age adjusted data. Map and data from {GLOBOCAN}\cite{GLOBOCAN2010}.}
 %IARC has proprietary rights to the materials on the Website. Publications/data made available by IARC/WHO enjoy copyright protection in accordance with the provisions of Protocol 2 of the Universal Copyright Convention. All rights are reserved. Materials (fact sheets, maps, estimates or data) may be used "as is" for research, educational or other non-commercial purposes, but the corresponding reference must be cited in all cases.
 \label{fig:world}
@@ -31,9 +31,23 @@ Conventional photon RT is widely used around the world, nowadays generally guide
 \end{figure}
 
 
-As previously mentioned, for both types of RT but specially for hadron therapy, imaging is generally used and needed for accurate treatment. Tumours not only are very different between patients, but also change considerably during treatment, so the patient does due to the physical toll of cancer treatment. This means that the tumour does change both shape and location, and that if these changes are not known, healthy tissue could be damaged and cancerous tissue spared. Generally patients will be imaged before each treatment, being one of the most common systems for imaging cone beam compute tomography (CBCT). CBCT takes few hundreds of seconds to scan a patient due to mechanical safety limitations. As one can foresee, this is an important limiting factor for tumours that move, such the liver and the lung ones, as the motion during acquisition can generate heave artefacts around the moving parts in image reconstruction. This moving effect is also a key factor to take into account in hadron therapy, as having a moving tumour means the high chance of missing the treatment target. Providing accurate imaging not only in space, but in time (4D imaging) is a key factor on treatment planning, an thus in cancer treatment. 
+As previously mentioned, for both types of RT but specially for hadron therapy, imaging is generally used and needed for accurate treatment. Tumours not only are very different between patients, but also change considerably during treatment, so the patient does due to the physical toll of cancer treatment. This means that the tumour does change both shape and location, and that if these changes are not known, healthy tissue could be damaged and cancerous tissue spared. Generally patients will be imaged before each treatment, being one of the most common systems for imaging cone beam compute tomography (CBCT). CBCT takes few hundreds of seconds to scan a patient due to mechanical safety limitations. As one can foresee, this is an important limiting factor for tumours that move, such the liver and the lung ones, as the motion during acquisition can generate heave artefacts around the moving parts in image reconstruction. This moving effect is also a key factor to take into account in hadron therapy, as having a moving tumour means the high chance of missing the treatment target. Providing accurate imaging not only in space, but in time (4D imaging) is a key factor on treatment planning, an thus in cancer treatment. Figure \ref{fig:motionblurr} shows the motion artefacts common in CBCT.
 
 Interestingly, a motion compensation method for when objects are moving during adquisition was proposed by Hancock \textit{et al}\cite{pst1}\cite{pst2}\cite{pstweb} for monitoring the phase space of high energy particle bunches in particle accelerators at CERN. Phase space tomography is a hybrid algorithm that combines particle tracking in a computer model of a synchrotron with iterative reconstruction algorithms to reconstruct an image of the population of a bunch of particles circulating in the accelerator. The particle motion involves non-linear rotation and is non-cyclic, but a 1D projection of the distribution can be completely acquired as a single snapshot on one turn of the machine. By tracking test particles to gain a knowledge of how the geometry of the 2D image plane (longitudinal phase space) deforms, the information in all the discrete time slices acquired over many turns can be translated back to the same instant and tomographically combined in a single image.  Exploring the feasibility of using this tomographic motion compensation technique in medical applications is the objective of this thesis.
+
+\begin{figure}
+
+\begin{center} 
+\subfigure[]{ 
+\includegraphics[width=0.45\linewidth]{Introduction/static.png} 
+}
+\subfigure[]{ 
+\includegraphics[width=0.45\linewidth]{Introduction/motionblur.png} 
+}
+ 
+\caption[Motion blurr in lung CBCT]{\label{fig:motionblurr}(a) Static CT image of a patient (from a 4D-CT dataset) (b) motion artefacts when reconstructed using data acquired from various breathing periods (simulated). The dataset is the POPI model\cite{popi-modelweb}.}
+\end{center} 
+\end{figure}
 
 
 %% BLURRED IMAGE OF TUMOUR
@@ -55,55 +69,76 @@ The chapters of this thesis try to be self a contained document however, it can 
 
 \subsubsection{Chapter 2: Image Guided Radiation Therapy and Computed Tomography}
 
-An introduction to IGRT, focusing on imaging and the challenges on providing quality imaging for radiation treatment for both photon and hadron radiation therapy. As CBCT is one of the most widely used imaging systems for IGRT, a further study in the innovations of CBCT is presented, focusing after in the research available for dealing with non-rigid motion, such as respiratory motion. This exhaustive research shows that the vast majority of motion compensation algorithm are based on binning the data according to breathing phase and reconstructing an image for each bin, while very few publications exist with asimilar concept for motion compensation as the phase space tomography, with no computational focus. Finally a brief description of the more wide uses CT in general has, from research to industry.
 
-\subsubsection{Chapter 3: The Image Reconstruction Problem}
-
-\begin{wrapfigure}{L}{0.3\textwidth}
+\begin{wrapfigure}{L}{0.35\textwidth}
 \centering
-\includegraphics[width=0.28\textwidth]{RecAlgorithms/POCS.pdf}
+\includegraphics[width=0.32\textwidth]{StateOfArt/pst.png}
 \end{wrapfigure}
 
-CT image reconstruction is an ill-posed problem, where for some types (such as circular CBCT) a unique mathematical solution does not exist. Substandard conditions on the data acquisition process (such as noise, or geometric errors) and limited data can have severe influence in the quality of the image reconstructed, especially using the Feldkamp Davis and Kress (FDK) method that approximates the analytic solution. However FDK is the most commonly used algorithm across the field. The reconstruction problem can however be described as an algebraic minimization problem, and iterative solvers can be used for minimization. This chapter describes briefly FDK and continues to showcase the mathematics of a variety of different iterative solvers for CBCT.
+An introduction to IGRT, focusing on imaging and the challenges on providing quality imaging for radiation treatment for both photon and hadron radiation therapy. As CBCT is one of the most widely used imaging systems for IGRT, a further study in the innovations of CBCT is presented, focusing after in the research available for dealing with non-rigid motion, such as respiratory motion. This exhaustive research shows that the vast majority of motion compensation algorithm are based on binning the data according to breathing phase and reconstructing an image for each bin, while very few publications exist with asimilar concept for motion compensation as the phase space tomography, with no computational focus. Finally a brief description of the more wide uses CT in general has, from research to industry.
+
+\vspace{40pt}
+\subsubsection{Chapter 3: The Image Reconstruction Problem}
+
+\begin{wrapfigure}{L}{0.35\textwidth}
+\centering
+\includegraphics[width=0.32\textwidth]{RecAlgorithms/POCS.pdf}
+\end{wrapfigure}
+
+CT image reconstruction is an ill-posed problem, where for some types (such as circular CBCT) a unique mathematical solution does not exist. Substandard conditions on the data acquisition process (such as noise, or geometric errors) and limited data can have severe influence in the quality of the image reconstructed, especially using the Feldkamp Davis and Kress (FDK) method that approximates the analytic solution. However FDK is the most commonly used algorithm across the field. The reconstruction problem can however be described as an algebraic minimization problem, and iterative solvers can be used for minimization. This chapter describes briefly FDK and continues to showcase the mathematics of a variety of different iterative solvers for CBCT, such as SART and similar methods, Krylov subspace methods and a variety of total variation regularized iterative methods.
 \FloatBarrier
 \subsubsection{Chapter 4: GPU methods in tomography}
 
 
 
-\begin{wrapfigure}{L}{0.3\textwidth}
+\begin{wrapfigure}{L}{0.35\textwidth}
 \centering
-\includegraphics[width=0.28\textwidth]{GPUmethods/projcoord-figure0.pdf}
+\includegraphics[width=0.32\textwidth]{GPUmethods/projcoord-figure0.pdf}
 \end{wrapfigure}
 
-The CT reconstruction, and specifically CBCT, is a computationally very expensive problem. Iterative algorithms only enhance this problem, as they require sometimes hundreds of iterations, being each of them more costly than a single FDK solution. This chapter shows how GPU computing can accelerate the image reconstruction by tailoring very fast algorithms to GPU computational structure. It describes how the projection and backprojection operators (the basic building blocks of CT reconstruction) are implemented to reach state of the art speeds and how those have been used together with the mathematics of Chapter 3 to build the TIGRE Toolbox, an easy to use, modular and fast MATLAB and Python with CUDA toolbox.
+The CT reconstruction, and specifically CBCT, is a computationally very expensive problem. Iterative algorithms only enhance this problem, as they require sometimes hundreds of iterations, being each of them more costly than a single FDK solution. This chapter shows how GPU computing can accelerate the image reconstruction by tailoring very fast algorithms to GPU computational structure. It describes how the projection and backprojection operators (the basic building blocks of CT reconstruction) are implemented to reach state of the art speeds using different X-ray approximation methods. After, how those have been used together with the mathematics of Chapter 3 to build the TIGRE Toolbox, an easy to use, free, flexible, modular and fast MATLAB and Python with CUDA toolbox is shown. 
 \FloatBarrier
+
+
+\newpage
 \subsubsection{Chapter 5: Experiments and applications}
 
-\begin{wrapfigure}{L}{0.3\textwidth}
+\begin{wrapfigure}{L}{0.35\textwidth}
 \centering
-\includegraphics[width=0.28\textwidth]{Applications/thumnail.png}
+\includegraphics[width=0.27\textwidth]{Applications/thumnail.png}
 \end{wrapfigure}
 
-This chapter explores some behaviour of iterative algorithms implemented on GPUs and shows how various of the algorithms behave with different datasets. Firstly some numerical experiments are performed for digital phantoms, for effect of angle ordering  on SART-type algorithms, hyperparameter reduction methods and TV algorithms. Then some real datasets are showcased, from medicine (a head phantom), micro-tomography (the Sofia-beads dataset) and synchrotron tomography (some cryo soft X-ray tomograms). One of these last datasets is then segmented using the SuRVoS workbench to highlight the differences.
+This chapter explores some behaviour of iterative algorithms implemented on GPUs and shows how various of the algorithms behave with different datasets. Firstly some numerical experiments are performed for digital phantoms, analysing the effect of angle ordering on SART-type algorithms, hyperparameter reduction methods and observing the behaviour of the different TV algorithms included in TIGRE. Then some real datasets are reconstructed using a variety of the algorithms presented in previous chapters, from medicine (a head phantom from the Christie Hospital), micro-tomography (the Sofia-beads dataset) and synchrotron tomography (some cryo soft X-ray tomograms). One of these last datasets is then segmented using the {SuRVoS} workbench to highlight the differences.
+
+
 \FloatBarrier
 \subsubsection{Chapter 6: motion compensation modelling}
 
-\begin{wrapfigure}{L}{0.3\textwidth}
+\begin{wrapfigure}{l}{0.35\textwidth}
 \centering
-\includegraphics[width=0.26\textwidth]{MotionCorrection/diagrammotion1.pdf}
+\includegraphics[width=0.32\textwidth]{MotionCorrection/diagrammotion1.pdf}
 \end{wrapfigure}
 
 Using the theory from phase space tomography at CERN, this chapters proposes a motion compensation algorithm for when the motion is approximately known. By modelling the X-rays as warped paths instead of straight lines on the GPU. The GPU implementation is described and two experiments are presented, one with synthetic data and deformation  vector fields, and another one using a 4D-CT dataset. Results show that when the motion is perfectly known the method performs equally to a reconstruction without motion and that the method can give better information about the tumour using the same amount of projections than a CBCT image. As the method relies in modelling the motion in the basic building blocks if CT reconstruction, it can be used in any existing iterative algorithm.
+
+
+
+\newpage
 \FloatBarrier
 \subsubsection{Chapter 7: Numerical Study of Motion Compensation}
 
-\begin{wrapfigure}{L}{0.3\textwidth}
+\begin{wrapfigure}{L}{0.35\textwidth}
 \centering
-\includegraphics[width=0.28\textwidth]{accuracyMC/4DCBCT3stage.png}
+\includegraphics[width=0.32\textwidth]{accuracyMC/4DCBCT3stage.png}
 \end{wrapfigure}
+The previous chapter described a method for motion compensation. This chapter focuses on numerically testing the limits of the method, as obtaining perfect motion information is an almost impossible task in medical applications. The chapter shows that the performance of the method is very similar (with minor bigger error) than 4D-CBCT, with an order of magnitude less projections, thus less radiation to the patient. Tests against the most common numerical errors in medical applications are performed: very low resolution motion information, errors in the binning process of projections (thus in the motion information) and the case where only the motion of the tumour is known. In all cases, the motion compensation method has errors of less than a voxel in tumour location, and very small mismatch in the volume selection of the tumour.
 
-The previous chapter described a method for motion compensation. This chapter focuses on numerically testing the limits of the method, as obtaining motion information is an almost impossible task in medical applications. The chapter shows that the performance of the method is very similar (with minor bigger error) than 4D-CBCT, with an order of magnitude less projections, thus less radiation to the patient. Tests against the most common numerical errors in medical applications are performed: very low resolution motion information, errors in the binning process of projections (thus in the motion information) and the case where only the motion of the tumour is known. In all cases, the motion compensation method has errors of less than a voxel in tumour location, and very small mismatch in the volume selection of the tumour.
+
+
+
 \FloatBarrier
+
+
 \section{Publications and contributions}
 
 The work on this thesis was been published either by open source software or publications in conferences and peer reviewed journals. The following publications directly relate to the content of this thesis:

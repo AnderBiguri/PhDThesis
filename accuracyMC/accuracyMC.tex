@@ -5,7 +5,7 @@ In the previous chapter of this thesis a motion compensation algorithm is propos
 
 This chapter looks more specifically at these challenges and compares the motion compensated reconstruction to the now most commonly used methods in clinical IGRT. The aim of the work here is to supplement Chapter \ref{ch:motion} with further observations about the behaviour of the algorithm under less ideal numerical data.
 
-The objectives of this chapter are twofold: Firstly, the improved image quality obtainable by iterative algorithms is highlighted, showing how 4D CBCT binning methods can be improved by using better reconstruction algorithms, even with low data. Secondly, the flexibility and error behaviour of the algorithm is studied. The algorithm will reconstruct the image without any motion artefacts if the motion is perfectly know, however respiratory motion is variable between patients and within the patients themselves. The error behaviour with uncertainties in the DVF crucial for the future possibility of the method in clinical cases, as while the motion correction method removes almost in its entirety any motion artefacts with very accurately known DVFs, obtaining very accurate motion models of patients is not possible. Thus, the performance of the method with low resolution and approximately accurate DVFs is studied in this work. Additionally, some proposed methods for 4D CBCT rely in computing DVFs and then deforming a high resolution image with them. This work also studies why using reconstruction for motion correction produces better results than deforming a static image.
+The objectives of this chapter are twofold: Firstly, the improved image quality obtainable by iterative algorithms is highlighted, showing how 4D CBCT binning methods can be improved by using better reconstruction algorithms, even with low data. Secondly, the flexibility and error behaviour of the algorithm is studied. The algorithm will reconstruct the image without any motion artefacts if the motion is perfectly known, however respiratory motion is variable between patients and within the patients themselves. The error behaviour with uncertainties in the DVF crucial for the future possibility of the method in clinical cases, as while the motion correction method removes almost in its entirety any motion artefacts with very accurately known DVFs, obtaining very accurate motion models of patients is not possible. Thus, the performance of the method with low resolution and approximately accurate DVFs is studied in this work. Additionally, some proposed methods for 4D CBCT rely in computing DVFs and then deforming a high resolution image with them. This work also studies why using reconstruction for motion correction produces better results than deforming a static image.
 
 
 
@@ -18,7 +18,7 @@ An small introduction of the POPI dataset, reconstruction methods, methods for d
 
 
 
-\subsubsection{4D POPI model}
+\subsection{4D POPI model}
 
 The dataset that is going to be used is the same as in the previous chapter, a 4D-CT (10 bins) treatment planning scan of a lung cancer patient, known as the POPI model. In Figure \ref{fig:POPIfull} a snapshot of the whole breathing pattern can be seen in the cranial-caudal direction, with a zoomed section of the tumour, on where the motion is better appreciated. Figure \ref{fig:POPI3} shows the only frames 0, 3 and 6, for an amplified image.
 
@@ -45,15 +45,15 @@ The dataset that is going to be used is the same as in the previous chapter, a 4
 \caption[Three frames of the 4D dataset in CC direction]{\label{fig:POPI3} The POPI dataset for three frames (0, 3 and 6) in the cranial-caudal direction, and a zoomed area of the tumour.  The colour scale is linear attenuation coefficient in the range [0-2000].} 
 \end{figure}
 
-\subsubsection{Image reconstruction}
+\subsection{Image reconstruction}
 
 This chapter reconstruct 4D images in all frames, and compare them to the ground truth. The iterative algorithms used in this section are SART and ASD-POCS. The rationale is that to demonstrate the flexibility of the method, more than one algorithm is presented, and SART is chosen because its a well understood and common algorithm, while ASD-POCS is chosen because its a more advanced algorithm with more complex constrains, however it is also quite well known one. One would expect that more advanced and newer algorithms to work even better than these two, but using those may obscure the results of the analysis that this chapter attempt to study, the quality of the reconstruction with the common errors in 4D CBCT.
 
-\subsubsection{Deformation vector field computation}
+\subsection{Deformation vector field computation}
 
 As images in all frames are reconstructed in this chapter, deformation fields from and to any arbitrary time snapshot are required by the algorithm. For 10 frames, this makes 90 deformation vector fields + 10 identity fields (all zeroes). The DVfs used in the previous chapter that are provided with the POPI model only register to a single time slice (the second one, labelled 1), thus they are not enough to reconstruct the data in this chapter. In order to obtain the needed DVFs, a third party software has been used, the Elastix\cite{elastix} package. Elastix is an open source software that provides a big variety of multimodal nonrigid image registration tools. 
 
-From the algorithms available in the package, a nD+t B-spline group-wise cyclic registration\cite{metz2011nonrigid} approach has been chosen. This method is an optimization based algorithm, that registers 4D images (in this case) with B-splines. This allows for an analytic representation of the deformation using a simple yet fast method. The algorithms assumes deformation only in the spacial domain, and smoothness, as it is mean to represent intra-patient deformation. An assumption is made that a correctly registered image should have the same pixel intensity value in each corresponding spacial location, thus a cost function of the following form is defined:
+From the algorithms available in the package, a nD+t B-spline group-wise cyclic registration\cite{metz2011nonrigid} approach has been chosen. This method is an optimization based algorithm, that registers 4D images (in this case) with B-splines. This allows for an analytic representation of the deformation using a simple yet fast method. The algorithms assumes deformation only in the spatial domain, and smoothness, as it is mean to represent intra-patient deformation. An assumption is made that a correctly registered image should have the same pixel intensity value in each corresponding spacial location, thus a cost function of the following form is defined:
 
 \begin{equation}
 C(\mu)=\frac{1}{\lVert \mathcal{S} \rVert\lVert \mathcal{T}\rVert}\sum_{x\in \mathcal{S}} \sum_{t\in\mathcal{T}}\left(I(T_\mu(x,t)) - \bar{I_\mu}(x)\right)^2,
@@ -71,7 +71,7 @@ The minimization equation therefore is
 This equation is minimized using adaptive stochastic gradient descend, a faster converging version of gradient descend\cite{klein2009adaptive}. For more details about the specific implementation, refer to the article\cite{metz2011nonrigid}.
 
 This algorithm needs an initial grid of spatial points to register and link via B-splines. The grid size used in this work is an uniformly distributed grid with samples every 13x13x1 voxels. The advantage of using this smooth low grid resolution deformable image registration method, as opposed to a more numerically complex one is that while the results are smoother and show less detailed information, the method is very robust, and ensures coherence in four dimensions. In short, this method is a feasible method to use in clinical applications, but gives lower accuracy.
-\subsubsection{Quantitative reconstruction quality parameters}
+\subsection{Quantitative reconstruction quality parameters}
 
 To evaluate the quality of the reconstruction, the tumour is going to be the focus, as  in the previous chapter. The metrics RMSE and UQI and Segmentation mismatch will also be used, however an additional metric to compute the binary shape location of the tumour will also be used.  Using the same tumour area, the tumour will be extracted using morphological operators on images, via binarization with Otsu's method, image dilation and erosion and labelling using connected components. The biggest segmented blob will be then used to compute the geometric center, and the euclidean distance between this and the ground truth will be used as metric of quality. This is due to CBCT not reconstructing HU units of images with the best accuracy, thus the quality of the result on image attenuation coefficient values is less important than the quality of the shape of the tumour. The attenuation coefficients are actually important for RT planning, however CBCT is mainly used to know the tumour shape and location on the treatment.
 
@@ -136,7 +136,7 @@ In the results one can see that while the quality of the reconstruction is lower
 \caption[Reconstruction quality comparison of motion compensation]{\label{fig:MCCBCTquality} Reconstruction quality comparison of 4D CBCT FDK, motion compensated methods (SART and ASD-POCS) and the 4th frame after deformation. Horizontal axis shows frame number and vertical axis the value of the quality parameter.} 
 \end{figure}
 
-\subsection{Substandard Deformation Vector Fields}
+\subsection{Suboptimal Deformation Vector Fields}
 The biggest single challenge of the motion compensation method is the fact that obtaining accurate patient specific DVFs is not possible with the current methods. Thus, evaluating numerically how accurately the DVFs need to be known for the algorithm to perform within reasonable limits is an important factor. The previous chapter shows that if the DVFs are perfectly known the motion compensated method can completely eliminate the motion's influence in the final image, and the first section of this chapter shows that a smooth cyclic DVF computation algorithm can, while with more error, lead to accurate reconstruction. This section pushes the limits of the DVFs numerically in order to evaluate how much the reconstruction quality deteriorates with each of the effects. The motion compensated methods with full DVFs are taken as a baseline for comparison.
 
 \subsubsection{Undersampled DVFs}
@@ -199,7 +199,7 @@ Another of the most common errors in 4D CBCT is the mislabelling of projections 
 
 Nowadays clinically used breathing surrogates only give 1D signals of the breathing phase, and there are potential options for obtaining live 1D motion information of the tumour, such as implanted fiducials, ultrasound imaging\cite{western2015ultrasound} or electrical impedance tomography\cite{song2009non}\cite{pengpan2010motion} systems. Thus, evaluating the performance of the motion correction method for when only the motion of the tumour is known is crucial, as this would be the most likely introduction of the method to clinical cases, as the technology already exists. For the tests of this section, the DVFs are cropped to the same area as the tumour is for the quality evaluation plus 2 pixels in each direction, and set to zeros in the rest.
 
-Figure \ref{fig:tumourMCCBCT3static} shows the difference between the motion compensation methods and the cropped DVF motion compensation for SART and ASD-POCS. Note that while the error is big in all of the image, the tumour are itself has no error. Similarly, figure \ref{fig:tumourMCCBCTquality} shows how the quality parameters are barely deteriorated after cropping most of the DVFs. This is an important result, as the motion is not only appearing in the tumour area for the specific X-rays that cross it, nevertheless the algorithm can discriminate the error and reconstruct accurately the tumour area, pushing the resultant motion errors outside the region of interest (observe box-like pattern around the tumour area).
+Figure \ref{fig:tumourMCCBCT3static} shows the difference between the motion compensation methods and the cropped DVF motion compensation for SART and ASD-POCS. Note that while the error is big in all of the image, the tumour area itself has no error. Similarly, figure \ref{fig:tumourMCCBCTquality} shows how the quality parameters are barely deteriorated after cropping most of the DVFs. This is an important result, as the motion is not only appearing in the tumour area for the specific X-rays that cross it, nevertheless the algorithm can discriminate the error and reconstruct accurately the tumour area, pushing the resultant motion errors outside the region of interest (observe box-like pattern around the tumour area).
 
 
 

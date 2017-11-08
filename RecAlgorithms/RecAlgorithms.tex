@@ -5,9 +5,40 @@
 This chapter tries to explain the mathematics behind CT reconstruction, the FDK algorithm and iterative reconstruction algorithms. After the formal proposition of the mathematical problem of integrating over straight lines the FDK algorithm is introduced. Then, the alternative proposal of the iterative algebraic methods is shown, followed by a wide variety of different algorithms that can be used to solve the algebraic problem. These include gradient descent techniques, Krylov subspace methods and compressed sensing techniques. Finally, the challenges that arise from the use iterative algorithms are discussed.  
 
 \section{Geometry of CBCT}
+While different CBCT geometries exist, the most common one is the flat detector circular scanning trajectory CBCT , as show in figure XXXXXXXXXX. In the figure, a three dimensional (3D) image sits in the middle  of the coordinate system defined by a $XYZ$ coordinate system, where the $\overrightarrow{OX}$ vector is aligned to the source, $S$ and geometric center of the detector at the tomographic angle $\theta=0$. The detector is a planar geometry and rotates among the source around the $\overrightarrow{OZ}$ direction, parallel to $(y \sin \theta+x\cos \theta)$, defining a detector coordinate system $UV$. If we denote the attenuation of photons by the 3D image as $ f(\vec r)$, being $\vec r =(x,y,z)$ we can describe the function measured in the detector at every tomographic angle $p(\theta,u,v)$ as 
 
+\begin{equation}
+p(\theta,u,v)= \int_{0}^{\infty} {f(\vec{r_0} (\theta)+\alpha\hat{\gamma})d\alpha},
+\label{eq:Beer}
+\end{equation} 
+where $\vec{r_0} (\theta)=(R \sin\theta, R \cos \theta,0)$ is the source location, $\alpha \in [0,\sqrt{D^2+u^2+v^2}]$, $R$ the distance between the source and center of rotation and $D$ the source to detector distance. $\hat{\gamma}$ denotes the line directions between the source and the detector coordinates $u$ and $v$ as in
+ \begin{equation}
+\hat{\gamma}=\frac{\vec{d}(u,v,\theta) -\vec{r_0} (\theta) }{\left | \vec{d}(u,v,\theta) -\vec{r_0} (\theta)  \right |},
+\end{equation}
+being $\vec{d}(u,v,\theta)$ the detector pixel coordinates. Equation \ref{eq:Beer} is Beer's law for CBCT geometry, that states that the measured projection is the path integral of the image attenuation over the x-ray line. 
 \section{FDK}
+The FDK algorithm \cite{Feldkamp1984} for circular CBCT with planar detector is described as
 
+\begin{equation}
+\hat{f}(x,y,z)=\frac{1}{2}\int_{0}^{2\pi}d\theta \frac{1}{U^2} \times \int_{-\infty}^{\infty}p(\theta,u,v') \frac{D}{\sqrt{D^2+u^2+v'^2}} \cdot h(u'-u)\cdot dud\theta
+\end{equation}
+where $h(\bullet)$ describes the ramp filter, 
+
+\begin{align}
+u'(x,y,\theta)&=\frac{D(y\cos\theta+x\sin\theta)}{R+y\sin\theta-x\cos\theta},\notag\\
+v'(x,y,z,\theta)&=\frac{zD}{R+y\sin\theta-x\cos\theta},\notag\\
+U&=\frac{R+y\sin\theta-x\cos\theta}{R}.
+\label{eq:weigth}
+\end{align}
+
+
+Computationally FDK can be separated into 3 steps. 
+
+\begin{enumerate}
+\item Multiply the measured projection data $p(\theta,u,v)$ by $D/\sqrt{D^2+u^2+v^2}$.
+\item Convolve result from step 1 with a ramp the $h(u)/2$ ramp filter. 
+\item Backproject (or \textit{smear}) the result from step 2 weighting by $1/U^2$.
+\end{enumerate}
 \section{Iterative reconstruction algorithms}
 Nowadays the FDK algorithm is the most widely used algorithm, and only until very recently it has been the only algorithm available in any commercial medical or industrial CT device. Companies started using hybrid iterative algorithms for a limited subsection of their software in 2010 earliest\cite{geyer2015state}, for standard CT, and for IGRT/CBCT one of the first has been Varian Medical Systems Inc, patented Apr. 2017\cite{paysan2017iterative}, published on web Sep. 2017\cite{Varian}.  While using FDK is advantageous in some cases, often the algorithm behaves poorly, especially when errors in the data, or the amount of data is limited. This is because FDK is based on an analytical approximation of straight path integrals in continuous spaces. The reality is far from straight path integrals as, due to X-ray physics, photons do not behave linearly. Photons from CT machines are polychromatic and human tissue is behaves non-linearly in respect to X-ray energy deposition. Additionally, Compton scattering is a common effect, where the photons get deflected at different angles dependent on their energy. Apart from photon physics related errors, electronic noise is always present in detector technology being the only feasible way of avoiding  long exposition times that would be harmful to living tissue. Limited data can additionally impair the image reconstruction, as CT has generally less detector data than the amount of voxels it is desired to reconstruct. All these effects make CT image reconstruction a challenging problem and have a strong effect on the behaviour of FDK. As an alternative to FDK, iterative algebraic reconstruction algorithms try to minimize a functional by updating the image continuously and comparing it to the measured data. These algorithms have been shown to improve reconstruction quality when the data is noisy and/or limited. Additionally, as they are an algebraic tool, they allow careful tuning of the mathematics, enabling them to change their behaviour.
 

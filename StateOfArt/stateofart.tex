@@ -6,6 +6,24 @@
 \section{Image Guided Radiation Therapy}
 
 \section{CT imaging in other applications}
+
+\section{Phase Space Tomography at the proton Synchrotron}
+
+Motion in tomography is a problem not only in X-ray modalities. Phase space tomography is a hybrid algorithm that combines particle tracking in a computer model of a synchrotron with iterative algorithms to reconstruct an image of the population of a bunch of particles circulating in the accelerator. The particle motion involves non-linear rotation and is non-cyclic, but a 1D projection of the distribution can be completely acquired as a single snapshot on one turn of the machine. By tracking test particles to gain a knowledge of how the geometry of the 2D image plane (longitudinal phase space) deforms, the information in all the discrete time slices acquired over many turns can be translated back to the same instant and topographically combined in a single image. This is possible because the motion of this particles can be exactly known from understanding and measuring the physics involved int he particle acceleration process. To do so, each pixel in the reconstructed image is populated with a bunch (generally 16) phantom particles, and their movement is simulated. By knowing in which measurement bin each fraction of the pixels (each phantom particle) falls in each position in time, the tomographic reconstruction can be performed by assigning values to the locations of these particles in the desired time position. Figure \ref{fig:PST} shows the measured projections and reconstructed images using these technique. If the motion modelling were not included, the swirl pattern would not be visible.
+
+\begin{figure}
+
+\begin{center} 
+
+\includegraphics[width=\linewidth]{StateOfArt/Tosca2016fig.png} 
+
+\caption[Phase space tomography]{\label{fig:PST} Early example (1999) of a set of 1D bunch profile data (left) processed into a 2D image of particle density in the longitudinal plane (right) using phase space tomography.  The resultant particle distribution is consistent with all the measured profiles and the physics of synchrotron motion.  The detailed internal bunch structure that is revealed is a consequence of the non-linearity of the motion.  The measurement was made at the CERN Proton Synchrotron Booster.\cite{pstweb}.} 
+\end{center} 
+\end{figure}
+
+
+ Conceptually the method means adding the motion information to the geometry of the model with which the problem is posed rather than inserting it somehow into the mathematics of the tomography by which a solution is found. However, the specific technique used in phase space tomography is not viable in medical imaging, as the images are already very big in pixels, increasing the size e.g. 16 times would be computationally infeasible. Thus, the concept of phase space tomography must be implemented using a different method in CBCT.
+
 \section{Motion in CBCT}
 Due to the lower doses used than in a conventional CT scan and to its slow data acquisition rate, a CBCT image is generally riddled with noise and motion artefacts.  Research into the removal of motion artefacts in CBCT is widespread and numerous articles have been published on the subject.  The most studied method to deal with motion is phase-correlated CBCT, also called 4D-CBCT\cite{sonke2005respiratory}\cite{thomas2006}\cite{li2006four}\cite{Pengpan2012246}\cite{t2016first}.  In 4D-CBCT, projection data are binned according to respiratory phase and then the data from each bin are reconstructed separately to produce a series of images.  This approach has several drawbacks.  Even though the amount of data per reconstructed image is smaller than usual, the total number of projections increases which means a longer irradiation time and a higher dose for the patient, limiting its clinical use.  In addition, the image quality of each 4D-CBCT reconstruction is inferior to a 3D-CBCT one due to its reduced angular sampling and to small inconsistencies resulting from binning inaccuracies. 
 
