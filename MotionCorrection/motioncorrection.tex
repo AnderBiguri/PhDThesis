@@ -126,8 +126,41 @@ Using any iterative CT reconstruction algorithm with warped projection and back 
 
 \section{Results}
 
-In order to validate the motion-compensation algorithm, two different tests were performed.  The results are presented in this section.  First, a proof of principle is established by subjecting a digital thorax phantom to a well-defined, if somewhat contrived deformation with time.  In this case, the expected image at any instant is perfectly known, but despite this the inverse motion map must still be computed numerically and is necessarily only approximate.  The motion moves all voxels within the image (but not the image boundaries) and the amplitude of the deformation is made substantially larger than any real movement in a breathing patient.  A second test is performed using clinical 4D-CT images, where the motion is only approximately known.  Nevertheless, even an approximate motion model can be exploited to significant beneficial effect.
+In order to validate the motion-compensation algorithm, three different tests were performed.  The results are presented in this section. First, a very basic test os performed with a simple phantom and simple translation motion of a small part of the image. Then, a proof of principle is established by subjecting a digital thorax phantom to a well-defined, if somewhat contrived deformation with time.  In this case, the expected image at any instant is perfectly known, but despite this the inverse motion map must still be computed numerically and is necessarily only approximate.  The motion moves all voxels within the image (but not the image boundaries) and the amplitude of the deformation is made substantially larger than any real movement in a breathing patient.  A final test is performed using clinical 4D-CT images, where the motion is only approximately known.  Nevertheless, even an approximate motion model can be exploited to significant beneficial effect.
 
+
+\subsection{Simple digital phantom with simple motion}
+To test the algorithm in a very controlled numerical environment a simple lung phantom has been created. The phantom it is defined as: A $128^3$ voxel image, where an empty sphere of radius 60-64 is enclosed, of value 1. Inside, two spheres are located, of radius 20, offset by $\pm 25$ voxels in Y direction with value 0.5. Inside the left sphere (or \textit{lung}) a small circle of radius 4 is located, centred 18 voxels away from the centre of the image, of value 0.8, resembling a tumour. The background has value 0 and all spheres are inserted without any anti-aliasing correction. The data hopes to have some resemblance to a human thorax with 2 lungs, one with a tumour.
+
+%\begin{figure}[h]
+%\begin{center}
+%\includegraphics[width=0.7\linewidth]{fakethorax1.png} 
+%\caption{\label{fig:fakethorax} Synthetic thorax-like phantom resembling two lungs and a tumour.} 
+%\end{center}
+%\end{figure}
+ 
+To simulate motion, a single lung is moved. The lung with the tumour is moved in the vertical axis by a sinusoidal amplitude of 10 peak to peak, performing a single period during the 100 uniformly spaced projections over the full circular path of the detector. The motion is performed by redefining the phantom with a different centre for the lung and tumour. As previously mentioned, the algorithm needs a deformation/motion vector field from the desired reconstruction state (or time) to the current projection state, and its inverse. In the case of a vertical uniform motion the inverse is straightforward to compute, as it will be the same amplitude but in negative numbers, location offset in the forward motion direction.
+
+To test the algorithm 3 different reconstruction are performed, using the SART algorithm in all of them. Firstly, the image is reconstructed using 100 simulated projection without any motion, in a static state of the image. This will show the ideal image after reconstruction. Then, the image reconstruction would be performed without any motion compensation, but with motion happening in the projections themselves. This is a rough approximation of what happens if the patient is breathing and the motion is not taken into account. Finally, our motion correction method is tested with SART. The results can be seen in figure \ref{fig:result11}, and the errors between the original phantom and the reconstructed one can be seen in figure \ref{fig:result12}. It is clear that the motion corrected algorithm does indeed remove most of the artefacts from the image reconstruction.  Visually, the lung and the tumour can be easily delineated within a pixel of accuracy, and the error figure shows clearly an improvement. Note that the colorbar is saturated in figure \ref{fig:result12}, as scaling it to the maximum error would make the errors in the motion corrected reconstruction imperceptible. Most of the error lies in the edges between objects, however this is most likely because the motion corrected projection and back-projection rely on linear interpolation, while the phantoms where generated with nearest neighbour interpolation.
+
+
+ \begin{figure}[h]
+\begin{center}
+\includegraphics[width=1\linewidth]{MotionCorrection/motion.png} 
+
+\end{center}
+\caption[Recosntruction with and without motion compensation for simple phantom]{\label{fig:result11} Vertical cross-section of images on: (a) Image reconstructed with SART and no motion happening, (b) image reconstructed with SART and motion is happening, but no compensation is applied, (c) image reconstructed with SART and motion happening, with motion compensation. The colour scale is linear attenuation coefficient in the range [0-1]} 
+\end{figure}
+ 
+ 
+ 
+ \begin{figure}[H]
+\begin{center}
+\includegraphics[width=1\linewidth]{MotionCorrection/steven2.png} 
+
+\end{center}
+\caption[Error with and without motion compensation for simple phantom]{\label{fig:result12} Vertical cross-section of the difference between the ideal and reconstructed image on: (a) Image reconstructed with SART and no motion happening, (b) image reconstructed with SART and motion is happening, but no compensation is applied, (c) image reconstructed with SART and motion happening, with motion compensation. The colour scale is linear attenuation coefficient in the range [0-0.2]} 
+\end{figure}
 
 
 \subsection{Arbitrary deformation of a digital phantom}
@@ -195,7 +228,7 @@ This test demonstrates that the new method can handle arbitrary, non-cyclic moti
 \FloatBarrier
 \subsection{Real patient data}
 
-The second test is performed using clinical data with precomputed DVFs, which are not entirely accurate.  It is important to note that no real CBCT data are used, only 4D-CT image data.  These are taken from the so-called POPI-model\cite{vandemeulebroucke2007popi} and are publicly available\cite{popi-modelweb}.  The data comprise ten 3D-CT images (labelled from ``0'' to ``9'') of the thorax equally spaced during the breathing cycle of a single patient.  Additionally, motion maps generated by two different methods are provided by the authors describing the inter-phase motion of the voxels.  We choose to use the maps that are generated by the parametric method for no specific reason as, statistically, both methods are reported to have similar errors.  And we choose to use the 3D-CT image labelled ``1'' as the reference state to be reconstructed because the authors provide the motion vectors from this state to all the others.  The reference state of the thorax can be seen in figure \ref{fig:realthorax}.  The particular feature of a tumour is highlighted.
+The last test is performed using clinical data with precomputed DVFs, which are not entirely accurate.  It is important to note that no real CBCT data are used, only 4D-CT image data.  These are taken from the so-called POPI-model\cite{vandemeulebroucke2007popi} and are publicly available\cite{popi-modelweb}.  The data comprise ten 3D-CT images (labelled from ``0'' to ``9'') of the thorax equally spaced during the breathing cycle of a single patient.  Additionally, motion maps generated by two different methods are provided by the authors describing the inter-phase motion of the voxels.  We choose to use the maps that are generated by the parametric method for no specific reason as, statistically, both methods are reported to have similar errors.  And we choose to use the 3D-CT image labelled ``1'' as the reference state to be reconstructed because the authors provide the motion vectors from this state to all the others.  The reference state of the thorax can be seen in figure \ref{fig:realthorax}.  The particular feature of a tumour is highlighted.
 
 %\begin{figure}[H]
 %\begin{center} 
