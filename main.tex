@@ -79,7 +79,7 @@
 
 
 % front matter
-\title{Motion compensation in X-ray tomography}
+\title{Dual modality CBCT and EIT for lung radiation therapy}
 \author{Ander Biguri}
 \degree{Doctor of Philosophy}
 \department{Department of Electrical and Electronic Engineering}
@@ -118,7 +118,7 @@ Finally, I'd like to thanks to everyone that has pushed me and helped me to get 
 \renewcommand{\abstractname}{Abstract}
 
 \begin{abstract}
-Computed tomography (CT), and especially cone-beam computed tomography (CBCT) has a wide range of applications. This thesis focuses on CBCT for image-guided radiation therapy (IGRT), particularly for lung cancer treatment. In lung IGRT the tumour moves due to respiration, not only making it hard to target with the radiation beam, but also blurring the images acquired for daily treatment tuning. Generating high quality images without motion artefacts is essential for RT and hadron therapy. In this thesis, motion modelling ideas from CERNs proton synchrotron's phase space tomography are modified and adapted to lung CBCT. The CERN method includes a knowledge of the motion in the basic building blocks of the image reconstruction and uses all the acquired data to reconstruct a single static image at any chosen moment within the acquisition timespan. In order to use this method, and in general improve the reconstructed image quality of CBCT, iterative algorithms are explored with a focus on fast reconstruction using GPUs. The work presented here lead to the publication of the TIGRE Toolbox, a fast, easy-to-use MATLAB-CUDA toolbox for the reconstruction of CBCT images at state-of-the-art speeds with an extensive variety of iterative algorithms. This thesis presents the mathematics, GPU techniques and different applications of TIGRE and its algorithms, strengthening the idea already stated that iterative algorithms can significantly improve image quality in CBCT. A motion compensation method is developed together with a fast GPU implementation and its robustness is tested numerically by simulating the expected clinical errors in the data. The method is very robust and provides high-quality static images using data from disparate moments in time, offering the prospect of videos of patients breathing at no extra cost in radiation dose.
+Computed tomography (CT), and especially cone-beam computed tomography (CBCT) has a wide range of applications. This thesis focuses on CBCT for image-guided radiation therapy (IGRT), particularly for lung cancer treatment. In lung IGRT the tumour moves due to respiration, not only making it hard to target with the radiation beam, but also blurring the images acquired for daily treatment tuning. Generating high quality images without motion artefacts is essential for RT and hadron therapy. In this thesis, motion modelling ideas from CERN's  phase space tomography are modified and adapted to lung CBCT. The CERN method includes a knowledge of the motion in the basic building blocks of the image reconstruction and uses all the acquired data to reconstruct a single static image at any chosen moment within the acquisition timespan. In order to use this method, and in general improve the reconstructed image quality of CBCT, iterative algorithms are explored with a focus on fast reconstruction using GPUs. The work presented here lead to the publication of the TIGRE Toolbox, a fast, easy-to-use MATLAB-CUDA toolbox for the reconstruction of CBCT images at state-of-the-art speeds with an extensive variety of iterative algorithms. This thesis presents the mathematics, GPU techniques and different applications of TIGRE and its algorithms, strengthening the idea already stated that iterative algorithms can significantly improve image quality in CBCT. A motion compensation method is developed together with a fast GPU implementation and its robustness is tested numerically by simulating the expected clinical errors in the data. The method is very robust and provides high-quality static images using data from disparate moments in time, offering the prospect of videos of patients breathing at no extra cost in radiation dose.
 
 \end{abstract}
 
@@ -127,7 +127,7 @@ Computed tomography (CT), and especially cone-beam computed tomography (CBCT) ha
 \subsectionfont{\titlecap}
 \subsubsectionfont{\titlecap}
 
-\Addlcwords{the on by in of and at from via an}
+\Addlcwords{the on by in of and at from via an vs}
 %\chapter{X-ray imaging in medicine}
 \input{Introduction/intro.tex}
 \input{StateOfArt/stateofart.tex}
