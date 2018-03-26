@@ -8,7 +8,7 @@ University of Bath,
 
 Thesis supervisors: Manucherh Soleimani, Steven Hancock, Manjit Dosanjh
 
-Title (probably, to be changed): ITerative Recosntruction and Motion compensation in Computed Tomography on GPUs
+Title (probably, to be changed): Iterative Reconstruction and Motion compensation in Computed Tomography on GPUs
 
 Topic: X-ray tomography, CBCT, Iterative recosntruction, GPU computing, Motion compensation. 
 
