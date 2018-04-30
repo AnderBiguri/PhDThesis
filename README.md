@@ -1,12 +1,16 @@
-PhD Thesis of Ander Biguri, 2017 (hopefully).
+
+
+# NON-CORRECTED VERSION. NOT FINAL
+
+PhD Thesis of Ander Biguri, 2018 .
 
 University of Bath,
 
 Thesis supervisors: Manucherh Soleimani, Steven Hancock, Manjit Dosanjh
 
-Title: TBA
+Title (probably, to be changed): Iterative Reconstruction and Motion compensation in Computed Tomography on GPUs
 
-Topic: X-ray tomography, CBCT, Iterative recosntruction, GPU computing, Motion correction. 
+Topic: X-ray tomography, CBCT, Iterative recosntruction, GPU computing, Motion compensation. 
 
 
 
