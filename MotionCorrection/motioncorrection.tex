@@ -40,7 +40,7 @@ Motion in tomography is a problem not only in X-ray modalities.  Phase space tom
 
 The concept can be transferred to standard absorption tomography, but the idea of following the motion of test points in a 3D image volume simply does not scale from the 2D tracking used for the modest number of pixels typical in phase space tomography.  It would lead to unreasonable computing times and memory requirements.  Instead, motion is modelled as a different effect with the same mathematical result.  Thus a shift upwards of the voxels in a region of the image is modelled as a local shift downwards of the X-ray paths through a regular voxel mesh that remains frozen in the state at which the reconstruction is made.  The motion can be arbitrary provided it does not send any voxels out of the image or add new ones to it.
 
-The idea is illustrated in figure \ref{fig:motion}, where two different states of motion are sketched.  In order to reconstruct at the initial time (a), the measurement at detector element $d_k$ at later time (b) is back projected along the deformed line of response in (a) and so combined with the measurement at element $d_j$ made directly at the earlier time.  Likewise, if the later time is chosen for the reference state at which to reconstruct, the integral over the deformed line of response in (b) provides the attenuation figure needed to project onto $d_j$ in order to iterate the measurement at that element which was actually made at time (a).  Note that the paths are not only bent (or "warped") but also stretched in some places and compressed in others.
+The idea is illustrated in figure \ref{fig:motion}, where two different states of motion are sketched.  In order to reconstruct at the initial time (a), the measurement at detector element $d_k$ at later time (b) is back projected along the deformed line of response in (a) and so combined with the measurement at element $d_j$ made directly at the earlier time.  Likewise, if the later time is chosen for the reference state at which to reconstruct, the integral over the deformed line of response in (b) provides the attenuation figure needed to project onto $d_j$ in order to iterate the measurement at that element which was actually made at time (a).  Note that the paths are not only bent (or ``warped'') but also stretched in some places and compressed in others.
 
 \begin{figure}
 \begin{center} 
@@ -149,7 +149,7 @@ To test the algorithm 3 different reconstruction are performed, using the SART a
 \includegraphics[width=1\linewidth]{MotionCorrection/motion.png} 
 
 \end{center}
-\caption[Recosntruction with and without motion compensation for simple phantom]{\label{fig:result11} Vertical cross-section of images on: (a) Image reconstructed with SART and no motion happening, (b) image reconstructed with SART and motion is happening, but no compensation is applied, (c) image reconstructed with SART and motion happening, with motion compensation. The colour scale is linear attenuation coefficient in the range [0-1]} 
+\caption[Reconstruction with and without motion compensation for simple phantom]{\label{fig:result11} Vertical cross-section of images on: (a) Image reconstructed with SART and no motion happening, (b) image reconstructed with SART and motion is happening, but no compensation is applied, (c) image reconstructed with SART and motion happening, with motion compensation. The colour scale is linear attenuation coefficient in the range [0-1]} 
 \end{figure}
  
  
@@ -168,9 +168,9 @@ To test the algorithm 3 different reconstruction are performed, using the SART a
 The phantom used is a digital representation\cite{xcatweb} of a human thorax comprising $256^3$ cubic voxels.  Motion is simulated according to equation \ref{eq:motion} using 100 equidistant discrete steps of an arbitrary time scale $t$, which runs from 0 to 1, and using $L=128$.  This creates a steadily increasing sinusoidal deformation in all three spatial dimensions, displacing all voxels throughout the volume of the phantom.  Only the boundaries at the faces of the cube and the three perpendicular mid-planes that intersect at its centre remain unshifted.  Figure \ref{fig:motion_Res2} shows a cross-section of the undeformed reference image at $t=0$ and of the deformed image at $t=1$.  Not only are there no static regions, but the deformation is huge compared with real breathing\cite{Liu2007531}, locally approaching three times that for a typical size of thorax.
 \begin{eqnarray}
 V(x,y,z) = \bigl(\nonumber\\
-8*t*\sin(x \cdot \pi/L)\sin(y \cdot \pi/L)\sin(z \cdot \pi/L),\nonumber \\
-8*t*\sin(x \cdot \pi/L)\sin(y \cdot \pi/L)\sin(z \cdot \pi/L),\nonumber\\
-8*t*\sin(x \cdot \pi/L)\sin(y \cdot \pi/L)\sin(z \cdot \pi/L)\bigr)
+8t\sin(x \cdot \pi/L)\sin(y \cdot \pi/L)\sin(z \cdot \pi/L),\nonumber \\
+8t\sin(x \cdot \pi/L)\sin(y \cdot \pi/L)\sin(z \cdot \pi/L),\nonumber\\
+8t\sin(x \cdot \pi/L)\sin(y \cdot \pi/L)\sin(z \cdot \pi/L)\bigr)
 \label{eq:motion}
 \end{eqnarray}
 
@@ -200,7 +200,7 @@ The error between the original phantom and each of the reconstructions is shown 
 \begin{center}
 \includegraphics[width=1\linewidth]{MotionCorrection/motion2XCAT2.png}
 \hspace{0.1cm}{\footnotesize (a)}\hspace{4.3cm}{\footnotesize (b)}\hspace{4.3cm}{\footnotesize (c)}
-\caption[Recosntruction of SART, SART with motion and motion compensated SART]{\label{fig:result21} Transverse cross-section of the CBCT reconstruction made (a) using SART in the absence of motion; (b) with motion using uncompensated SART; (c) with motion using compensated SART. The colour scale is linear attenuation coefficient in the range [0-0.045].} 
+\caption[Reconstruction of SART, SART with motion and motion compensated SART]{\label{fig:result21} Transverse cross-section of the CBCT reconstruction made (a) using SART in the absence of motion; (b) with motion using uncompensated SART; (c) with motion using compensated SART. The colour scale is linear attenuation coefficient in the range [0-0.045].} 
 \end{center}
 \end{figure}
 
@@ -209,7 +209,7 @@ The error between the original phantom and each of the reconstructions is shown 
 \includegraphics[width=1\linewidth]{MotionCorrection/motion21errorXCAT2.png}
 \hspace{0.1cm}{\footnotesize (a)}\hspace{4.3cm}{\footnotesize (b)}\hspace{4.3cm}{\footnotesize (c)}
 
-\caption[Errors between the original and recosntructed image]{\label{fig:error2} Transverse cross-section of the difference between the known phantom (figure \ref{fig:motion_Res2a}) and the CBCT reconstruction made (a) using SART in the absence of motion; (b) with motion using uncompensated SART; (c) with motion using compensated SART.  The display range is significantly enhanced with respect to that of figure \ref{fig:result21}. The colour scale is linear attenuation coefficient in the range [0-0.01].} 
+\caption[Errors between the original and reconstructed image]{\label{fig:error2} Transverse cross-section of the difference between the known phantom (figure \ref{fig:motion_Res2a}) and the CBCT reconstruction made (a) using SART in the absence of motion; (b) with motion using uncompensated SART; (c) with motion using compensated SART.  The display range is significantly enhanced with respect to that of figure \ref{fig:result21}. The colour scale is linear attenuation coefficient in the range [0-0.01].} 
 \end{center}
 \end{figure}
 
@@ -333,10 +333,10 @@ The results for each index applied to the subset of voxels in the region of the 
 \hline
  & RMSE & UQI & Seg. mismatch \\
 \hline \hline  
- SART without motion & 67.18 & 0.9656 & 1108 (3.288\%)\\
- SART with motion & 172.12 & 0.7617 & 3315 (9.838\%)\\
- SART motion-compensated & 109.84 & 0.9077 & 1505 (4.466\%)\\
- ASD-POCS motion-compensated & 82.72 & 0.9451 & 1284 (3.811\%)\\
+ SART without motion & 67.18 & 0.9656 & 1108 (3.28\%)\\
+ SART with motion & 172.12 & 0.7617 & 3315 (9.83\%)\\
+ SART motion-compensated & 109.84 & 0.9077 & 1505 (4.46\%)\\
+ ASD-POCS motion-compensated & 82.72 & 0.9451 & 1284 (3.81\%)\\
 \hline  
 \end{tabular}
 \end{center}
@@ -373,7 +373,7 @@ We have demonstrated a significant improvement in CBCT image quality by removing
 
 One of the greatest strengths of the new method is that it employs all the projection data to reconstruct an image, reducing the X-ray dose to the patient.  It is also completely algorithm independent; its novelty lies in a modelling approach, which in principle can be applied in conjunction with any static reconstruction algorithm.  In fact, most of the motion-compensation ideas present in the literature and reviewed at the beginning of this work could incorporate the method.  As some of these rely on refining DVFs, then, instead of using those DVFs to generate a deformed image from a prior high-quality one, they could be used to reconstruct images from the real acquired data.  Others rely on temporal reconstruction constraints, where the images at successive time steps are regularized to look similar to their neighbours.  Again, such techniques can be used in combination with the new motion compensation because the latter permits any state of the motion to be reconstructed.  Indeed, one could generate an X-ray video of the patient breathing if enough time steps are reconstructed and, as these frames are computationally independent, they could be processed in parallel.  And none of these extra images would require any extra dose for the patient.
 
-The use of DVFs can lead to large memory requirements and an increased preprocessing time, but it has been established in phase space tomography that it is possible to trade off the accuracy of the maps against an increased number of iterations and that some parameters in the motion model itself can be refined by their influence on convergence\cite{pst1}\cite{pst2}.  More speculative is the idea of "bootstrapping" the DVFs without starting from any high-resolution images.  One can imagine repeatedly subdividing the CBCT data into more and more motion phases, and thus iterating both the images and the DVFs themselves at each subdivision, whilst still using all the data for each reconstruction by interpolating between DVFs until there are enough of these to describe the motion in sufficient detail.  This would be very heavy computationally and there is no guarantee of convergence.
+The use of DVFs can lead to large memory requirements and an increased preprocessing time, but it has been established in phase space tomography that it is possible to trade off the accuracy of the maps against an increased number of iterations and that some parameters in the motion model itself can be refined by their influence on convergence\cite{pst1}\cite{pst2}.  More speculative is the idea of ``bootstrapping'' the DVFs without starting from any high-resolution images.  One can imagine repeatedly subdividing the CBCT data into more and more motion phases, and thus iterating both the images and the DVFs themselves at each subdivision, whilst still using all the data for each reconstruction by interpolating between DVFs until there are enough of these to describe the motion in sufficient detail.  This would be very heavy computationally and there is no guarantee of convergence.
 
 As presented here, the method takes only 2 to 3 times longer than a standard iterative reconstruction algorithm due to the use of GPUs for the motion-compensated projection and back projection operators.  So the computational penalty is not large.  It is important to note that we used DVFs of the same size as the images (they are generally smaller) and the code was not highly optimized.  Careful tuning should lead to appreciably faster execution.
 

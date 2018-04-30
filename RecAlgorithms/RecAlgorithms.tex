@@ -9,16 +9,16 @@ This chapter tries to explain the mathematics behind CT reconstruction, the FDK 
 The most common one is the flat detector circular scanning trajectory CBCT , as show in figure \ref{fig:geo}. In the figure, a three dimensional (3D) image sits in the middle  of the coordinate system defined by a $XYZ$ coordinate system, where the $\overrightarrow{OX}$ vector is aligned to the source, $S$ and geometric center of the detector at the tomographic angle $\theta=0$. The detector is a planar geometry and rotates among the source around the $\overrightarrow{OZ}$ direction, parallel to $(y \sin \theta+x\cos \theta)$, defining a detector coordinate system $UV$. If we denote the attenuation of photons by the 3D image as $ f(\vec r)$, being $\vec r =(x,y,z)$ we can describe the function measured in the detector at every tomographic angle $p(\theta,u,v)$ as 
 
 \begin{equation}
-p(\theta,u,v)= \int_{0}^{\infty} {f(\vec{r_0} (\theta)+\alpha\hat{\gamma})d\alpha},
+p(\theta,u,v)= p_0\int_{0}^{\infty} {e^{f(\vec{r_0} (\theta)+\alpha\hat{\gamma})}d\alpha},
 \label{eq:Beer}
 \end{equation} 
-where $\vec{r_0} (\theta)=(R \sin\theta, R \cos \theta,0)$ is the source location, $\alpha \in [0,\sqrt{D^2+u^2+v^2}]$, $R$ the distance between the source and center of rotation and $D$ the source to detector distance. $\hat{\gamma}$ denotes the line directions between the source and the detector coordinates $u$ and $v$ as in
+where, \tb{$p_0$ is the measured value without attenuation}, $\vec{r_0} (\theta)=(R \sin\theta, R \cos \theta,0)$ is the source location, $\alpha \in [0,\sqrt{D^2+u^2+v^2}]$, $R$ the distance between the source and center of rotation and $D$ the source to detector distance. $\hat{\gamma}$ denotes the line directions between the source and the detector coordinates $u$ and $v$ as in
  \begin{equation}
 \hat{\gamma}=\frac{\vec{d}(u,v,\theta) -\vec{r_0} (\theta) }{\left | \vec{d}(u,v,\theta) -\vec{r_0} (\theta)  \right |},
 \end{equation}
-being $\vec{d}(u,v,\theta)$ the detector pixel coordinates. Equation \ref{eq:Beer} is Beer's law for CBCT geometry, that states that the measured projection is the path integral of the image attenuation over the X-ray line. 
+being $\vec{d}(u,v,\theta)$ the detector pixel coordinates. Equation \ref{eq:Beer} is the  Beer's law for CBCT geometry, that states that the measured projection is the path integral of the image attenuation over the X-ray line. \tb{In order to solve the equation, the exponent is dropped assuming that $f(\vec{r})$ is not energy dependent, linearising the problem.} 
 
-Other geometries exist, such as helical CBCT, where a unique solution exists and exact reconstruction algorithms have been explored. Similarly, instead of planar detectors, circular detectors are also used in some applications. Changing the mathematics description to these is not complex starting from the equations shown here. This thesis focuses in planar array circular CBCT, however most of the mathematics on this chapter can be directly applied to any CBCT (and CT in general) geometry.
+Other geometries exist, such as helical CBCT, where the Tuy data sufficiency conditions\cite{tuy} (each plane crossing the object must intersect the orbit of the focal point at least once) is not a limitation and exact algorithms have been explored. Similarly, instead of planar detectors, circular detectors are also used in some applications. Changing the mathematics description to these is not complex starting from the equations shown here. This thesis focuses in planar array circular CBCT, however most of the mathematics on this chapter can be directly applied to any CBCT (and CT in general) geometry.
 
 \begin{figure}[H]
 \begin{center}
@@ -36,7 +36,7 @@ Nowadays, the most widely used algorithm in tomography is the Feldkamp Davis and
 \begin{equation}
 \hat{f}(x,y,z)=\frac{1}{2}\int_{0}^{2\pi}d\theta \frac{1}{U^2} \times \int_{-\infty}^{\infty}p(\theta,u,v') \frac{D}{\sqrt{D^2+u^2+v'^2}} \cdot h(u'-u)\cdot dud\theta
 \end{equation}
-where $h(\bullet)$ describes the ramp filter, 
+where $\hat{f}$ is the approximated solution and $h(\bullet)$ describes the ramp filter, 
 
 \begin{align}
 u'(x,y,\theta)&=\frac{D(y\cos\theta+x\sin\theta)}{R+y\sin\theta-x\cos\theta},\notag\\
@@ -58,7 +58,7 @@ These three steps are all highly parallelizable, thus making FDK an ideal candid
 
 
 \section{Iterative reconstruction algorithms}
-Only until very recently FDK has been the only algorithm available in any commercial medical or industrial CT device. Companies started using hybrid iterative algorithms for a limited subsection of their software in 2010 earliest\cite{geyer2015state}, for standard CT, and for IGRT/CBCT one of the first has been Varian Medical Systems Inc, patented Apr. 2017\cite{paysan2017iterative}, published on web Sep. 2017\cite{Varian}.  While using FDK is advantageous in some cases, often the algorithm behaves poorly, especially when errors in the data, or the amount of data is limited. This is because FDK is based on an analytical approximation of straight path integrals in continuous spaces. The reality is far from straight path integrals as, due to X-ray physics, photons do not behave linearly. Photons from CT machines are polychromatic and human tissue is behaves non-linearly in respect to X-ray energy deposition. Additionally, Compton scattering is a common effect, where the photons get deflected at different angles dependent on their energy. Apart from photon physics related errors, electronic noise is always present in detector technology being the only feasible way of avoiding  long exposition times that would be harmful to living tissue. Limited data can additionally impair the image reconstruction, as CT has generally less detector data than the amount of voxels it is desired to reconstruct. All these effects make CT image reconstruction a challenging problem and have a strong effect on the behaviour of FDK. As an alternative to FDK, iterative algebraic reconstruction algorithms try to minimize a functional by updating the image continuously and comparing it to the measured data. These algorithms have been shown to improve reconstruction quality when the data is noisy and/or limited. Additionally, as they are an algebraic tool, they allow careful tuning of the mathematics, enabling them to change their behaviour.
+Only until very recently FDK has been the only algorithm available in any commercial medical or industrial CT device. Companies started using hybrid iterative algorithms for a limited subsection of their software in 2010 earliest\cite{geyer2015state}, for standard CT, and for IGRT/CBCT one of the first has been Varian Medical Systems Inc, patented Apr. 2017\cite{paysan2017iterative}, published on web Sep. 2017\cite{Varian}.  While using FDK is advantageous in some cases, often the algorithm behaves poorly, especially when errors in the data, or the amount of data is limited. This is because FDK is based on an analytical approximation of straight path integrals in continuous spaces. The reality is far from straight path integrals as, due to X-ray physics. Photons from CT machines are polychromatic and human tissue behaves non-linearly in respect to X-ray energy deposition \tb{i.e. different energies will be attenuated with different intensity, thus breaking the assumptions made with equation \ref{eq:Beer}}. Additionally, Compton scattering is a common effect, where the photons get deflected at different angles dependent on their energy. Apart from photon physics related errors, electronic noise is always present in detector technology being the only feasible way of avoiding  long exposition times that would be harmful to living tissue. Limited data can additionally impair the image reconstruction, as CT has generally less detector data than the amount of voxels it is desired to reconstruct. All these effects make CT image reconstruction a challenging problem and have a strong effect on the behaviour of FDK. As an alternative to FDK, iterative algebraic reconstruction algorithms try to minimize \tb{the residual of the image, comparing the image in reconstruction with the measured data iteratively.} These algorithms have been shown to improve reconstruction quality, \tb{specially} when the data is noisy and/or limited. 
 
 Iterative algorithms in CT generally refer to those algorithms that, as the name says, iterate, but solve the linearized model 
 \begin{equation}
@@ -70,26 +70,26 @@ As an exact solution for $x$ can not be found, the problem in equation \ref{eq:l
 \begin{equation}
 \hat{x}=\argmin_x \lVert Ax-b\rVert^2+R(x),\label{eq:THE equation}
 \end{equation}
- where $R(x)$ is an optional regularization function. This minimization function has been widely studied in mathematics and there are multiple algorithms that can solve it. However not all algorithms that solve the equation can be used in CT reconstruction, due to the nature of the $A$ matrix, as it is very big (approximately $10^8\times 10^8$ in a standard medical image) and very sparse (approximately $0.0017\%$ of sparsity in a standard medical image). This makes the matrix severely ill-conditioned and impossible to store in memory. Additionally, often the CT problem can be underdetermined, making the problem ill-posed and further constraining the possible algorithms that can be used. That said, a wide variety of algorithm have been proposed to solve the CT algebraic problem and new ones are still being published. This section discusses a few of the available and most common algorithms that have been studied in this work and implemented in TIGRE. There are numerous other algorithms in the literature, and none of them are necessarily worse than the ones presented here.
+ where $R(x)$ is an optional regularization function. \tb{This system of equations is underdetermined, i.e. there are multiple solutions for $\hat{x}$, thus regularization function can be used to add prior information about the form of the image, reducing the space of possible solutions.} This minimization structure has been widely studied in mathematics and there are multiple algorithms that can solve it. However not all algorithms that solve the equation can be used in CT reconstruction, due to the nature of the $A$ matrix and the underdetermined nature of the problem. As the $A$ matrix is very big (approximately $10^8\times 10^8$ in a standard medical image) and very sparse (approximately $0.0017\%$ of sparsity in a standard medical image), the matrix is severely ill-conditioned and impossible to store in memory. \tb{As previously mentioned this system is undetermined, therefore there are multiple solutions with the same residual to the problem. Some algorithms can fail, stall or cycle around solutions when solving the problem}. That said, a wide variety of algorithm have been proposed to solve the CT algebraic problem and new ones are still being published. This section discusses a few of the available and most common algorithms that have been studied in this work and implemented in TIGRE. There are numerous other algorithms in the literature, and none of them are necessarily worse than the ones presented here.
 
 
 \subsection{Algebraic Reconstruction Techniques}
 
 Arguably the most well known iterative algorithm is the method known as the algebraic reconstruction technique (ART)\cite{K-1937}, known as the Kaczmarz method outside the CT imaging field due to its discoverer, Stefan Kaczmarz. The ART algorithm, for matrix elements $a_{ij}\in R$ is defined as
 \begin{equation}
-x^{n+1}=x^n+\frac{b_i-\langle a_i,x^n\rangle}{\lVert{a_i}\rVert^2}a_i^T,
+x^{n+1}=x^n+\lambda_n\frac{b_i-\langle a_i,x^n\rangle}{\lVert{a_i}\rVert^2}a_i^T,
 \end{equation}
-where $a_i$ is the $i$-th row of matrix $A$ and $\langle \,, \rangle$ denotes the inner product. The ART method projects the image into the hyperplane described by the equation in row $i$. Generally the method includes a relaxation parameter $\lambda_n$ that controls the update size and that decreases with the iteration number $n$. This generally avoids the cyclical convergence that the method describes when the solution is not unique (the intersection of the hyperplanes is not a single point). By relaxing the update step, the algorithm converges to a single point. Generally the algorithm is also run with some inequality constraints, the most common one being a positivity constraint for $x$, as negative values are not physically possible.
+where $a_i$ is the $i$-th row of matrix $A$ and $\langle \,, \rangle$ denotes the inner product. The ART method projects the image into the hyperplane described by the equation in row $i$. Generally the method includes a relaxation parameter $\lambda_n$ that controls the update size. Generally the algorithm is also run with some inequality constraints, the most common one being a positivity constraint for $x$, as negative values are not physically possible.
 
 Studies on the convergence of the ART algorithm show\cite{herman1993algebraic} that randomly choosing the order of the rows in each iteration increase the convergence rate, even more if the probabilities of picking rows are different than one (different methods propose different probabilities)\cite{strohmer2009randomized}\cite{liu2016accelerated}. 
 
-However, the ART method has a major disadvantage: the image $x^{n+1}$ needs to be updated $i$ times each iteration. In current CT applications, and specifically in CBCT, the amount of rows in the matrix i.e. the total amount of independent pixel measurements in the detector is a massive number. Following the same definition of standard medical image size from the thesis, a $512\times512$ detector with 360 projection angles means that the amount of rows is in the order of $10^8$. In order to update the image less, the Simultaneous Iterative Reconstruction Technique (SIRT)\cite{SIRT} can be used, a method that is very similar to Cimmino method\cite{cimmino1938cacolo}, that updates the image using simultaneously (instead of sequentially) all data in the measurement $b$, thus each iteration is a single update. While SIRT generally solves the problem of the high amount of updates in ART, it suffers from a very slow convergence in comparison, and will generally plateau in a solution that is not as good as what ART provides. The SIRT algorithm can be described in matrix form as
+However, the ART method has a major disadvantage: the image $x^{n+1}$ needs to be updated $i$ times each iteration. In current CT applications, and specifically in CBCT, the amount of rows in the matrix i.e. the total amount of independent pixel measurements in the detector is a massive number. Following the same definition of standard medical image size from the thesis, a $512\times512$ detector with 360 projection angles means that the amount of rows is in the order of $10^8$. In order to update the image less, the Simultaneous Iterative Reconstruction Technique (SIRT)\cite{SIRT} can be used, a method that is very similar to Cimmino method\cite{cimmino1938cacolo} (\tb{with a normalizing factor}), that updates the image using simultaneously (instead of sequentially) all data in the measurement $b$, thus each iteration is a single update. While SIRT generally solves the problem of the high amount of updates in ART, it suffers from a very slow convergence in comparison, and will generally plateau in a solution that is not as good as what ART provides. The SIRT algorithm can be described in matrix form as
 \begin{equation}
 x^{n+1}=x^n+\lambda_n V A^T W^{-1}\left(b-Ax\right) \label{eq:SIRT}
 \end{equation}
 where $V=1/\text{diag}\bigl({\sum_j a_{ij}}\bigr)$ and  $W=\text{diag}\bigl({\sum_i a_{ij}}\bigr)$.
 
-However, a middle ground has also been proposed. Kak and Andersen proposed\cite{SART} the Simultaneous Algebraic Reconstruction Technique (SART) where the image is updated using simultaneously all data from each X-ray projection, but still updating the image multiple times per iteration. Finally, the update can also be done using block-based methods, or Oriented Subsets (OS) with a variety of methods generally described as OS-SART\cite{OS_SART} methods.
+However, a middle ground has also been proposed. Kak and Andersen proposed\cite{SART} the Simultaneous Algebraic Reconstruction Technique (SART) where the image is updated using simultaneously all data from each X-ray projection, but still updating the image multiple times per iteration. Finally, the update can also be done using block-based methods, or Ordered Subsets (OS) with a variety of methods generally described as OS-SART methods\cite{OS_SART}\cite{wang2004ordered}. \tb{This approach is a good middle ground between SART and SIRT, as converges to the solution in less iterations than SIRT, but the speed of each iteration is considerably faster than SART.}
 
  Similarly as with ART, the order of the subsets in both OS-SART and SART influence the convergence, but with a lower impact than in ART. In this work a three methods have been implemented, a completely ordered method, a randomized ordered method with full sampling (i.e. all projections are ensured to be used once and only once per iteration) and an angular distance based one. This last one orders the subsets by selecting the next one as the subset with largest angular distance from the ones already used. The heuristic rationale is that the projections at larger angular distance update the image by a bigger step than projections angularly near. In this thesis, the default ordering is random unless otherwise explicitly stated.
  
@@ -101,15 +101,15 @@ However, a middle ground has also been proposed. Kak and Andersen proposed\cite{
 
 As previously mentioned, changing the relaxation parameter per iteration can be of advantage, by avoiding cyclical convergence and often by increasing the general convergence rate. On of the commonly used methods for the reduction of lambda is simply reducing it by a reduction factor each iteration as
 \begin{equation}
-\lambda_{n+1}=\lambda_n*r_\lambda
+\lambda_{n+1}=\lambda_n r_\lambda
 \end{equation}
-where $r_\lambda$ is some value close to one, such as $r_\lambda=0.99$ or $r_\lambda=0.999$. However this method, while useful to avoid cyclical convergence in ART methods, is of less use in simultaneous methods, as it generally slows the convergence rate.% Alternatively, convergence studies for SART/OS-SART/SIRT algorithms have shown\cite{jiang2003convergence} that an update of the relaxation parameter in the form of
+where $r_\lambda$ is some value close to one, such as $r_\lambda=0.99$ or $r_\lambda=0.999$. \tb{This generally avoids the cyclical convergence that the method describes when the solution is not unique (the intersection of the hyperplanes is not a single point). By relaxing the update step, the algorithm converges to a single point.} However this method, while useful to avoid cyclical convergence in ART methods, is of less use in simultaneous methods, as it generally slows the convergence rate.% Alternatively, convergence studies for SART/OS-SART/SIRT algorithms have shown\cite{jiang2003convergence} that an update of the relaxation parameter in the form of
 %\begin{equation}
 %\lambda_{n+1}=\frac{\lambda_0}{1+n^\alpha}
 %\end{equation}
 %where $\lambda_0$ is an initial value of the relaxation parameter (usually 1) and $0<%\alpha\leq 1$. this can improve the convergence of the algorithms. 
 
-It is worth noticing that this family of algorithms is very closely related to the well-known gradient descent methods, as the gradient of equation \ref{eq:THE equation} is  proportional to $A^T(Ax-b)$, or in other words $V=I$ and $W=I$ in equation \ref{eq:SIRT}. The gradient descent methods have been widely studied in the past years\cite{sutskever2013importance}\cite{DBLP:journals/corr/Ruder16}, as the Neural Networks community tries to find faster converging methods to train the nets they research. Among other methods proposed, Nesterov proposed an accelerated version of the gradient descent\cite{nesterov1983method}, that obtains a rate of convergence of $1/n^2$. The proposed update updates the result image in each iteration by pushing it in the current update and previous update direction combined. Nesterovs Accelerated Gradient (NAG) defines
+It is worth noticing that this family of algorithms is very closely related to the well-known gradient descent methods, as the gradient of equation \ref{eq:THE equation} is  proportional to $A^T(Ax-b)$, or in other words $V=I$ and $W=I$ in equation \ref{eq:SIRT}. The gradient descent methods have been widely studied in the past years\cite{sutskever2013importance}\cite{DBLP:journals/corr/Ruder16}. Among other methods in the literature, Nesterov proposed an accelerated version of the gradient descent\cite{nesterov1983method}, that obtains a rate of convergence of $1/n^2$. The proposed update updates the result image in each iteration by pushing it in the current update and previous update direction combined (adding momentum to the gradient). Nesterovs Accelerated Gradient (NAG) defines
 \begin{align}
 \lambda_{n+1}&=\frac{1+\sqrt{1+4\lambda_{n}^2}}{2}\\
 \gamma_n&=\frac{1-\lambda_n}{\lambda_{n+1}}\\
@@ -145,7 +145,7 @@ However, solving the minimization problem in equation \ref{eq:THE equation} is n
 
 \subsubsection{ASD-POCS}
 
-The previous algorithms discussed in this chapter were unconstrained minimization methods. While the TV minimization problem can be solved similarly (see section \ref{sec:SART-TV}), formalizing the algorithm as a non-linear constrained minimization adds an advantage in the case where there system is under-determined. In an unconstrained problem such as in equation \ref{eq:THE equation}, the balance between the data constraint and the regularization constraint can be tuned via a hyperparameter, but in the case of an under-determined system, multiple solutions for the data fidelity term may exist. By reformulating it as shown in the rest of this section, the image with the same data fidelity 2-norm but the lowest TV norm can be chosen.
+The previous algorithms discussed in this chapter were unconstrained minimization methods. While the TV minimization problem can be solved similarly (see section \ref{sec:SART-TV}), formalizing the algorithm as a non-linear constrained minimization adds an advantage in the case where there system is under-determined. In an unconstrained problem such as in equation \ref{eq:THE equation}, the balance between the data constraint and the regularization constraint can be tuned via a hyperparameter, but in the case of an under-determined system, multiple solutions for the data fidelity term may exist. By reformulating it as shown in the rest of this section, the image with the same data fidelity 2-norm but the lowest TV norm can be chosen. \tb{The following section shows the mathematical derivation of the algorithm, refer to figure 3-2 and below for a conceptual understanding of the method.}
 
 The minimization will yield an image $\vec{x}^*$ that minimizes 
 
@@ -154,7 +154,7 @@ The minimization will yield an image $\vec{x}^*$ that minimizes
 \end{equation}
 subject to 
 \begin{align}
-\lVert A\cdot \vec{x}-\vec{b}\rVert &\leq \epsilon,\label{eq:nl-datafid}\\
+\lVert A \vec{x}-\vec{b}\rVert &\leq \epsilon,\label{eq:nl-datafid}\\
 \vec{x}&\geq 0.
 \end{align}
 
@@ -163,7 +163,7 @@ As previously described in this chapter, the data fidelity in equation \ref{eq:n
 The conditions for a constrained minimization to find the optimal solution can be obtained by satisfying the Karush Kuhn-Tucker conditions (a generalization of the Lagrange multiplies for inequality constraints). First, the Lagrangian for the current problems needs to be defined, as
 
 \begin{equation}
-\textbf{L}=\lVert \vec{x} \rVert_\text{TV}+\lambda_0\cdot(\lVert A\cdot \vec{x}-\vec{b}\rVert^2 - \epsilon^2)-\vec{\lambda}\cdot\vec{x},\label{eq:Lagrangian}
+\textbf{L}=\lVert \vec{x} \rVert_\text{TV}+\lambda_0(\lVert A \vec{x}-\vec{b}\rVert^2 - \epsilon^2)-\vec{\lambda}\vec{x},\label{eq:Lagrangian}
 \end{equation}
 where $\vec{\lambda}$ is a vector of the same size as the image, but $\lambda_0$ is a single value. Two inequality constraints are imposed to the Lagrange multipliers, namely non-negativity
 \begin{equation}
@@ -175,7 +175,7 @@ h_i(\vec{x}) \lambda_i = 0,
 \end{equation}
 where $i=0,1,..., N_{pixels}$, and $h_i$ is an alternative form of the inequality constrains as
 \begin{align}
-h_0(\vec{x}) &=\lVert A\cdot \vec{x}-\vec{b}\rVert^2 - \epsilon^2 \leq 0&\\
+h_0(\vec{x}) &=\lVert A \vec{x}-\vec{b}\rVert^2 - \epsilon^2 \leq 0&\\
 h_i(\vec{x}) &= -x_i \leq 0 & i \in [1, N_{pixels}]
 \end{align}
 
@@ -186,11 +186,11 @@ Thus, only when the inequalities are violated does $h_i$ turns non-zero, and wit
 \end{equation}
 where $\vec{\delta}_i$ is the Kronecker delta. The gradient of the Lagrangian can be then written as
 \begin{align}
-\nabla_{\vec{x}}\textbf{L}&=\nabla_{\vec{x}}\lVert \vec{x} \rVert_\text{TV}+\lambda_0\nabla_{\vec{x}}h_0(\vec{x})+\sum_{i=1\textit{•}}^{N_{pixels}}\lambda_i\nabla_{\vec{x}}h_i(\vec{x})=0 \notag \\
-&=\nabla_{\vec{x}}\lVert \vec{x} \rVert_\text{TV}+2\lambda_0 A^T\cdot(A\cdot\vec{x}-\vec{b})-\vec{\lambda}=0 \label{eq:KKT}
+\nabla_{\vec{x}}\textbf{L}&=\nabla_{\vec{x}}\lVert \vec{x} \rVert_\text{TV}+\lambda_0\nabla_{\vec{x}}h_0(\vec{x})+\sum_{i=1}^{N_{pixels}}\lambda_i\nabla_{\vec{x}}h_i(\vec{x})=0 \notag \\
+&=\nabla_{\vec{x}}\lVert \vec{x} \rVert_\text{TV}+2\lambda_0 A^T(A\vec{x}-\vec{b})-\vec{\lambda}=0 \label{eq:KKT}
 \end{align}
 
-Further simplification can be applied to equation \ref{eq:KKT}. As the non-negativity constrains are only active in zero valued voxels, the Lagrange multipliers are zero for strictly positive voxels. Thus, by adding an indicator function
+Further simplification can be applied to equation \ref{eq:KKT}. As the non-negativity constraints are only active in zero-valued voxels, the Lagrange multipliers are zero for strictly positive voxels. Thus, by adding an indicator function
 \begin{equation}
 \vec{x}_{indic}=
 \begin{cases}
@@ -315,13 +315,13 @@ Xue \textit{et al}\cite{B_ASD_POCS_beta} proposed a faster converging modificati
 \end{algorithmic}
 \end{algorithm}
 
-In the article, the authors show that this approach results in a faster (less amount of iterations) convergence,  getting to a solution faster than in the standard ASD-POCS approach. This algorithm however requires 3 extra parameters for tuning. 
+In the article, the authors show that this approach results in a faster (\tb{fewer} of iterations) convergence,  getting to a solution faster than in the standard ASD-POCS approach. This algorithm however requires three extra parameters for tuning. 
 
 
 \FloatBarrier
 \subsubsection{The gradient of the TV norm}
 
-In order to minimize the TV norm via gradient descent\footnote{Special thanks to Andr\'as De\'ak for the help\cite{Andras} in this section.}, the gradient of the TV norm needs to be computed, $ \nabla_{\vec{x}} ||\vec x ||_{TV}$, being $\vec x$ the vectorized form of a N-dimensional image.
+In order to minimize the TV norm via gradient descent\footnote{Special thanks to Andr\'as De\'ak \tb{for the help with the mathematical formulation of this section}\cite{Andras}.}, the gradient of the TV norm needs to be computed, $ \nabla_{\vec{x}} ||\vec x ||_{TV}$, being $\vec x$ the vectorized form of a N-dimensional image.
 
 The main challenge with the $ \nabla_{\vec{x}} ||\vec x ||_{TV}$ term is that $ ||\vec x ||_{TV}$ is not differentiable in the general case. However, in the CT case, $\vec{x}$ can be described as $x_{ijk}$, a regularly discretized mesh of directional indices $i,j,k$ of maximum value $i_{max},j_{max},k_{max}$. The gradient of $x$ has an additional Cartesian index $\alpha$:
 
@@ -330,7 +330,7 @@ g^\alpha &=\left(\nabla x\right)^\alpha=\partial_\alpha x\\
 g^\alpha_{ijk} & = \partial_\alpha x_{ijk}.
 \end{align}
 
-The TV norm can me then defined as sum of the 2-norms of the gradient of $x$, $g$, over the Cartesian coordinate, resulting in a scalar.
+The TV norm can \tb{be} then defined as sum of the 2-norms of the gradient of $x$, $g$, over the Cartesian coordinate, resulting in a scalar.
 
 \begin{align}
 \lVert x \rVert_\text{TV}=\sum\limits_{ijk} \sqrt{\sum\limits_\alpha \left(g^\alpha_{ijk}\right)^2}=\sum\limits_{ijk} \sqrt{\sum\limits_\alpha \left(\partial_\alpha x_{ijk}\right)^2},
@@ -474,7 +474,7 @@ The discretization of the divergence and gradient operators are a key factor whe
 
 \section{Discussion}
 
-This chapter describes mathematically some of the available image reconstruction methods. It briefly explains FDK and a variety of different algorithms are described, that behave differently. A small improvement to the published literature is proposed by proposing solving the ROF model for the TV regularized reconstruction using an accelerated method, however this is a relatively small addition, as the ROF model has been extensively studied in the image processing literature.
+This chapter describes mathematically some of the available image reconstruction methods. It briefly explains FDK and a variety of different algorithms are described, that behave differently. A small improvement to the published literature is proposed by proposing solving the ROF model for the TV regularized reconstruction using an accelerated method (SART-TV).
 
 This chapter has few algorithms and there are considerably more algorithms published in the literature. The selection of these was relatively arbitrary,  the principal objective was having a larger amount of differently behaving ones (Krylov, SART, TV). There is a clear lack of statistical reconstruction methods and the Krylov subspace algorithms should have been explored further, as they are the fastest converging algorithms in the literature.
 % Commment on Krylob subspace methods. Restarting, other algorithms, few words about unknown backprojection, etc.
