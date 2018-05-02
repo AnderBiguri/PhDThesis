@@ -1,5 +1,5 @@
 
-#Iterative Reconstruction and Motion compensation in Computed Tomography on GPUs
+# Iterative Reconstruction and Motion compensation in Computed Tomography on GPUs
 
 PhD Thesis by Ander Biguri, 2018.
 
@@ -7,6 +7,7 @@ University of Bath,
 
 Thesis supervisors: Manucherh Soleimani, Steven Hancock, Manjit Dosanjh
 
+----
 
 This thesis describes the research done for the [TIGRE toolbox](https://github.com/CERN/TIGRE) and further.
 
@@ -18,12 +19,17 @@ If you are here because of the TIGRE toolbox, the most relevant stuff is on:
 
 **Chapter 5**: Brief showcase/study of behavioru of algorithms in TIGRE.
 
+If you are here becayase if the Motion compensation code, you'd like to read
+
+**Chapter 6**: General proposition of a GPU accelerated motion compensation algorithm
+
+**Chapter 7**: Numerical study of the algorithm under cotnrolled conditions.
 
 Topic: `X-ray tomography`, `CBCT`, `Iterative recosntruction`, `GPU computing`, `Motion compensation`. 
 
 
 
 
+----
 
-
-ander.biguri@gmail.com
+Contact: ander.biguri@gmail.com
