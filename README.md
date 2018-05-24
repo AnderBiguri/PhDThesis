@@ -17,15 +17,15 @@ If you are here because of the TIGRE toolbox, the most relevant stuff is on:
 
 **Chapter 4**: GPU implementation of tomographic operations in detail.
 
-**Chapter 5**: Brief showcase/study of behavioru of algorithms in TIGRE.
+**Chapter 5**: Brief showcase/study of behaviour  of algorithms in TIGRE.
 
-If you are here becayase if the Motion compensation code, you'd like to read
+If you are here because if the Motion compensation code, you'd like to read
 
 **Chapter 6**: General proposition of a GPU accelerated motion compensation algorithm
 
-**Chapter 7**: Numerical study of the algorithm under cotnrolled conditions.
+**Chapter 7**: Numerical study of the algorithm under controlled  conditions.
 
-Topic: `X-ray tomography`, `CBCT`, `Iterative recosntruction`, `GPU computing`, `Motion compensation`. 
+Topic: `X-ray tomography`, `CBCT`, `Iterative reconstruction`, `GPU computing`, `Motion compensation`. 
 
 
 
