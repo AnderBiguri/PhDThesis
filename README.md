@@ -11,6 +11,10 @@ Thesis supervisors: Manucherh Soleimani, Steven Hancock, Manjit Dosanjh
 
 This thesis describes the research done for the [TIGRE toolbox](https://github.com/CERN/TIGRE) and further.
 
+**Chapter 1:** Introduces the thesis and its contents
+
+**Chapter 2:** Introduces Cancer treatment and CT imaging
+
 If you are here because of the TIGRE toolbox, the most relevant stuff is on:
 
 **Chapter 3**: Mathematics of the algorithms in TIGRE
